@@ -1,0 +1,246 @@
+\documentclass[russian,parskip=half,fontsize=7pt,open=any,headings=normal,paper=120mm:75mm,pagesize,landscape]{scrbook}
+% чуть шире, чем размер полосы книги (тут 75mm, там 73mm)
+\usepackage[width=120mm, height=73mm, inner=0mm, outer=0mm, top=0mm, bottom=0mm]{geometry}
+
+\usepackage[utf8]{inputenc}
+\usepackage[english,main=russian]{babel}
+
+\usepackage[T1]{fontenc}
+\usepackage{PTSansCaption}
+\usepackage[scaled=1.00]{PTMono}
+\usepackage{PTSerifCaption}
+\renewcommand\familydefault{\sfdefault} 
+
+% TikZ staff
+\usepackage{array}
+\renewcommand{\arraystretch}{1.1}
+\usepackage{tikz}
+\usepackage{tikz-cd}
+% for ER (Baker's notation)
+\usetikzlibrary{shapes.multipart}
+\usetikzlibrary{positioning}
+\usetikzlibrary{shadows}
+\usetikzlibrary{calc}
+\usetikzlibrary{decorations.pathreplacing,calc}
+\usetikzlibrary{decorations.text}
+% for ER
+\usetikzlibrary{er}
+
+% TikZ staff for ERD
+% code for "one to omany", etc. is taken from https://tex.stackexchange.com/q/141797/101651
+\makeatletter
+\pgfarrowsdeclare{crow's foot}{crow's foot}
+{
+  \pgfarrowsleftextend{+-.5\pgflinewidth}%
+  \pgfarrowsrightextend{+.5\pgflinewidth}%
+}
+{
+  \pgfutil@tempdima=0.5pt%
+  \pgfsetdash{}{+0pt}%
+  \pgfsetmiterjoin%
+  \pgfpathmoveto{\pgfqpoint{0pt}{-5\pgfutil@tempdima}}%
+  \pgfpathlineto{\pgfqpoint{-7\pgfutil@tempdima}{0pt}}%
+  \pgfpathlineto{\pgfqpoint{0pt}{5\pgfutil@tempdima}}%
+  \pgfusepathqstroke%
+}
+\pgfarrowsdeclare{crow's foot uid}{crow's foot uid}
+{
+    \pgfarrowsleftextend{+-.5\pgflinewidth}%
+    \pgfarrowsrightextend{+.5\pgflinewidth}%
+}
+{
+    \pgfutil@tempdima=0.5pt%
+    \pgfsetdash{}{+0pt}%
+    \pgfsetmiterjoin%
+    \pgfpathmoveto{\pgfqpoint{0pt}{-5\pgfutil@tempdima}}%
+    \pgfpathlineto{\pgfqpoint{-7\pgfutil@tempdima}{0pt}}%
+    \pgfpathlineto{\pgfqpoint{0pt}{5\pgfutil@tempdima}}%
+    \pgfpathmoveto{\pgfqpoint{0\pgfutil@tempdima}{0\pgfutil@tempdima}}%
+    \pgfpathmoveto{\pgfqpoint{-7\pgfutil@tempdima}{-6\pgfutil@tempdima}}% 
+    \pgfpathlineto{\pgfqpoint{-7\pgfutil@tempdima}{-6\pgfutil@tempdima}}%  
+    \pgfpathlineto{\pgfqpoint{-7\pgfutil@tempdima}{6\pgfutil@tempdima}}% 
+    \pgfusepathqstroke%
+}
+
+\pgfarrowsdeclare{one}{one}
+{
+    \pgfarrowsleftextend{+-.5\pgflinewidth}%
+    \pgfarrowsrightextend{+.5\pgflinewidth}%
+}
+{
+    \pgfutil@tempdima=0.5pt%
+    \pgfsetdash{}{+0pt}%
+    \pgfsetmiterjoin%
+    \pgfusepathqstroke%
+}
+\pgfarrowsdeclare{one uid}{one uid}
+{
+    \pgfarrowsleftextend{+-.5\pgflinewidth}%
+    \pgfarrowsrightextend{+.5\pgflinewidth}%
+}
+{
+    \pgfutil@tempdima=0.5pt%
+    \pgfsetdash{}{+0pt}%
+    \pgfsetmiterjoin%
+    \pgfpathmoveto{\pgfqpoint{0\pgfutil@tempdima}{0\pgfutil@tempdima}}%
+    \pgfpathmoveto{\pgfqpoint{-7\pgfutil@tempdima}{-6\pgfutil@tempdima}}% 
+    \pgfpathlineto{\pgfqpoint{-7\pgfutil@tempdima}{-6\pgfutil@tempdima}}%  
+    \pgfpathlineto{\pgfqpoint{-7\pgfutil@tempdima}{6\pgfutil@tempdima}}% 
+    \pgfusepathqstroke%
+}
+\makeatother
+
+\tikzset{%
+%    entity/.append style={font=\sffamily\footnotesize
+%   },
+%    attribute/.append style={font=\sffamily\footnotesize
+%   },
+%    relationship/.append style={font=\sffamily\footnotesize
+%   },
+    pics/entity/.style n args={3}{code={%
+            \node[draw, rounded corners,
+            rectangle split,
+            rectangle split parts=2,
+            font=\sffamily\scriptsize,
+            text height=1.5ex,text depth=.25ex
+            ] (#1)
+            {\textbf{#2} \nodepart{second}
+                \setlength{\tabcolsep}{2pt}
+                \begin{tabular}{l l}
+                    #3
+                \end{tabular}
+            };%
+    }},
+    pics/table/.style n args={3}{code={%
+            \node[draw,
+            rectangle split,
+            rectangle split parts=2,
+            font=\sffamily\footnotesize,
+            text height=1.5ex,text depth=.25ex
+            ] (#1)
+            {\textbf{#2} \nodepart{second}
+                \setlength{\tabcolsep}{2pt}
+                \begin{tabular}{l l}
+                    #3
+                \end{tabular}
+            };%
+    }},
+    zig zag to/.style={
+        to path={(\tikztostart) -| ($(\tikztostart)!#1!(\tikztotarget)$) |- (\tikztotarget)}
+    },
+%    zig zag to/.default=0.4,   
+    one to one/.style={
+        one-one, zig zag to
+    },
+    one to many/.style={
+        one-crow's foot, zig zag to,
+    },
+    one to omany/.style={
+        one-omany, zig zag to
+    },
+    many to one/.style={
+        crow's foot-one, zig zag to
+    },
+    many to many/.style={
+        crow's foot-crow's foot, zig zag to
+    },
+    optional one to many/.style={
+      decoration={show path construction,
+        lineto code={
+          \draw [dash pattern=on 2pt off 2pt,one-] (\tikzinputsegmentfirst) --
+             ($(\tikzinputsegmentfirst)!0.5!(\tikzinputsegmentlast)$);
+          \draw [solid,-crow's foot] ($(\tikzinputsegmentfirst)!0.5!(\tikzinputsegmentlast)$)
+            -- (\tikzinputsegmentlast);
+        }
+      }, decorate
+    },
+    optional one to one/.style={
+      decoration={show path construction,
+        lineto code={
+          \draw [dash pattern=on 2pt off 2pt,one-] (\tikzinputsegmentfirst) --
+             ($(\tikzinputsegmentfirst)!0.5!(\tikzinputsegmentlast)$);
+          \draw [solid,-one] ($(\tikzinputsegmentfirst)!0.5!(\tikzinputsegmentlast)$)
+            -- (\tikzinputsegmentlast);
+        }
+      }, decorate
+    }
+}
+
+\tikzstyle{every entity} = [font=\sffamily\footnotesize,text height=1.5ex,text depth=.25ex]
+\tikzstyle{every relationship} = [font=\sffamily\footnotesize,text height=1.5ex,text depth=.25ex]
+\tikzstyle{every attribute} = [font=\sffamily\footnotesize,text height=1.5ex,text depth=.25ex]
+
+\begin{document}
+\centering
+    \begin{tikzpicture}
+      \matrix[ampersand replacement=\&,column sep=22pt,row sep=15pt]
+      {
+        \pic {table={bookings}{Bookings}{%
+                \#      & book\_ref \\
+                $\ast$  & book\_date \\     
+                $\ast$  & total\_amount \\
+        }}; \& \&
+        \pic {table={airports}{Airports}{%
+                \#      & airport\_code \\
+                $\ast$  & airport\_name \\     
+                $\ast$  & city \\     
+                $\ast$  & coordinates \\     
+                $\ast$  & timezone \\     
+        }};
+        \\
+        \pic {table={tickets}{Tickets}{%
+                \#      & ticket\_no \\
+                $\ast$  & book\_ref \\     
+                $\ast$  & passenger\_id \\
+                $\ast$  & passenger\_name \\
+                $\ast$  & contact\_data \\
+        }}; \&
+        \pic {table={ticket-flights}{Ticket\_flights}{%
+                \#      & ticket\_no \\
+                \#      & flight\_id \\
+                $\ast$  & fare\_conditions \\
+                $\ast$  & amount \\
+        }}; \&
+        \pic {table={flights}{Flights}{%
+                \#      & flight\_id \\
+                $\ast$  & flight\_no \\
+                $\ast$  & scheduled\_departure \\
+                $\ast$  & scheduled\_arrival \\
+                $\ast$  & departure\_airport \\
+                $\ast$  & arrival\_airport \\
+                $\ast$  & status \\
+                $\ast$  & aircraft\_code \\
+                $\circ$ & actual\_departure \\
+                $\circ$ & actual\_arrival \\
+        }}; \&
+        \pic {table={aircrafts}{Aircrafts}{%
+                \#      & aircraft\_code \\
+                $\ast$  & model \\
+                $\ast$  & range \\
+        }};
+        \\[-19pt]
+        \&
+        \pic {table={boarding-passes}{Boarding\_passes}{%
+                \#      & ticket\_no \\
+                \#      & flight\_id \\
+                $\ast$  & boarding\_no \\
+                $\ast$  & seat\_no \\
+        }}; \& \&
+        \pic {table={seats}{Seats}{%
+                \#      & aircraft\_code \\
+                \#      & seat\_no \\
+                $\ast$  & fare\_conditions \\
+        }}; \\
+      };
+      \draw [one to many] (bookings) -- (tickets);
+      \draw [one to many] (tickets) -- (ticket-flights);
+      \draw [one to many] (flights) -- (ticket-flights);
+      \draw [optional one to one] (ticket-flights) -- (boarding-passes);
+      \draw [optional one to many] (aircrafts) -- (flights);
+      \draw [one to many] (aircrafts) -- (seats);
+      \draw [optional one to many] ([xshift=-2ex]airports.south) -- ([xshift=-2ex]flights.north);
+      \draw [optional one to many] ([xshift=+2ex]airports.south) -- ([xshift=+2ex]flights.north);
+    \end{tikzpicture}
+
+\end{document}
+

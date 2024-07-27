@@ -1,0 +1,209 @@
+% po4a: environment codep2
+% po4a: environment codep
+% po4a: environment code
+% po4a: environment code2
+% po4a: environment denseitem
+% po4a: environment denseenum
+% po4a: environment itemize
+% po4a: environment itemizex
+% po4a: environment document
+% po4a: environment leftbar
+% po4a: environment sidewaysfigure 
+\chapter{PostgreSQL haqida}\label{about}
+
+PostgreSQL~--- to‘liq funksiyalari bilan ishlaydigan, erkin tarqatiladigan ochiq manbali ma‘lumotlar bazasi. 
+Akademik muhitda ishlab chiqilgan va uzoq tarixga ega bo‘lib, uning atrofida ishlab chiquvchilarning keng hamjamiyatini birlashtirgan ushbu MBBT ko‘pchilik mijozlar tomonidan talab qilinadigan barcha imkoniyatlarga ega. PostgreSQL butun dunyoda katta yuklama ostida ishlaydigan muhim biznes tizimlarini yaratish uchun faol qo‘llaniladi.
+
+\section{Qisqacha tarix}
+
+Zamonaviy PostgreSQL kelib chiqish tarixi Berklidagi Kaliforniya universiteti professori Maykl Stounbreyker boshchiligida ishlab chiqilgan POSTGRES loyihasiga borib taqaladi. Bunga qadar Stounbreyker relyatsion ma‘lumotlar bazasi tizimlari ichida birinchilardan bo‘lgan INGRESni~--- ishlab chiqishga rahbarlik qilgan va POSTGRES ana shu loyihadagi tizimning qat‘iy turlaridagi cheklovlarini yengib o‘tish istagi tufayli yaralgan.
+
+Loyiha ustida ish 1985 yilda boshlangan va 1988 yilgacha POSTQUEL so‘rovlar tilining (o‘sha paytda SQL hali umume‘tirof etilgan standart bo‘lmagan) ma‘lumotlar modeli va ma‘lumotlar bazasi dizaynini tavsiflovchi bir qator ilmiy maqolalar nashr etilgan.
+
+POSTGRES-ni ba‘zida relyatsion bo‘lmagan MBBT-lar qatoriga qo‘shishadi. Relyatsion modelning cheklovlari har doim tanqidga sabab bo‘lgan, garchi unda bir tomondan soddalik va qat‘iylik bo‘lsa ham. Biroq, kompyuter texnologiyalarining hayotning barcha sohalariga kirib borishi nostandart ma‘lumotlar turlarini va murakkab ob‘ektlarni meros qilib olish, yaratish va boshqarish kabi imkoniyatlarni qo‘llab-quvvatlash uchun ilovalarning yangi sinflari hamda zarur ma‘lumotlar bazalarining paydo bo‘lishiga olib keldi.
+
+Birinchi MBBT 1989 yilda ishga tushirilgan. Ma‘lumotlar bazasi bir necha yillar davomida takomillashtirildi va 1993 yilda 4.2 versiyasi chiqarilganda loyiha yopildi. Rasmiy halokatga qaramay, ochiq manba va BSD litsenziyasi Berkli bitiruvchilari Endryu Yu va Joli Chenga 1994 yilda uni yanada rivojlantirishga imkon berdi. Ular POSTQUEL so‘rovlar tilini o‘sha vaqtga kelib umumiy qabul qilingan SQL bilan almashtirdilar va loyihani Postgres95 deb nomladilar.
+
+1996 yilga kelib, Postgres95 nomi vaqt sinovidan o‘tmasligi aniq bo‘ldi va yangi ~--- PostgreSQL nomi tanlandi. Bu nom o‘zida ham asl POSTGRES loyihasining atamasini, ham SQL ga o‘tishni aks ettirdi. 
+Tan olish kerakki, nomni talaffuz qilish qiyin bo‘lib chiqdi, uni o‘qishda: PostgreSQL “postgres-kuel” yoki oddiygina “postgres” deb talaffuz qilinishi kerak, lekin “postgre” emas.
+
+%Tan olish kerakki, nomni talaffuz qilish qiyin bo‘lib chiqdi, uni o‘qishda: PostgreSQL “postgres-kuel” yoki oddiygina “postgres” deb talaffuz qilinishi kerak, lekin “postgre” emas.
+
+Yangi talqin 6.0 sifatida boshlandi va asl raqamlashni davom ettirdi. Loyiha o‘sib bordi va uni boshqarish dastlab PostgreSQL ni ishlab chiquvchilarning global guruhi deya nom olgan (PostgreSQL Glo\-bal De\-ve\-lop\-ment Group) proaktiv foydalanuvchilar va ishlab chiquvchilarning kichik guruhi tomonidan o‘z zimmasiga olindi.
+
+\section{Taraqqiyot}
+
+Rivojlanish rejalari va yangi talqinlarni chiqarish bo‘yicha barcha asosiy qarorlar hozirda yetti kishidan iborat boshqaruvchi qo‘mita (Core team) tomonidan qabul qilinadi.
+
+Tizim rivojiga o‘z hissasini qo‘shayotgan oddiy dasturchilardan tashqari, PostgreSQL rivojiga katta hissa qo‘shayotgan asosiy (major contributors) va manba kodlari bazasiga yozish huquqiga ega bo‘lgan (committers) ishlab chiquvchilar guruhi ham mavjud. Guruhlarning tarkibi vaqt o‘tishi bilan o‘zgaradi, yangi a‘zolar paydo bo‘ladi, ba‘zilari loyihani tark etadilar. Ishlab chiquvchilarning joriy ro‘yxati rasmiy veb-saytda e‘lon qilingan: \urld{https}{postgresql.org/community/contributors}.
+
+
+Rossiyalik ishlab chiquvchilarning PostgreSQL ga qo‘shayotgan hissasi ahamiyatga sazovordir. Bu Rossiya ishtirok etgan eng katta ochiq kodli loyihalardan biri.
+
+PostgreSQL rivojida boshqaruvchi qo‘mita a‘zosi bo‘lgan Krasnoyarsklik dasturchi Vadim Mixeev katta rol o‘ynadi. U bir vaqtning o‘zida kirishda ko‘ptalqinli boshqaruvni ta‘minlash (MVCC), tozalash tizimi (vacuum), tranzaksiyalar jurnali (WAL), qism so‘rovlar, triggerlar  kabi muxim hisoblangan qismlar muallifi. Hozirda u loyiha bilan shug‘ullanmaydi.
+
+2015 yilda Oleg Bortunov, astronom va “ГАИШ МГУ” ilmiy xodimi Fedor Sigayev va Aleksandr Korotkovlar bilan PostgreSQL Professional kompaniyasiga asos soldi.
+
+Ular tomonidan bajarilgan ishlar yo‘nalishi sifatida PostgreSQL ni mahalliylashtirish (mahalliy kodlarni va Unicode ni qo‘llab - quvvatlash), umummatn qidiruv tizimi, massivlar va zaiftuzilmali ma‘lumotlar bilan ishlash (hstore, json, jsonb), indekslash yangi usullari (GiST, SP-GiST, GIN va RUM, Bloom) larni aytish mumkin. Shuningdek ular ko‘p sondagi mashhur kengaytmalar mualliflaridir.
+
+PostgreSQL-ning keyingi talqini uchun ishlash davri odatda bir yil davom etadi. Bu vaqt ichida tuzatishlar, o‘zgartirishlar va yangi funksiyalarga ega patchlar ko‘rib chiqish uchun hammadan qabul qilinadi. An‘anaga ko‘ra, pgsql-hackers pochta ro‘yxati patchlarni muhokama qilish uchun ishlatiladi. Agar hamjamiyat g‘oyani foydali deb bilsa, uni amalga oshirishni to‘g‘ri deb topsa va kod boshqa ishlab chiquvchilar majburiy sinovidan o‘tgan bo‘lsa, unda patch relizga kiritiladi.
+
+Ma‘lum bir vaqtda (odatda bahorda, relizdan taxminan olti oy oldin) kodni barqarorlashtirish bosqichi e‘lon qilinadi~--- yangi funksionallik keyingi talqingacha qoldiriladi va faqat relizga kiritilgan patchlarga tuzatishlar yoki yaxshilanishlar qabul qilinadi. 
+Reliz sikli davomida bir necha marta beta-talqinlari chiqariladi, sikl oxirida reliz nomzodi (major) paydo bo‘ladi va tez orada PostgreSQLning yangi asosiy talqini chiqariladi.
+
+% FIXME https://postgrespro.ru/docs/postgresql/current/release
+Ilgari asosiy talqin raqami ikkita raqamdan iborat edi, ammo 2017 yildan boshlab faqat bitta raqamni qoldirishga qaror qilindi. Shunday qilib, 9.6 dan keyin 10 keldi va PostgreSQL ning oxirgi joriy talqini \PGYEAR\ yil sentyabr oyi o‘rtalarida chiqarilgan \PGVER talqinidir.
+
+MBBT-ning yangi talqini ustida ishlayotganda xatolar aniqlanishi mumkin. Ularning eng tanqidiylari nafaqat joriy, balki oldingi talqinlarda ham tuzatiladi. Odatda, to‘plangan tuzatishlarni qamragan qo‘shimcha (minor) talqinlar har chorakda bir marta chiqariladi. Masalan, 12.5 talqinida faqat 12.4-da topilgan xatolarning tuzatishlari mavjud va \PGVER.1~---da faqat \PGVER.0~---da topilgan xatolar uchun tuzatishlar mavjud.
+
+
+\section{Qo‘llab-quvvatlash}
+
+Global PostgreSQL ishlab chiqish jamoasi tizimning asosiy talqinlarini chiqarilgan kundan boshlab besh yil davomida qo‘llab-quvvatlaydi. Ushbu qo‘llab-quvvatlash, shuningdek, rivojlanishni muvofiqlashtirish pochta ro‘yxatlari orqali taqdim etiladi. To‘g‘ri formatlangan xato xabari imkon qadar tezroq hal qilish uchun barcha imkoniyatlarga ega: ko‘pincha xatolarni tuzatish 24 soat ichida chiqariladi.
+
+
+Ishlab chiquvchilar hamjamiyatining yordamiga qo‘shimcha ravishda, butun dunyo bo‘ylab bir qator kompaniyalar PostgreSQL uchun tijoriy yordam ko‘rsatadilar. 
+Rossiyada bunday tashkilotlardan Postgres Professional (\urld{https}{postgrespro.ru}) bo‘lib, ular 24\kern0.7pt x\kern0.7pt 7 qo‘llab-quvvatlash xizmatlarini taqdim etadi.
+
+\section{Zamonaviy~holati}
+
+PostgreSQL dunyodagi eng nom taratgan ma‘lumotlar bazasi tizimlaridan biridir. Yigirma yildan ortiq vaqt davomida mustahkam ilmiy asoslarga tayanib, to‘laqonli MBBT-ga aylandi. Shu bilan birga u tashkilot miqyosida foydalanish uchun mos bo‘lgan hamda tijorat tizimlariga haqiqiy alternativ hisoblanadi. Bunga ishonch hosil qilish uchun PostgreSQL \PGVER ning so‘nggi talqinining eng muhim xususiyatlarini ko‘rib chiqing.
+
+\subsection{Ishonchlilik va barqarorlik}
+
+Korxona ilovalarida muhim ma‘lumotlar bilan ishlashda ishonchlilik ayniqsa muhimdir. Shu maqsadda PostgreSQL sizga “issiq” zaxira nusxalarini sozlash, o‘tmishdagi ma‘lum bir vaqt holatini tiklash va turli xil replikatsiya turlarini (sinxron, asinxron, kaskad) sozlash imkonini beradi.
+
+\subsection{Xavfsizlik}
+
+PostgreSQL foydalanuvchilarga xavfsiz SSL orqali ulanish imkonini beradi. Parolni autentifikatsiya qilish (shu jumladan SCRAM), mijoz sertifikatlaridan foydalanish va tashqi xizmatlar (LDAP, RADIUS, PAM, Kerberos) yordamida autentifikatsiya qilish ham mumkin.
+
+Ma‘lumotlar bazasi obyektlaridan foydalanish imkonini boshqarish uchun quyidagi variantlar taqdim etiladi:
+
+\begin{itemizex}
+
+\item{}    foydalanuvchi hisoblari va guruh rollarini yaratish va boshqarish;
+
+\item{}    individual foydalanuvchilar va guruhlar darajasida ma‘lumotlar bazasi obyektlaridan foydalanish imkonlarini farqlash;
+
+\item{}    alohida ustunlar va qatorlar darajasida foydalanish imkonini batafsil nazorat qilish;
+
+\item{}    SE-PostgreSQL funksiyasi (kirishni “majburiy” boshqarish) orqali SELinux-ni qo‘llab-quvvatlash.
+
+\end{itemizex}
+
+Postgres Pro\-fessional kompaniyasi tomonidan yaratilgan PostgreSQL maxsus talqini - Postgres Pro Certified, shaxsiy ma‘lumotlar va maxfiy axborotlar bilan ishlovchi tizimlar uchun himoyalangan “ФСТЭК” sertifikatiga ega.
+
+\subsection{Standartlarga moslik}
+
+% FIXME
+PostgreSQL yangi ANSI SQL standart talablari ishlab chiqilsa ularga bo‘lgan moslikni ta‘minlaydi. Bu SQL-92 dan to JSON formati bilan ishlashni qo‘llab-quvvatlashni standartlashtirgan so‘nggi SQL:2016 gacha bo‘lgan standartning barcha talqinlari uchun ham amal qiladi. Ushbu funksionalning muhim qismi allaqachon PostgreSQL~\PGVER da joriy qilingan.
+
+% FIXME https://postgrespro.ru/docs/postgresql/current/features
+Umuman olganda, PostgreSQL standartga yuqori darajadagi muvofiqlikni ta‘minlaydi va 177 talab qilinadigan imkoniyatlardan 170 tasini, shuningdek, ko‘p sonli qo‘shimcha imkoniyatlarni qo‘llab-quvvatlaydi.
+
+\subsection{Tranzaksiyani qo‘llab-quvvatlash}
+
+PostgreSQL ACID xususiyatlarini va tranzaksiyalarni samarali izolyatsiya qilishni to‘liq qo‘llab-quvvatlaydi. Bunga Multi-Version Concurrency Control (MVCC) yordamida erishiladi. Bu barcha hollarda qator bloklanishlaridan qochadi, bundan tashqari bir nechta jarayonlar bir vaqtning o‘zida bir xil ma‘lumotlar qatorini o‘zgartiradi: o‘qish hech qachon yozishni bloklamaydi va yozish esa~--- o‘qishni.
+
+Xuddi shu narsa Serializable Snapshot innovatsion izolyatsiya tizimidan foydalangan holda ishlovchi eng qat‘iy izolyatsiyalash darajasiga tegishli bo‘lib, seriyalashdan kelib chiqish mumkin bo‘lgan xatoliklardan batamom halos qiladi hamda ketma-ket va parallel bajarilishlar natijalarining mosligini ta‘minlanishini kafolatlaydi.
+
+\subsection{Ilova yaratuvchilar uchun}
+
+Ilovalarni ishlab chiquvchilar ixtiyorida har qanday turdagi ilovalarni amalga oshirish imkonini beruvchi boy uskunalar to‘plami mavjud:
+
+\begin{itemizex}
+\item{}   turli server dasturlash tillari: ichida o‘rnatilgan PL/pgSQL (SQL bilan yaqindan integratsiyalashuvi tufayli ancha qulay), tezkorlikka moyil muhim vazifalar uchun C, Perl, Python, Tcl, shuningdek JavaScript, Java va boshqalar;
+
+\item{}   istalgan tildagi ilovalardan ma‘lumotlar bazasiga murojaat uchun dasturiy interfeyslar, shu jumladan standart ODBC va JDBC interfeyslari;
+
+\item{}   server tomonida har qanday murakkablikdagi mantiqni samarali amalga oshirish imkonini beruvchi ma‘lumotlar bazasi ob‘ektlari to‘plami: jadvallar va indekslar, ketma-ketliklar, yaxlitlik cheklovlari, ko‘rinishlar va moddiylashtirilgan ko‘rinishlar, bo‘limlar, qism so‘rovlar (shu jumladan rekursiv), yig‘ish va oyna funktsiyalari, saqlanuvchi funktsiyalar, triggerlar va boshqalar;
+
+\item{}   rus va barcha Yevropa tillarini qo‘llab-quvvatlaydigan, indeksli foydalanish bilan samarali to‘ldirilgan moslashuvchan umummatnli qidiruv tizimi;
+
+\item{}   NoSQL-ga xos zaif tuzilmali ma‘lumotlar: hstore (kalit-qiymat juftliklari bazasi), xml, json (ham matnda, ham yanada samarali ikkilik tasviri ko‘rinishi jsonb-da);
+
+\item{}   ma‘lumotlar manbalarini, barcha asosiy ma‘lumotlar bazalarini ham o‘z ichiga olgan holda, SQL/MED standarti bo‘yicha tashqi jadvallar sifatida ulardan to‘liq foydalanish imkoniyati bilan ularga yozish va tarqatilgan holda so‘rovlarni bajarish uchun ulash (Foreign Data Wrappers).
+
+\end{itemizex}
+
+\subsection{Masshtablilik va ishlash tezligi}
+
+PostgreSQL zamonaviy ko‘p yadroli protsessor arxitekturasidan samarali foydalanadi~--- MBBT ishlashi yadrolar sonining ko‘payishi bilan deyarli chiziqli bog‘liq holda o‘sadi.
+
+So‘rovlarni va ba‘zi xizmat buyruqlarini bajarish uchun parallel rejim mavjud (masalan, indekslarni yaratish va tozalash). Ushbu rejimda ma‘lumotlarni o‘qish va ulanish operatsiyalari bir vaqtning o‘zida ishlaydigan bir nechta jarayonlar tomonidan amalga oshiriladi. 
+So‘rovlarni JIT-kompilyatsiya qilish - apparat bilan bog‘liq jarayonlarni tezlashtirish qobiliyatini yaxshilaydi. PostgreSQL ning har bir talqinida yangi parallellashtirish xususiyatlari paydo bo‘lib kelayabdi.
+
+Gorizontal masshtablash uchun PostgreSQL ham fizik, ham mantiqiy replikatsiyani ta‘minlaydi. Bu - nosozliklarga chidamlilik, yuqori unumdorlik va geografik taqsimotni ta‘minlash uchun, PostgreSQL asosida klasterlar yaratish imkonini beradi. Bunday tizimlarga misollar: Citus (Citusdata), Postgres-BDR (2ndQuadrant), Multimaster va BiHA (Postgres Professional), Patroni (Zalando).
+
+\subsection{So‘rovlarni rejalashtiruvchi}
+
+PostgreSQL xarajatlarga asoslangan so‘rovlarni rejalashtiruvchidan foydalanadi. Statistik ma‘lumotlarni to‘plash shuningdek disk va protsessor operatsiyalari uchun resurslar sarfini hisobga olish va hatto eng murakkab so‘rovlarni optimallashtirishga imkon beradi. 
+Rejalashtiruvchi ixtiyorida ilg‘or tijorat MBBT-larida mavjud bo‘lgan ma‘lumotlarni olib chiqish va ulardan foydalanishning barcha usullari.
+
+\subsection{Indekslash imkoniyatlari}
+
+PostgreSQL turli xil indekslash usullarini qo‘llaydi. An‘anaviy B - daraxtlardan tashqari, bir qator boshqa foydalanish usullari mavjud.
+
+\begin{itemizex}
+\item{}    Hash~--- indeks, xeshlashga asoslangan. B - daraxtdan farqli o‘laroq faqat tenglikni tekshirishda ishlaydi, lekin ba‘zi hollarda u ixchamroq va samarali bo‘lib chiqadi.
+
+\item{}    GiST~--- bu tartiblash imkonini bermaydigan ma‘lumotlar uchun ishlatiladigan umumlashtirilgan muvozanatli qidiruv daraxti. Misollar sifatida, eng yaqin qo‘shnilarni tez qidirish (k-NN qidiruvi) imkoniyati bilan tekislikdagi nuqtalarni indekslash uchun xizmat qiladigan R-daraxtlarni va intervallarning kesishishini indekslash amallarini keltirish mumkin.
+
+\item{}   SP-GiST~--- umumlashtirilgan muvozanatlshtirilmagan daraxt, qiymatlar sohasini kesishmaydigan qism sohalarga ajratishga asoslangan. Misol tariqasida fazoviy ma‘lumotlar uchun kvadrantlar daraxti va matnli qatorlar uchun old qo‘shimchali daraxt bo‘lishi mumkin.
+
+\item{}    GIN~--- umumlashtirilgan invertlangan indeks, elementlardan tashkil topgan murakkab qiymatlar uchun ishlatiladi. Uning asosiy ishlatilish maydoni – umummatn qidiruvi, ya‘ni so‘rovda ko‘rsatilgan so‘z uchraydigan barcha hujjatlarni topish. Qo‘llanilishiga yana boshqa bir misol sifatida  massiv ichidan qiymatni qidirishni olish mumkin.
+
+\item{}    RUM~--- umummatn qidiruvi uchun GIN uslubining keyingi rivojlantirilgan talqini. Ushbu indeks kengaytma sifatida bo‘lib iboraviy qidirishlarni tezlashtiradi va natijani muvofiqligi bo‘yicha hech qanday qo‘shimcha hisoblashlarsiz tartiblaydi.
+
+\item{}    BRIN~--- indeks o‘lchami va qidiruv tezligi o‘rtasida kelishuvga imkon beruvchi ixcham tuzilma. Ushbu indeks katta klasterli jadvallarda samarali.
+
+\item{}    Bloom~--- Bloom filtriga asoslangan indeks. Juda ixchamligi tufayli, bu sizga aniq keraksiz qatorlarni tezda olib tashlashga imkon beradi, ammo qolganlarini qayta tekshirishni talab qiladi.
+
+\end{itemizex}
+
+Ko‘p turdagi indekslarni faqat bitta emas, balki jadvalning bir nechta ustunlarida ham yaratish mumkin. Turi qanday bo‘lishidan qat‘iy nazar, siz indekslarni ham ustun bo‘yicha, ham ixtiyoriy ifodalarda qurishingiz mumkin, shuningdek, faqat ma‘lum qatorlar uchun qism indekslarni yaratishingiz mumkin. Qatorlarni qamrab olgan indekslar jadvalga kirmasdan indeksning o‘zidan barcha kerakli ma‘lumotlarni olish orqali so‘rovlar bajarilishini tezlashtirish imkonini beradi.
+
+Rejalashtiruvchining qurollari qatoriga kiruvchi bit xarita bo‘yicha skanerlash bir nechta indekslarni birlashtirib ma‘lumotlarni olib chiqish tezligini oshiradi.
+
+\subsection{Krossplatformalilik}
+
+PostgreSQL Unix-lar oilasiga mansub operatsion tizimlarda, jumladan Linux, FreeBSD, Solaris va macOS, shuningdek, Windowsning server va mijoz talqinlarida ishlaydi.
+
+C tilida ochiq va ko‘chma bo‘lganligi sababli, PostgreSQL-ni turli xil platformalarda hatto PostgreSQL jamiyati tomonidan yig‘ma paketi qo‘llab-quvvatlanishi bo‘lmagan platformalarga ham, yig‘ish mumkin.
+
+
+\subsection{Kengayuvchanlik}
+
+Kengayuvchanlik - PostgreSQL arxitekturasi asosidagi tizimning asosiy afzalliklaridan biridir. Foydalanuvchilar asosiy tizim kodini o‘zgartirmasdan, mustaqil ravishda quyidagilarni qo‘shishlari mumkin:
+
+\begin{itemizex}
+\item{}   ma‘lumotlar turlari;
+\item{}   yangi turlar bilan ishlash funksiyalari va operatorlari;
+\item{}   indeks va jadvalga kirish usullari;
+\item{}   server dasturlash tillari;
+\item{}   tashqi ma‘lumotlar manbalariga ulanishlar (Foreign Data Wrappers);
+\item{}   yuklab olinadigan kengaytmalar.
+\end{itemizex}
+
+Kengaytmalarni to‘liq qo‘llab-quvvatlash PostgreSQL yadrosiga o‘zgartirishlar kiritmasdan va kerak bo‘lganda ulanishga ruxsat bermasdan har qanday murakkablikdagi funksionallikni amalga oshirish imkonini beradi. Masalan, kengaytmalar shaklida  yaratilgan bir qancha murakkab tizimlar mavjud:
+
+\begin{itemizex}
+\item{}    CitusDB~--- turli PostgreSQL-ga ma‘lumotlarni tarqatish (parchalash-sharding) va so‘rovlarni parallel ravishda bajarish qobiliyati.
+
+\item{}    PostGIS~--- geografik axborot ma‘lumotlarini qayta ishlash uchun eng mashhur va kuchli tizimlardan biri;
+
+\item{}    TimescaleDB~--- vaqt qatorlari, shu jumladan maxsus qismlarga ajratish (partition) va parchalash (sharding) bilan ishlash.
+
+\end{itemizex}
+PostgreSQL \PGVER yig‘masi o‘z ichiga olgan standart to‘plamning o‘zi, ishonch va foydaliligini isbotlagan ellikga yaqin kengaytmalarga ega.
+
+\subsection{Mumkinlik}
+
+BSD va MIT litsenziyalariga o‘xshash liberal PostgreSQL litsenziyasi MBBT dan cheklovsiz foydalanish, kodni o‘zgartirish va boshqa mahsulotlarga, shu jumladan xususiy va tijoriy mahsulotlarga qo‘shish imkonini beradi.
+
+
+\subsection{Bog‘liqsizlik}
+
+PostgreSQL biror tashkilotga qarashli emas va u xalqaro jamiyat tomonidan rivojlanadi. Bu shuni anglatadiki, PostgreSQL-dan foydalanadigan tizimlar har qanday sotuvchidan mustaqil bo‘lib, ularga kiritgan investitsiyalaringiz har qanday vaziyatda ham himoyalangandir.
+
+

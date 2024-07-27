@@ -1,0 +1,220 @@
+\documentclass[russian,parskip=half,fontsize=7pt,headings=normal,paper=a6,pagesize,DIV=12,BCOR=8mm]{scrbook}
+% A6 = 105mm:148mm
+\usepackage[width=73mm, height=120mm, inner=16mm, outer=16mm, top=12mm, bottom=16mm]{geometry}
+
+%\renewcommand*{\chapterformat}{}   % главы без номеров (KOMA SCRIPT)
+%\makeatletter
+%\renewcommand*{\thechapter}{\uppercase\expandafter{\romannumeral\c@chapter\relax}}
+%\makeatother
+
+\makeatletter
+\newcommand{\romanchapter}{\romannumeral\c@chapter\relax}
+\newcommand{\Romanchapter}{\uppercase\expandafter{\romannumeral\c@chapter\relax}}
+\makeatother
+
+\renewcommand*{\chapterformat}{%
+\mbox{\chapappifchapterprefix{\nobreakspace}\Romanchapter\autodot\IfUsePrefixLine{}{\enskip}}%
+}
+
+\renewcommand*{\sectionformat}{}
+\renewcommand*{\subsectionformat}{}
+
+\usepackage[utf8]{inputenc}
+\usepackage[english,main=russian]{babel}
+
+\usepackage[T1]{fontenc}
+\usepackage{PTSansCaption}
+\usepackage[scaled=1.00]{PTMono}
+\usepackage{PTSerifCaption}
+\renewcommand\familydefault{\sfdefault} 
+
+\usepackage{relsize}
+
+%\addtokomafont{pagenumber}{\large}%\bfseries}
+\addtokomafont{chapter}{\usefont{T2A}{PTSans-TLF}{b}{n}\Huge}
+\RedeclareSectionCommand[beforeskip=4em plus 1pt]{chapter}
+
+%\addtokomafont{section}{\LARGE}
+%\addtokomafont{subsection}{\large}
+
+%\usepackage{graphics}
+\usepackage{graphicx}
+\usepackage[svgnames]{xcolor}
+
+%\usepackage{qrcode}
+
+%\setlength{\hspace}{0mm}
+%\setlength{\vspace}{0mm}
+
+%--\setlength{\topmargin}{-22mm}   
+%--\setlength{\textheight}{120mm}
+%--\setlength{\textwidth}{80mm}
+
+\newcommand {\PG} {Postgres}
+\newcommand{\BS}{\textbackslash}
+
+\usepackage{ifthen}
+
+% url
+\usepackage[hyphens]{url} % разрешает перенос url на месте черточек
+\urlstyle{sf}
+\usepackage[
+  hidelinks=off,colorlinks,urlcolor=DarkBlue,linkcolor=black
+]{hyperref}
+%\newcommand\urld[2]{\href{#1://#2}{\nolinkurl{#2}}}
+\newcommand\urld[2]{%
+  \ifthenelse{\equal{#1}{mailto}}
+    {\href{#1:#2}}
+	{\href{#1://#2}}
+  {\nolinkurl{#2}}%
+}
+
+
+\usepackage{upquote}  % чтобы апостроф оставался апострофом, а не превращался в кавычку
+
+\usepackage{float}
+\usepackage{wrapfig}
+\floatstyle{boxed}
+\newfloat{floatbox}{thp}{lob}[chapter]
+
+\usepackage{lastpage} % для \pageref{LastPage}
+
+\usepackage{enumitem}
+
+% заточен под "полезные команды psql", возможно дано сделать отдельное окружение
+\setlist[description]{labelwidth=1.6cm,labelsep=0pt,leftmargin=1.6cm}
+
+\newlist{ENUMTOC}{enumerate}{1}
+\setlist[ENUMTOC]{label=\Roman*}
+\newenvironment{enumtoc}%
+  {\begin{ENUMTOC}[leftmargin=19pt,labelsep=3pt,parsep=0\parsep, align=left]
+  }
+  {\end{ENUMTOC}
+  }
+
+\newenvironment{itemizex}%
+%  {\begin{itemize}[leftmargin=11pt,labelsep=8pt,label={\Large\raisebox{0ex}{\textbullet}}]}%
+  {\begin{itemize}[leftmargin=11pt,labelsep=8pt,parsep=0.75\parsep]
+  }
+  {\end{itemize}
+  }
+
+\newenvironment{denseenum}%
+  {\begin{enumerate}[leftmargin=11pt,labelsep=3pt,parsep=0\parsep]
+  }
+  {\end{enumerate}
+  }
+\def\itemgrp #1{\vskip 0.5\baselineskip minus 1pt\item[] \textbf{#1}\vskip 0.2\baselineskip minus 0.5pt}
+
+\newenvironment{denseitem}%
+  {\begin{itemize}[leftmargin=11pt,labelsep=8pt,parsep=0\parsep]
+  }
+  {\end{itemize}
+  }
+
+%% Выключка влево, но с переносами
+\usepackage{ragged2e}
+%%\setlength{\RaggedRightRightskip}{0pt plus 2em}
+%\RaggedRight
+\sloppy
+
+\hyphenation{Post-greSQL}
+\hyphenation{Post-gres}
+
+% окружения для кода
+\usepackage{etoolbox}
+\usepackage{mdframed}
+\newmdenv[linecolor=black,linewidth=0.5pt,skipabove=1.5\baselineskip,innerleftmargin=3ex,innertopmargin=0pt,innerbottommargin=0pt,innerrightmargin=0pt,topline=false,rightline=false,bottomline=false]{leftbar}
+\usepackage{alltt}
+\makeatletter
+\newenvironment{code} % обычный код
+  {\renewcommand{\baselinestretch}{1}\renewcommand{\verbatim@font}{\ttfamily\relscale{0.94}}
+   \begin{alltt}
+  }
+  {
+   \end{alltt}
+  }
+\newenvironment{codep} % продолжение кода (уменьшенный верхний отступ)
+  {\renewcommand{\baselinestretch}{1}\renewcommand{\verbatim@font}{\ttfamily\relscale{0.94}}
+   \begin{alltt}
+   \vskip-1\baselineskip
+  }
+  {\end{alltt}
+  }
+\makeatother
+
+% немного увеличенный интерлиньяж
+\renewcommand{\baselinestretch}{1.2}
+
+\usepackage{pdfpages}
+
+\usepackage{wrapfig}
+\usepackage{multicol}
+\usepackage{rotating} % sidewaysfigure
+
+% код в тексте (так как моноширинные пробелы смотрятся ужасно, заменяем их на обычные)
+\usepackage{xstring}
+\newcommand{\codett}[1]{%
+  \noexpandarg%
+  \StrSubstitute{#1}{ }{\textnormal{ }}[\codewords]%
+  \texttt{\codewords}%
+}
+
+\usepackage{tikz}
+\usetikzlibrary{positioning,shapes,calc}
+\usepackage{xkeyval}
+
+\usepackage[strict]{changepage}
+
+% ...чтобы TikZ не жаловался на "some package has redefined the meaning of the math-mode dollar sign"
+\makeatletter
+\global\let\tikz@ensure@dollar@catcode=\relax
+\makeatother
+\setlength{\fboxsep}{0pt}
+
+% Включаем microtype для всего, кроме кода (иначе будет нарушаться моноширинность)
+\usepackage[protrusion=true,expansion=true,stretch=10,shrink=5]{microtype}
+\AtBeginEnvironment{code}{\microtypesetup{activate=false}}
+\AtBeginEnvironment{codep}{\microtypesetup{activate=false}}
+
+% поменьше строк с переносами, идущих подряд
+\doublehyphendemerits=70000
+
+\newcommand\percent{\%}
+
+% Ударение для русских букв, когда не работает обычный \' - например, для буквы "ы"
+% https://tex.stackexchange.com/questions/409416/how-to-type-a-circumflex-over-a-greek-letter-in-text-mode
+\DeclareRobustCommand{\cyracute}[1]{%
+  \leavevmode
+  \vbox{\offinterlineskip
+    \ialign{%
+      \hfil##\hfil\cr
+      \'{}\cr
+      \noalign{\kern-1ex}
+      #1\cr
+    }%  
+  }%  
+}
+
+% номер страницы и главы на полях
+\usepackage[automark]{scrlayer-scrpage}
+\pagestyle{scrheadings}
+\clearpairofpagestyles
+\lehead{
+   \begin{tikzpicture}[remember picture,overlay]
+       \node[align=right,text width=10mm,text depth=30mm,anchor=north west,yshift=-12mm] at (current page.north west){\normalfont\normalsize\thepage};
+       \node[align=right,text width=10mm,text depth=30mm,anchor=north west,yshift=-12mm-8pt*1.2] at (current page.north west){\normalfont\normalsize\romanchapter};
+   \end{tikzpicture}%
+}
+\rohead{
+   \begin{tikzpicture}[remember picture,overlay]
+       \node[align=left,text width=10mm,text depth=30mm,anchor=north east,yshift=-12mm] at (current page.north east){\normalfont\normalsize\thepage};
+       \node[align=left,text width=10mm,text depth=30mm,anchor=north east,yshift=-12mm-8pt*1.2] at (current page.north east){\normalfont\normalsize\romanchapter};
+   \end{tikzpicture}
+}
+
+\newcommand{\PGVER}{16}
+\newcommand{\PGYEAR}{2023}
+
+\newcommand{\filepath}{}
+

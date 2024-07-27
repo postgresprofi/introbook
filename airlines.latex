@@ -1,0 +1,52 @@
+\documentclass[russian,parskip=half,fontsize=7pt,open=any,headings=normal,paper=120mm:75mm,pagesize,landscape]{scrbook}
+% чуть шире, чем размер полосы книги (тут 75mm, там 73mm)
+\usepackage[width=120mm, height=73mm, inner=0mm, outer=0mm, top=0mm, bottom=0mm]{geometry}
+
+\usepackage[utf8]{inputenc}
+\usepackage[english,main=russian]{babel}
+
+\usepackage[T1]{fontenc}
+\usepackage{PTSansCaption}
+\usepackage[scaled=1.00]{PTMono}
+\usepackage{PTSerifCaption}
+\renewcommand\familydefault{\sfdefault} 
+
+\usepackage{tikz}
+\usepackage{pgfplots}
+
+\definecolor{sea}{rgb}{0.9, 0.9, 0.98}
+
+\begin{document}
+\centering
+\begin{tikzpicture}
+\begin{axis}[   
+  hide axis,
+%  enlargelimits = false,
+%  axis equal,
+%  scale only axis,
+  width = 12.0cm,
+  height = 10.0cm,
+  xmin = 15, xmax = 180,
+  ymin = 30, ymax = 95,
+%  disabledatascaling,
+  clip = true,
+  clip mode = global
+]
+
+%\fill [red] (-16.0cm,-13.65cm) rectangle (16.0cm,13.65cm);
+\addplot [fill=sea] table {
+-181 -91
+-181 91
+181 91
+181 -91
+-181 -91
+};
+\addplot [black!25, fill=white] table {world_50m.txt};
+\addplot [smooth, black!75, ultra thin, no marks] table {routes.dat};
+\addplot [orange, only marks, mark options={scale=0.5}] table {airports.dat};
+	
+\end{axis}
+\end{tikzpicture}
+
+\end{document}
+

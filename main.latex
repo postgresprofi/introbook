@@ -1,0 +1,107 @@
+
+\input{_styles.latex}
+
+\begin{document}
+
+\chapter*{Kirish}
+
+Ushbu kichik kitob - PostgreSQL bilan tanishishni boshlayotganlar uchun. Undan o‘rganadiganlaringiz:
+
+\begin{enumtoc}
+\item{}    PostgreSQL umuman olganda nima \dotfill \pageref{about}
+
+\item{}    PostgreSQL \PGVER talqinida nimalar qo‘shilgan \dotfill \pageref{whatsnew}
+
+\item{}    PostgreSQL Linux va Windowsga o‘rnatilishi \dotfill \pageref{installation}
+
+\item{}    Serverga ulanish, SQL-so‘rovlar yozilishi va tranzaksiyalar ahamiyati \dotfill \pageref{trysql} 
+
+\item{}    Demo ma‘lumotlar bazasi yordamida SQL tilini mustaqil o‘rganishni davom ettirish \dotfill \pageref{demo}
+
+\item{}    O‘z ilovalaringizda PostgreSQL-ni ma‘lumotlar bazasi sifatida ishlatish haqida \dotfill \pageref{application}
+
+\item{}    Serverni minimal sozlashlarsiz aylanib o‘tib bo‘lmaydi, huddi shunday 1C da ham \dotfill \pageref{configure}
+
+\item{}    PgAdmin - foydali dastur haqida \dotfill \pageref{pgadmin}
+
+\item{}    Qo‘shimcha imkoniyatlar haqida:\\
+umummatnli qidiruv, \dotfill \pageref{tsearch} \\
+JSON format, \dotfill \pageref{json} \\
+tashqi ma‘lumotlardan foydalanish \dotfill \pageref{fdw}
+
+\item{}    Qanday ta‘lim resurslari bor, qanday qilib sertifikatli mutaxassis bo‘lish mumkin \dotfill \pageref{education}
+
+\item{}    Qanday qilib bo‘lib o‘tayotgan jarayonlardan xabardor bo‘lib turish mumkin \dotfill \pageref{galaxy}
+
+\item{}    Postgres Professional kompaniyasi haqida qisqacha \dotfill \pageref{pgpro}
+
+\end{enumtoc}
+
+Kitobimiz PostgreSQL bilan bo‘lgan birinchi tajribalaringizni yoqimli bo‘lishiga va MBBT jamiyatiga kirishib ketishingizga yordam beradi deb umid qilamiz. 
+Omad tilaymiz!
+
+\input{_01_about.latex}
+
+%\input{_02_whatsnew.latex}
+
+%\input{_03_installation.latex}
+
+%\input{_04_trysql.latex}
+
+%\input{_05_demo.latex}
+
+%\input{_06_application.latex}
+
+%\input{_07_configure.latex}
+
+%\input{_08_pgadmin.latex}
+
+%\input{_09_additional.latex}
+
+%\input{_10_education.latex}
+
+%\input{_11_galaxy.latex}
+
+%\input{_12_pgpro.latex}
+
+\newpage
+\thispagestyle{empty}
+~
+\vfill
+
+\begin{center}
+Luzanov Pavel Veniaminovich\\
+Rogov Yegor Valerevich\\
+Lyovshin Igor Viktorovich
+
+{\large\bfseries Postgres. Birinchi tanishuv}
+
+\vspace{\baselineskip}
+
+\setlength{\tabcolsep}{1pt}
+\begin{tabular}{r l}
+Muharrir: & Pyetr Lagutkin\\
+Muqova dizayneri: & Eteri Bejashvili\\
+\end{tabular}
+
+10 - nashr, qayta ishlangan ba to‘ldirilgan
+
+\urld{https}{postgrespro.ru/education/books/introbook}
+
+
+\vfill
+
+{\copyright} ООО <<ППГ>>, 2016--\the\year{}
+
+Москва, Постгрес Профессиональный, \the\year{}
+
+\vspace{\baselineskip}
+
+ISBN 978-5-6045970-5-7
+
+\vfill
+
+\end{center}
+
+\end{document}
+
