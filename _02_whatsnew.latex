@@ -1,0 +1,201 @@
+% po4a: environment codep2
+% po4a: environment codep
+% po4a: environment code
+% po4a: environment code2
+% po4a: environment denseitem
+% po4a: environment denseenum
+% po4a: environment itemize
+% po4a: environment itemizex
+% po4a: environment document
+% po4a: environment leftbar
+% po4a: environment sidewaysfigure 
+\chapter{PostgreSQL \PGVER - dagi yangiliklar }\label{whatsnew}
+
+Agar siz PostgreSQL ning oldingi talqinlari bilan tanish bo‘lsangiz, ushbu bob sizga o‘tgan yil ichida nima o‘zgarganligi haqida ma‘lumotlar beradi. 
+Faqat ba‘zi o‘zgarishlargina bu yerda keltirilgan. To‘liq ro‘yxat uchun nashr eslatmalariga qarang: \urld{https}{postgrespro.ru/docs/postgresql/\PGVER/release-\PGVER}. Postgres Pro tomonidan yuritiladigan Habr-dagi blogda yangi mahsulotlar bilan tezda tanishishingiz mumkin: \urld{https}{habr.com/ru/companies/postgrespro/articles/}.
+
+\section{SQL buyruqlari}
+
+\textbf{\codett{FROM} bandidagi qism so‘rovlar uchun taxalluslar endi ixtiyoriy bo‘lib,} hatto ular foydali bo‘lmagan taqdirda nom berish zaruriyatini olib tashlash imkonini yaratdi.
+
+Endilikda \textbf{kengaytirilgan statistika uchun nom o‘ylab topishga} hojat yo‘q. \codett{CREATE INDEX} buyrug‘i nomlashni boshqara oladi va \codett{CREATE STATISTICS} ham huddi shunday.
+
+O‘zgarishlar \textbf{\codett{REINDEX} buyrug‘iga} ham ta‘sir qildi: ma‘lumotlar bazasi nomini belgilash ixtiyoriy bo‘lib qoldi va \codett{REINDEX DATABASE} opsiyasi endi tizim katalogi indekslariga ta‘sir o‘tkazmaydi.
+
+\codett{CREATE TABLE} buyrug‘i endi \textbf{TOAST saqlash strategiyasini belgilash} imkoniyatiga ega. Ilgari, \codett{ALTER} yordamida jadval ifodalanishini o‘zgartirishingiz kerak edi.
+
+Yangi SQL:2023 standartida ko‘rsatilganidek, \textbf{butun son konstantalari nafaqat o‘nlik, balki o‘n oltilik, sakkizlik yoki ikkilik tizimlarda ham yozilishi mumkin}, bunda raqamlar guruhlarini~--- vizual ajratish pastki chiziq yordamida amalga oshiriladi.
+
+\codett{COPY FROM} buyrug‘i ma‘lum kirish qiymatlarini \textbf{ustunning sukut (default) qiymati bilan almashtirishni} o‘rgandi.
+
+\section{Funksiyalar}
+
+\textbf{SQL/JSON standartini} joriy qilish bo‘yicha qiyin ishlar davom etmoqda. Ushbu nashr \codett{json\_array}, \codett{json\_arrayagg}, \codett{json\_object}, \codett{json\_objectagg} \textbf{konstruktorlar funktsiyalari} va \codett{IS JSON}, \codett{IS JSON VALUE}, \codett{IS JSON ARRAY}, \codett{IS JSON OBJECT}, \codett{IS JSON SCALAR} \codett{predikatlarini} qo‘shdi. Eng qiziqarli narsa amalga oshirilmagan bo‘lib qolmoqda~--- \codett{json\_table} funksiyasi, biz uni ham kutib qolamiz.
+
+Taqsimlangan tasodifiy sonlarni olish uchun yangi \codett{random\_normal} funksiyasi, shu bilan birga uning uchun \codett{erf} xato funksiyasi va qo‘shimcha xato funksiyasi \codett{erfc} yaratildi.
+
+\codett{array\_shuffle} funksiyasi asl massivning elementlarini aralashtirib yuboradi va \codett{array\_sample} asl massivning elementlaridan ko‘rsatilgan soncha olinadigan \textbf{tasodifiy elementlar} soniga ega massivni qaytaradi.
+
+SQL standartida tasvirlangan \codett{any\_value}, yangi agregat funksiyasi - \textbf{qatorlar guruhi uchun ixtiyoriy bo‘sh bo‘lmagan qiymatni qaytaradi}.
+
+Yangi \codett{date\_add} va \codett{date\_subtract} funktsiyalari sanalarni qo‘shish va ayirishda \textbf{vaqt mintaqasini aniq ko‘rsatish} imkonini beradi.
+
+\codett{pg\_split\_walfile\_name} funksiyasi \textbf{WAL-fayl nomini tashkillashtiradi va offset-ni LSN pozitsiyasiga suradi}.
+
+\codett{pg\_input\_is\_valid} funktsiyasi birinchi argument sifatidagi \textbf{kirish qiymatining ikkinchi argument - ma‘lumotlar turi uchun mumkin bo‘lgan qiymat yoki yo‘qligini tekshiradi}. Xato haqidagi batafsil ma‘lumotlar \codett{pg\_input\_error\_info} funktsiyasi tomonidan taqdim etiladi.
+
+\section{Mantiqiy replikatsiya}
+
+Mantiqiy replikatsiya faol rivojlanishda davom etmoqda.
+\textbf{Mantiqiy replikatsiya jismoniy replikatsiya} bilan birga ishlay olishni boshladi, bu esa qo‘llab-quvvatlanadigan foydalanish holatlari doirasini yanada kengaytiradi.
+
+\textbf{Ikki tomonlamali mantiqiy replikatsiya}, albatta, hali multimaster degani emas (\urld{https}{pgconf.ru/2023/341014}), lekin bu ushbu yo‘nalishdagi muhim qadamdir.
+
+Agar jadvalda unikal indeks bo‘lmasa, replikatsiya \textbf{unikal bo‘lmagan indeksdan} foydalanishi mumkin.
+
+Ikkilik formatdagi dastlabki sinxronizatsiya \textbf{ma‘lumotlar uzatishni tezlashtiradi} va uzoq davom etadigan tranzaktsiyalardagi o‘zgartirishlar nashriyot serverida fiksirlashlarni kutmasdan \textbf{parallel ravishda qo‘llanilishi} mumkin.
+
+\textbf{Obuna yaratish huquqlari} superfoydalanuvchidan yangi \codett{pg\_create\_subscription} maxsus roliga o‘tkazildi. Va sukut bo‘yicha, \textbf{o‘zgarishlarni qo‘llash} avvalgidek obuna egasi emas, balki jadval egasi nomidan qo‘llaniladi.
+
+
+\section{Tozalash}
+
+\textbf{Muzlatish to‘g‘risidagi qaror} avvalgidek satr bo‘yicha emas, \textbf{balki butun sahifa uchun qabul qilinadi}: agar siz satrning bitta talqinini muzlatishingiz kerak bo‘lsa, qolganlarini muzlatishingizga hech narsa to‘sqinlik qilmaydi. Shu bilan birga,  to‘liq tasviri jurnalga qayd etilayotgan sahifalar ham muzlatiladi.
+
+\textbf{\textit{vacuum\_defer\_cleanup\_age} parametri olib tashlandi}. Bu muammolarni keltirib chiqardi, ammo qulaylik yaratmadi: katta qiymatlar jadvallarning o‘sishiga olib keldi, kichiklari esa replikada WAL-dan foydalanishdagi nizolarni oldini olishga yordam bermadi.
+
+\textbf{Tozalash buferining o‘lchami} yangi \textit{vacuum\_buffer\_usage\_limit} parametrida yoki \codett{VACUUM} va \codett{ANALYZE} ni chaqirganda ko‘rsatilishi mumkin. Ilgari o‘lcham fiksirlangan edi.
+
+\textbf{Qo‘lda tozalash} sizga kerakli sxemalardan jadvallarni tanlash, toast-jadvallarini alohida qayta ishlash va ma‘lumotlar bazasi statistikasini yangilash bosqichini boshqarish imkonini beradi.
+
+\section{Monitoring}
+
+Eng muhim yangilik~--- \textbf{\codett{pg\_stat\_io} ko‘rinishi bo‘lib, unda buferlar soni va ishlash vaqtini o‘z ichiga olgan batafsil kiritish-chiqarish statistikasi mavjud}. Endi, masalan, bufer keshidan diskka ma‘lumotlarni kim yozishini aniq tushunish mumkin bo‘ladi. Ilgari bu mumkin emas edi, chunki \codett{pg\_stat\_bgwriter} ko‘rinishida mijoz jarayonlari va tozalash o‘rtasidagi farqni bila olmasdik.
+
+Mavjud statistik ko‘rinishlarda ham o‘zgarishlar mavjud. 
+\codett{n\_tup\_newpage\_upd} ustuni \codett{pg\_stat\_*\_tables} oilasiga qo‘shildi, bu sizga \textbf{HOT optimallashtirish samaradorligini baholash imkonini} beradi.
+\textbf{DDL buyruqlarini normallashtirish} paydo bo‘ldi, endi \codett{pg\_stat\_statements} da dublikatlar bo‘lmaydi.
+\codett{pg\_stat\_all\_tables} va \codett{pg\_stat\_all\_indexes} nafaqat skanerlashlar sonini, balki indekslar va jadvallarga \textbf{oxirgi marta kirishni ham kuzatib boradi}.
+
+\codett{EXPLAIN} buyrug‘i \codett{\$1}, \codett{\$2} va xokozolarga almashtirilgan parametrlar bilan \textbf{umumiy so‘rov rejasini} ko‘rsatishi mumkin.
+
+\codett{auto\_explain} moduli \textbf{parametr qiymatlarini} (\textit{log\_parameter\_max\_length}) va \textbf{so‘rov identifikatorlarini} (\textit{log\_verbose}) jurnalga yozishni o‘rgandi.
+
+\textbf{Xulosa ma‘lumotlarini tezda olish uchun} \codett{pg\_buffercache} kengaytmasiga ikkita yangi \codett{pg\_buffercache\_usage\_counts} va \codett{pg\_buffercache\_summary} funksiyalari qo‘shildi.
+
+\section{Optimallashtirishlar}
+
+\textbf{BRIN indekslari endi HOT yangilanishlariga to‘sqinlik qilmaydi}, chunki ular ma‘lum qator talqinlariga emas, balki sahifa diapazonlariga murojaat qiladi. Oldingi, 15-talqindagi urinish yuzaga kelgan qiyinchiliklar tufayli bekor qilingandi, ular endi bartaraf etildi.
+
+Rejalashtiruvchi \textbf{o‘ng anti-ulanishni} ko‘rib chiqa boshladi, ilgari unga faqat chap tomonnikidan foydalanish imkoni mavjud edi.
+
+\textbf{To‘liq va o‘ng xesh-birikmalari} parallel ravishda amalga oshirilishi mumkin.
+
+\textbf{Oyna chegarasi turini optimal tanlash tufayli standart oyna funksiyalarini (masalan, \codett{row\_number} yoki \codett{rank}) bajarilishi tezlashdi}.
+
+\textbf{Agregat funksiyalar chaqirilishida \codett{ORDER BY} yoki \codett{DISTINCT} saralash bandi ko‘rsatilganda tartiblangan ma‘lumotlarni olish uchun indeksdan foydalanishi mumkin bo‘ldi}. Shuningdek \codett{string\_agg} va \codett{array\_agg} agregat funktsiyalari endi \textbf{parallel ravishda} bajariladi.
+
+\textbf{Endilikda \codett{GROUPBY} va \codett{DISTINCT} bandlaridagi takroriy ustunlar unumdorlikni pasaytirmaydi}: bu optimallashtirish avtomatik generatsiya qilingan so‘rovlar uchun foydali bo‘lishi mumkin.
+
+\textbf{Xesh-indekslarini yaratish} ma‘lumotlarni faqat savat raqami bo‘yicha emas, balki qiymat bo‘yicha ham oldindan saralash orqali tezlashdi.
+
+\textbf{Qatorlar qo‘shiladigan bo‘lim nomini keshlash orqali qismlarga bo‘lingan (partition) jadvalga ommaviy kiritish tezlashtirildi}.
+
+\textbf{Sur‘atlardan qidirish} - SIMD ko‘rsatmalari yordamida optimallashtirilgan bo‘lib, u bir vaqtning o‘zida yuzlab yozish tranzaktsiyalari bajarilganda ishlashga foyda keltiradi.
+
+\textbf{Munosabatlar kengaytmasi} sahifalar qo‘shilganda blokirovkani kam vaqtga ushlab turadi va shu orqali jadvalga bir vaqtda faol ma‘lumotlar qo‘shilishi mavjud bo‘lgandagi ishlashni tezlashtiradi.
+
+\textbf{\textit{force\_parallel\_mode} opsiyasi nihoyat \textit{debug\_parallel\_query} deb o‘zgartirildi} va u tajribasiz administratorlarni mavjud bo‘lmagan vasvasaga tushishdan to‘xtatadi degan umiddamiz.
+
+
+\section{Foydalanish nazorati}
+
+Ishlab chiquvchilar rollar va imtiyozlar tizimini faol ravishda qayta ko‘rib chiqmoqdalar.
+
+\codett{GRANT} buyrug‘ining sintaksisi kengaytirildi. Endi, bir rolni boshqasiga qo‘shganingizda, \textbf{imtiyozlar meros qilib olinishi kerakmi} (INHERIT OPTION) va \textbf{rolga o‘tishga ruxsat beriladimi} (SET OPTION) kabi xossalarni belgilashingiz mumkin. 
+Rol a‘zoligi uchinchi rol nomidan berilsa, server harakati endi shunga mos bo‘ladi.
+
+\textbf{\codett{CREATEROLE} atributining imkoniyatlari} faqat o‘zingizga tegishli bo‘lgan narsalarni uzatishingiz mumkin degan tamoyilga muvofiq qisqartirildi.
+
+\textls[-3]{Klasterni ishga tushirish vaqtida yaratilgan foydalanuvchidan \textbf{superuserlik bekor qilinmaydi}.}
+
+Yangi \codett{SYSTEM\_USER} funktsiyasi SQL standarti bilan moslandi, shu bilan birga u \textbf{autentifikatsiya usuli} va \textbf{tashqi foydalanuvchi} haqidagi ma‘lumotlarni ham ko‘rsatadi.
+
+%%%
+
+Konfiguratsiya fayllarini qayta ishlashda ma‘lum bir birlashmalar bo‘ldi. pg\_hba.conf va pg\_ident.conf fayllari, postgresql.conf bilan bir qatorda, endi boshqa fayllarni kiritish uchun \textbf{include direktivalarini} qo‘llab-quvvatlashni boshlashdi va \codett{pg\_hba\_file\_rules} va \codett{pg\_ident\_file\_mappings} ko‘rinishlarida fayl nomi va qoida yoki moslik raqamiga ega ustunlar paydo bo‘ldi. pg\_ident.conf faylida PostgreSQL foydalanuvchi nomi endi pg\_hba.conf bilan bir xil qoidalarga muvofiq qayta ishlanadi: siz \textbf{all} va \textbf{guruh rol nomlarini} belgilashingiz va \textbf{regulyar iboralardan} foydalanishingiz mumkin. Regulyar ifodalar pg\_hba.conf da foydalanuvchi nomlari va ma‘lumotlar bazalari uchun ham qo‘llab-quvvatlanadi.
+
+Yangi \textit{reserved\_connections} parametridan foydalanib, siz yangi \textit{pg\_use\_reserved\_connections} sobit roliga kiritilgan rollar tomonidan ishlatilishi mumkin bo‘lgan ulanishlarning kerakli sonini \textbf{zaxiraga olishingiz mumkin}. \textit{superuser\_reserved\_connections} zaxirasi ham saqlanib qoladi, lekin eng ekstremal holatlar uchun.
+
+Endi libpq kutubxonasi ulanish balansini qo‘llab-quvvatlaydi (\codett{load\_balance\_hosts}) va qabul qilinadigan \textbf{autentifikatsiya usullarini} (\codett{require\_auth}) belgilash qobiliyatiga ega.
+
+Yangi \textit{scram\_iterations} parametrini oshirish autentifikatsiyani sekinlashtirsada, \textbf{saqlangan parollarning turg‘unligini oshiradi}.
+
+\section{Utilitlar va kengaytmalar}
+
+\subsection{psql}
+
+Endi \textbf{sarlavhaning kengligini kengaytirilgan formatda (\codett{\BS{}pset xheader\_width}) boshqarish mumkin}.
+
+Bo‘lingan jadval uchun \codett{\BS{}d+} buyrug‘i bo‘limlarni - uchinchi tomon jadvallarini~--- \codett{FOREIGN} so‘zi bilan belgilab ko‘rsatadi.
+
+Yangi \codett{\BS{}bind} buyrug‘i qiymatlarni keyingi \textbf{so‘rovning parametrlariga bog‘laydi}.
+
+Ikki yangi \codett{SHELL\_ERROR} va \codett{SHELL\_EXIT\_CODE} o‘zgaruvchilari \textbf{oxirgi OS buyrug‘i qanday bajarilganligini ko‘rsatadi}.
+
+\codett{\BS{}watch} buyrug‘i endi \textbf{takrorlashlar sonini} ko‘rsatish imkonini beradi.
+
+\subsection{postgres\_fdw}
+
+Tashqi jadvalga \textbf{ommaviy kiritish rejimi} endilikda \codett{COPY FROM} buyrug‘i uchun va bo‘lim kalitini yangilashda ham ishlatiladi.
+
+Uchinchi tomon jadvallaridan statistik ma‘lumotlarni yig‘ishda \textbf{saralashlarni cheklash} uchun \codett{TABLESAMPLE} - dan foydalaniladi.
+
+Masofaviy serverlarda ochilgan tranzaktsiyalar endi ketma-ket emas, balki \textbf{parallel ravishda bekor qilinishi} mumkin.
+
+Endi uchinchi tomon jadvallari uchun \textbf{\codett{TRUNCATE} triggerlarini} yaratish mumkin.
+
+\subsection{pg\_dump}
+
+\codett{pg\_dump} yordamchi dasturi endi \textbf{LZ4 va zstd siqish algoritmlarini} qo‘llab-quvvatlaydi.
+
+Endi \textbf{bo‘lingan jadvalni barcha bo‘limlarini ularning nomlarini aniq ro‘yxatga kiritmasdan yuklash mumkin}.
+
+\textbf{Bir nechta jadvallarni yuklash optimallashtirildi}: ular birma-bir emas, bitta \codett{LOCK TABLE} buyrug‘i bilan bloklanadi. 
+
+\subsection{pg\_waldump va pg\_walinspect}
+
+\codett{pg\_walinspect} kengaytmasi va \codett{pg\_waldump} utilita dasturi \textbf{sahifalarning to‘liq tasvirlari} haqida ma‘lumot olishni o‘rgandi.
+
+\codett{pg\_get\_wal\_records\_info}, \codett{pg\_get\_wal\_stats}, \codett{pg\_get\_wal\_block\_info} funksiyalari endi \codett{end\_lsn} parametri ko‘rsatilmagan bo‘lsa, \textbf{jurnalni oxirigacha o‘qiydi}.
+
+\section{Konfiguratsiya parametrlari}
+
+Server konfiguratsiyasining infratuzilmasi parametr qiymatlariga, jumladan, \textbf{foydalanuvchi sozlamalariga kirishni tezlashtirish} uchun optimallashtirilgan.
+
+\codett{initdb} utilita dasturini chaqirishda siz \textbf{istalgan parametrning qiymatini bekor qilishingiz mumkin}. Bu klaster ishga tushirilgandan so‘ng konfiguratsiya fayllarini alohida tahrirlashdan qochadi.
+
+\section{Mahalliylashtirish}
+
+\textit{lc\_collate} va \textit{lc\_ctype} opsiyalari \textbf{olib tashlandi}, chunki ular faqat libc uchun tegishli edi. Provayderni \codett{pg\_database} da ko‘rish kerak.
+
+ICU provayderi uchun \textbf{Unicode tartiblash qoidasi qo‘shildi}, u sukut holatda oldindan yozilgan \textbf{UNI\-CODE} algoritmini almashtiradi.
+
+Lokal nomlar BCP 47 qoidalariga (\urld{https}{en.wikipedia.org/wiki/IETF_language_tag}) muvofiq \textbf{qisqartiriladi}, bu noto‘g‘ri tartiblash qoidasini tanlash imkoniyatini yo‘q qiladi. Va yangi buyruq parametri \codett{CREATE COLLATION} - \textbf{o‘z qoidalarini sozlash} imkonini beradi.
+
+\section{Turli xil}
+
+\textbf{Meson tizimi} hozirdanoq Windows uchun PostgreSQL - ni yig‘ishni soddalashtirayabdi va tezlashtirayabdi, vaqt o‘tishi bilan Unix-ga o‘xshash tizimlar uchun u odatiy bo‘lgan avtokonf va make-ni almashtiradi.
+
+\textbf{To‘gridan-to‘g‘ri kiritish-chiqarish}~--- MBBT dasturchilarning ertami kech duch keladigan zaruratidir. \textit{io\_direct} parametrini yoqish hozircha ishni sekinlashtiradi, chunki buferlangan kiritish/chiqarish holatida OT qabul qiladigan oldindan yuklash hali amalga oshirilmagan. Ammo bu muhim ish boshlandi.
+
+\codett{REFRESH MATERIALIZED VIEW} buyrug‘ini \codett{CONCURRENTLY} parametri yordamida chaqirib ko‘rinishlarni yangilashda \textbf{predikat bloklashlari qo‘shildi}.
+
+\textbf{Kengaytmalar o‘zlarining WAL resurs menejerlarini} yaratishi va shunga mos ravishda o‘z formatida qayd yozuvlarini yaratishi mumkin. Foydalanuvchi nuqtai nazaridan, hech narsa o‘zgarmadi, lekin yangi foydalanish usullarining paydo bo‘lishi tomon yana bir muhim qadam qo‘yildi.
+
+\section{Hujjatlar}
+
+\textbf{Hujjatlarga tranzaktsiyalar bo‘yicha yangi bob qo‘shildi}: \urld{https}{postgrespro.ru/docs/postgresql/16/transactions}.
+
+\textbf{Ingliz tilidagi hujjatlarning bo‘limlariga havola qilish \mbox{osonlashdi:}} kursorni olib borganingizda, nusxa ko‘chirishingiz mumkin bo‘lgan URL manzili paydo bo‘ladi. Rus tilidagi tarjimada shunga o‘xshash xususiyat amalga oshirilganiga ancha vaqt bo‘ldi.
+

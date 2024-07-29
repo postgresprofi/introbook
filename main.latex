@@ -10,7 +10,7 @@ Ushbu kichik kitob - PostgreSQL bilan tanishishni boshlayotganlar uchun. Undan o
 \begin{enumtoc}
 \item{}    PostgreSQL umuman olganda nima \dotfill \pageref{about}
 
-\item{}    PostgreSQL \PGVER talqinida nimalar qo‘shilgan \dotfill \pageref{whatsnew}
+\item{}    PostgreSQL \PGVER\ talqinida nimalar qo‘shilgan \dotfill \pageref{whatsnew}
 
 \item{}    PostgreSQL Linux va Windowsga o‘rnatilishi \dotfill \pageref{installation}
 
@@ -42,7 +42,7 @@ Omad tilaymiz!
 
 \input{_01_about.latex}
 
-%\input{_02_whatsnew.latex}
+\input{_02_whatsnew.latex}
 
 %\input{_03_installation.latex}
 
