@@ -1,0 +1,221 @@
+% po4a: environment codep2
+% po4a: environment codep
+% po4a: environment code
+% po4a: environment code2
+% po4a: environment denseitem
+% po4a: environment denseenum
+% po4a: environment itemize
+% po4a: environment itemizex
+% po4a: environment document
+% po4a: environment leftbar
+% po4a: environment sidewaysfigure 
+\chapter{O‘rnatish va ishlatishni boshlash}\label{installation}
+
+PostgreSQL bilan ishlashni boshlash uchun nima kerak? Ushbu bobda biz PostgreSQL xizmatini qanday o‘rnatish va boshqarishni tushuntiramiz, keyingi bobda esa oddiy ma‘lumotlar bazasini yaratamiz va undan 
+so‘rovlarni shakllantirishda foydalaniladigan SQL tili asoslarini o‘rgatish uchun foydalanamiz.
+
+Biz PostgreSQL~\PGVER ning odatiy (<<vanilli>>) distributivini olamiz.
+PostgreSQL serveri sizda qanday operatsion tizimiligiga qarab har xil tarzda o‘rnatiladi va ishga tushiriladi:
+\begin{itemizex}
+\item{} agar Windows bo‘lsa, o‘qishda davom eting;
+\item{} agar Ubuntu~--- yoki Debian oilasidagi Linux bo‘lsa — ~\pageref{linux} betga o‘ting. 
+\end{itemizex}
+
+Boshqa operatsion tizimlar uchun o‘rnatish bo‘yicha ko‘rsatmalar bu yerda mavjud: \urld{https}{postgresql.org/download}.
+
+Xuddi shu tarzda siz Postgres Pro Standard~\PGVER distibutividan foydalanishingiz mumkin: u oddiy PostgreSQL MBBT bilan to‘liq mos keladi, shuningdek, Postgres Professional kompaniyasida ishlab chiqilgan ba‘zi ishlanmalarni o‘z ichiga oladi va axborot va ta‘lim maqsadlarida foydalanilganda bepul. Uni tanlaganingizda, \urld{https}{postgrespro.ru/products/download} veb-saytida o‘rnatish bo‘yicha ko‘rsatmalarga qarang.
+
+\section{Windows}
+
+\subsection{O‘rnatish}
+
+O‘rnatuvchini yuklab oling (\urld{https}{postgrespro.ru/windows}), uni ishga tushiring va o‘rnatish tilini tanlang.
+
+O‘rnatuvchi an‘anaviy “Мастер” uslubida qurilgan: agar siz hamma narsadan mamnun bo‘lsangiz, "Далее" tugmasini bosing. Keling, asosiy o‘rnatish bosqichlarini ko‘rib chiqamiz.
+
+O‘rnatiladigan dasturning tarkibiy qismlari (agar tanlovga ikkilansangiz, hech narsani o‘zgartirmang):
+
+\vskip0.5\baselineskip
+\includegraphics[width=\textwidth]{03_components}
+\vskip0.5\baselineskip
+
+Keyin PostgreSQL-ni o‘rnatish uchun katalogni tanlash keladi.
+O‘zgarishsiz, o‘rnatish \filepath{C:{\BS}Program Files{\BS}PostgreSQL{\BS}\PGVER} jildida amalga oshiriladi.
+
+%\includegraphics[width=\textwidth]{03_folder}
+
+Ma‘lumotlar bazalari uchun katalog manzilini alohida tanlashingiz mumkin:
+
+\vskip0.5\baselineskip
+\includegraphics[width=\textwidth]{03_pgdata}
+\vskip0.5\baselineskip
+
+Aynan shu yerda MBBT da saqlanadigan ma‘lumotlar joylashadi, shuning uchun agar siz ko‘p ma‘lumotlarni saqlashni rejalashtirmoqchi bo‘lsangiz, diskda yetarli joy mavjudligiga ishonch~--- hosil qiling.
+
+%Параметры сервера:
+
+Ingliz tilidan boshqa tildagi ma‘lumotlar bilan ishlash uchun tegishli tilni tanlang (masalan, “Russian, Russia”) yoki Windows-da kerakli til o‘rnatilgan bo‘lsa, “Настройка ОС” variantini qoldiring.
+
+MBBT \codett{postgres} foydalanuvchisi parolini kiriting (va qayta kiritish orqali tasdiqlang). Shuningdek, joriy OT hisobi ostida PostgreSQL serveriga ulanish uchun “Настроить переменные среды” katagiga belgi qo‘ying.
+
+Qolgan parametrlar o‘zgarishsiz qoldirilishi mumkin:
+
+\vskip0.5\baselineskip
+\includegraphics[width=\textwidth]{03_parameters}
+\vskip0.5\baselineskip
+
+Agar siz PostgreSQL-ni faqat tanishish uchun o‘rnatishni rejalashtirayotgan bo‘lsangiz, keyingi oynada MBBT ko‘p RAM-ni egallamasligi uchun “Использовать параметры по умолчанию” xususiyatni belgilang.
+
+\subsection{Xizmatlarni boshqarish va asosiy fayllar}
+
+PostgreSQL o‘rnatilgach operatsion tizimda “postgresql-\PGVER” xizmati ro‘yxatga olinadi. Kompyuter  Network Service (tarmoq xizmati) hisob qaydnomasi ostida ishga tushganda u ham avtomat ravishda ishga tushadi. Agar kerak bo‘lsa, xizmat parametrlarini standart Windows vositalari yordamida o‘zgartirish mumkin.
+
+Ma‘lumotlar bazasi serveri xizmatini vaqtincha to‘xtatish uchun o‘rnatish vaqtida ko‘rsatilgan “Пуск” menyusi jildidan “Stop Server” dasturini ishga tushiring.
+
+\vskip0.5\baselineskip
+\includegraphics[width=\textwidth]{03_optimization}
+\vskip0.5\baselineskip
+
+Xizmat huddi shunday u yerda joylashgan “Start Server” dasturi tomonidan ishga tushiriladi.
+
+%\setlength\columnsep{0.5cm}
+%\setlength\intextsep{0pt}
+%\begin{wrapfigure}[14]{l}{0pt}
+%\includegraphics[width=0.496993988\textwidth]{03_stop}
+%\end{wrapfigure}
+
+Agar xizmatni ishga tushirishda xatolik yuzaga kelsa, bu haqda server xabarlari jurnalida qayd qilinadi.
+Jurnal, ma‘lumotlar bazalari uchun, o‘rnatish paytida tanlangan katalogning \filepath{log} qismkatalogida joylashgan (odatda \filepath{C:{\BS}Program Files{\BS}PostgreSQL{\BS}\PGVER{\BS}data{\BS}log}) bo‘ladi.
+Jurnal shunday tuzilganki, yozuv vaqti-vaqti bilan yangi faylga o‘tadi. Joriy faylni - oxirgi o‘zgartirish sanasi yoki o‘tish sanasini hamda vaqtini o‘z ichiga olgan nom bilan topishingiz mumkin.
+
+Server sozlamalarini belgilaydigan bir nechta muhim konfiguratsiya fayllari mavjud. Ular ma‘lumotlar bazasi katalogida joylashgan. PostgreSQL bilan birinchi marta tanishayotganda ularni o‘zgartirishning hojati yo‘q, lekin haqiqiy ishda 
+ular sizga albatta kerak bo‘ladi. Ushbu fayllarni ko‘rib chiqing - ular yaxshi hujjatlashtirilgan:
+
+\begin{itemizex}
+\item{}    \filepath{postgresql.conf}~--- server parametrlarining qiymatlarini o‘z ichiga olgan asosiy konfiguratsiya fayli;
+
+\item{}     \filepath{pg\_hba.conf}~--- kirish huquqi sozlamalarini belgilaydigan fayl. Xavfsizlik maqsadida, sukut bo‘yicha, kirish parol bilan tasdiqlanishi kerak va faqat mahalliy kompyuterdangina shunday qilish uchun ruxsat etiladi.
+\end{itemizex}
+
+Endi biz ma‘lumotlar bazasiga ulanishga tayyormiz. Buyruqlar berish va so‘rovlarni bajarishga harakat qilamiz. ~\pageref{trysql} betdagi “SQLni sinab ko‘rish” bo‘limiga o‘ting.
+
+\section{Debian va Ubuntu}\label{linux}
+
+\subsection{O‘rnatish}
+
+Agar siz Linuxdan foydalanayotgan bo‘lsangiz, o‘rnatish uchun siz PGDG (PostgreSQL Global Development Group) paketlar bazasini ulashingiz kerak. Hozirda Debian uchun 10 “Buster”, 11 “Bullseye” va 12 “Bookworm” talqinlar, Ubuntu uchun esa - 20.04 “Focal”, 22.04 “Jammy”, 23.04 “Lunar” va 23.10 “Mantic” talqinlar qo‘llab-quvvatlanadi.
+
+Terminalda quyidagi buyruqlarni bajaring:
+
+\begin{code}
+$ \textbf{sudo apt-get install lsb-release}
+\end{code}
+\begin{codep}
+$ {\bfseries{}sudo sh -c 'echo "deb \BS
+  http://apt.postgresql.org/pub/repos/apt/ \BS
+  $(lsb_release -cs)-pgdg main" \BS
+  > /etc/apt/sources.list.d/pgdg.list'}
+\end{codep}
+\begin{codep}
+$ \textbf{wget --quiet -O - \BS
+  https://postgresql.org/media/keys/ACCC4CF8.asc \BS
+  | sudo apt-key add -}
+\end{codep}
+
+Ombor linux tizimiga ulandi, endi paketlar ro‘yxatini yangilaymiz:
+
+\begin{code}
+$ \textbf{sudo apt-get update}
+\end{code}
+
+O‘rnatishdan oldin mahalliylashtirish sozlamalarini tekshiring
+
+\begin{code}
+$ \textbf{locale}
+\end{code}
+
+Ingliz tilidan boshqa tildagi ma‘lumotlar bilan ishlash uchun \texttt{LC\_CTYPE} va \texttt{LC\_COLLATE} o‘zgaruvchilari qiymatini o‘zgartirishingiz kerak bo‘lishi mumkin. “\texttt{en\_US.UTF8}” tili rus tili uchun ham mos keladi, ammo uni o‘zgartirish yaxshidir:
+
+\begin{code}
+$ \textbf{export LC_CTYPE=ru_RU.UTF8}
+\end{code}
+\begin{codep}
+$ \textbf{export LC_COLLATE=ru_RU.UTF8}
+\end{codep}
+
+Shuningdek, operatsion tizimda ham tegishli til o‘rnatilganligiga ishonch hosil qiling:
+
+\begin{code}
+$ \textbf{locale -a | grep ru_RU}
+\end{code}
+\begin{codep}
+ru_RU.utf8
+\end{codep}
+
+Agar bunday bo‘lmasa, uni generatsiya qilib yarating:
+
+\begin{code}
+$ \textbf{sudo locale-gen ru_RU.utf8}
+\end{code}
+
+Endi siz o‘rnatishni boshlashingiz mumkin:
+
+\begin{code}
+$ \textbf{sudo apt-get install postgresql-\PGVER}
+\end{code}
+
+Bu oxirgi bosqich edi. Endi PostgreSQL MBBT o‘rnatildi, ishga tushirildi va foydalanishga tayyor. 
+Buni tekshirish uchun quyidagi buyruqni bering:
+
+\begin{code}
+$ \textbf{sudo -u postgres psql -c 'select version()'}
+\end{code}
+
+Agar hamma narsa muvaffaqiyatli bajarilgan bo‘lsa, javob sifatida PostgreSQL talqinini olishingiz kerak.
+
+\subsection{Xizmatlarni boshqarish va asosiy fayllar}
+
+O‘rnatish vaqtida PostgreSQL maxsus \texttt{postgres} hisobini yaratadi, uning ostida serverga xizmat ko‘rsatish protseslari ishlaydi va MBBT bilan bog‘liq barcha fayllarga egalik qiladi. Operatsion tizim qayta ishga tushirilganda PostgreSQL avtomatik ravishda ishga tushadi. 
+Standart sozlamalar bilan bu muammo emas, chunki serverga murojaatlar bo‘lmasa, tizim resurslari juda kam sarflanadi.
+Agar siz baribir avtomatik ishga tushirishni o‘chirib qo‘ymoqchi bo‘lsangiz, quyidagilarni bajaring:
+
+\begin{code}
+$ \textbf{sudo systemctl disable postgresql}
+\end{code}
+
+Ma‘lumotlar bazasi serveri xizmatini vaqtincha to‘xtatish uchun quyidagi buyruqni bering:
+
+\begin{code}
+$ \textbf{sudo systemctl stop postgresql}
+\end{code}
+
+Server xizmatini quyidagi buyruq bilan ishga tushirishingiz mumkin:
+
+\begin{code}
+$ \textbf{sudo systemctl start postgresql}
+\end{code}
+
+\pagebreak[2]
+
+Shuningdek, joriy holatini tekshirishingiz ham mumkin:
+
+\begin{code}
+$ \textbf{sudo systemctl status postgresql}
+\end{code}
+
+Agar xizmat ishga tushmasa, server xabarlari jurnali sababni topishga yordam beradi. \filepath{/var/log/postgresql/postgresql-\PGVER-main.log} fayldagi eng so‘nggi jurnal yozuvlarini diqqat bilan o‘qing.
+
+Ma‘lumotlar bazasidagi barcha ma‘lumotlar fayl tizimida \filepath{/var/lib/postgresql/\PGVER/main/} maxsus katalogida joylashgan. Agar siz, juda ko‘p ma‘lumotlarni saqlamoqchi bo‘lsangiz, uning uchun yetarli joy mavjudligiga~--- ishonch hosil qiling.
+
+Server sozlamalarini belgilaydigan bir nechta muhim konfiguratsiya fayllari mavjud. Ishni boshlashda ushbu fayllarni o‘zgartirishning hojati yo‘q, lekin ular bilan oldindan tanishgan ma‘qul~--- kelajakda sizga albatta kerak bo‘ladi:
+
+\begin{itemizex}
+
+\item{}    \filepath{/etc/postgresql/\PGVER/main/postgresql.conf}~--- server parametrlari qiymatlarini o‘z ichiga olgan asosiy konfiguratsiya fayli;
+
+\item{}    \filepath{/etc/postgresql/\PGVER/main/pg\_hba.conf}~--- kirish huquqi sozlamalarini belgilaydigan fayl. Xavfsizlik maqsadida, sukut bo‘yicha, kirish faqat mahalliy kompyuterdan va faqat nomi operatsion tizim hisobi nomiga mos keladigan ma‘lumotlar bazasi foydalanuvchisi nomidan ruxsat etiladi.
+
+\end{itemizex}
+
+Ma‘lumotlar bazasiga ulanish va SQL-ni amalda sinab ko‘rish vaqti keldi.
+
