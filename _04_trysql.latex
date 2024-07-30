@@ -1,0 +1,903 @@
+% po4a: environment codep2
+% po4a: environment codep
+% po4a: environment code
+% po4a: environment code2
+% po4a: environment denseitem
+% po4a: environment denseenum
+% po4a: environment itemize
+% po4a: environment itemizex
+% po4a: environment document
+% po4a: environment leftbar
+% po4a: environment sidewaysfigure 
+\chapter{SQL-ni sinab ko‘ramiz}\label{trysql}
+
+\section{Psql yordamida ulanish}
+
+MBBT serveriga ulanish va har qanday buyruqlarni bajarish uchun mijoz dasturi talab qilinadi. "Ilova uchun PostgreSQL" bo‘limida biz turli xil dasturlash tillarida dasturlardan so‘rovlarni qanday yuborish haqida gapiramiz, ammo endi biz buyruq qatori rejimida interaktiv ishlash mumkin bo‘lgan psql terminal mijozi haqida gapiramiz.
+
+Afsuski, bugungi kunda ko‘pchilik buyruq qatorini yoqtirmaydi. Nima uchun u bilan ishlashni o‘rganish maqsadga muvofiq deb qaraladi?
+
+Birinchidan, \texttt{psql}~--- standart mijoz bo‘lib, u har qanday PostgreSQL yig‘masiga kiritilgan va shuning uchun har doim qo‘lingizda. Sizga moslashtirilgan muhitga ega bo‘lish, albatta, yaxshi, lekin notanish muhitda ojiz bo‘lish mantiqqa to‘g‘ri kelmaydi.
+
+Ikkinchidan, \texttt{psql} ma‘lumotlar bazasini administratorning kundalik vazifalarini hal qilish, kichik so‘rovlarni yozish va jarayonlarni avtomatlashtirish uchun juda qulaydir, masalan, vaqti-vaqti bilan MBBT serverida dastur kodini yangilashni o‘rnatish. Uning o‘z buyruqlari mavjud bo‘lib, ular ma‘lumotlar bazasida saqlangan obyektlar bo‘ylab harakatlanish va jadvallardagi ma‘lumotlarni vizual shaklda taqdim etish imkonini beradi.
+
+Agar siz grafik foydalanuvchi interfeyslari bilan ishlashga odatlangan bo‘lsangiz, pgAdmin-ni sinab ko‘ring - bu haqda keyinroq aytib o‘tamiz - yoki boshqa shunga o‘xshash mahsulotlarni quyidagi manzildan bilib olishingiz mumkin: \urld{http}{wiki.postgresql.org/wiki/Community_Guide_to_PostgreSQL_GUI_Tools}
+
+Linux operatsion tizimida \texttt{psql}-ni ishga tushirish uchun quyidagi buyruqni bering:
+
+\begin{code}
+$ \textbf{sudo -u postgres psql}
+\end{code}
+
+\setlength\columnsep{0.7cm}
+\setlength\intextsep{0pt}
+\begin{wrapfigure}[14]{l}{0pt}
+\includegraphics[width=0.496993988\textwidth]{04_psql}
+\end{wrapfigure}
+
+Windows operatsion tizimida “Пуск” menyusidan “SQL~Shell (psql)” dasturini ishga tushiring. 
+Parol so‘ralganda, PostgreSQLni o‘rnatishda ko‘rsatilgan \texttt{postgres} foydalanuvchi parolini kiriting.
+ 
+Windows foydalanuvchilari terminalda kirillcha belgilar to‘g‘ri ko‘rsatilmasligi bilan bog‘liq muammolarga duch kelishlari mumkin. Bunday holda, terminal oynasi xususiyatlarida TrueType shrift o‘rnatilganligiga ishonch hosil qiling (odatda “Lucida Console” yoki “Consolas”).
+
+Shunday qilib, taklif ikkala operatsion tizimda ham bir xil ko‘rinadi: \texttt{postgres=\#} (“postgres” bu yerda siz hozir ulangan ma‘lumotlar bazasining nomi). Bitta server bir nechta ma‘lumotlar bazasiga xizmat qilishi mumkin, lekin u bir vaqtning o‘zida faqat bittasi bilan ishlashi mumkin.
+
+Endi birlamchi buyruqlarni o‘rganamiz. Faqat qalin harf bilan yozilganlarni kiriting. Tizimning taklifi va buyruqlarga javoblari qulaylik uchun taqdim etiladi.
+
+\vspace{-4pt}
+\section{Ma‘lumotlar bazasi}
+
+\vspace{-2pt}
+Test nomli yangi ma‘lumotlar bazasini yaratamiz. Quyidagilarni bajaring:
+
+\vspace{-2pt}
+\begin{code}
+postgres=# \textbf{CREATE DATABASE test;}
+\end{code}
+\begin{codep}
+CREATE DATABASE
+\end{codep}
+
+\vspace{-2pt}
+Buyruqning oxiridagi nuqtali vergulni unutmang~--- PostgreSQL ushbu belgini ko‘rmaguncha, u siz yozishni davom ettirayotganingizni taxmin qiladi (ya‘ni, buyruq bir nechta qatorlarga bo‘linishi mumkin).
+
+Endi yaratilgan ma‘lumotlar bazasiga o‘tamiz:
+
+\vspace{-2pt}
+\begin{code}
+postgres=# \textbf{{\BS}c test}
+\end{code}
+\begin{codep}
+You are now connected to database "test" as user
+"postgres".
+\end{codep}
+\begin{codep}
+test=#
+\end{codep}
+
+\vspace{-2pt}
+Ko‘rib turganingizdek, taklif \texttt{test=\#} ga o‘zgartirildi.
+
+Biz kiritgan buyruq SQL-ga o‘xshamaydi~--- u teskari chiziq bilan boshlanadi. Faqat \texttt{psql} tushunadigan maxsus buyruqlar shunday ko‘rinadi (shuning uchun agar sizda pgAdmin yoki boshqa grafik vosita ochiq turgan bo‘lsa, slash bilan boshlangan hamma narsani o‘tkazib yuboring).
+
+Bir nechta \texttt{psql} buyruqlari mavjud va biz ularning ba‘zilari bilan biroz keyinroq tanishamiz, ammo to‘liq ro‘yxatni qisqacha tavsiflari bilan hoziroq tanishib olishingiz mumkin: 
+Команд \texttt{psql} довольно много; с некоторыми из них мы познакомимся чуть позже, а полный список с краткими описаниями можно получить прямо сейчас:
+
+\begin{code}
+test=# \textbf{{\BS}?}
+\end{code}
+
+Yordam ma‘lumotlari juda ko‘p bo‘lgani uchun u operatsion tizimda sozlangan peyjer-buyrug‘i yordamida ko‘rsatiladi (odatda \texttt{more} yoki \texttt{less}).
+
+\section{Jadvallar}
+
+Relyatsion MBBT-larda ma‘lumotlar \textbf{jadvallar} ko‘rinishida taqdim etiladi. Jadvalning tuzilishi uning \textbf{ustunlari} bilan belgilanadi. Haqiqiy ma‘lumotlar \textbf{qatorlarda} joylashgan. Ular tartibsiz saqlanadi va hatto jadvalga qo‘shilgan tartibda bo‘lishi shart emas.
+
+Har bir ustun ma‘lumotlar turiga ega. Qatorlardagi maydon qiymatlari ushbu turlarga mos kelishi kerak. 
+PostgreSQL ko‘p sonli o‘z ichida o‘rnatilgan turlarga (\urld{https}{postgrespro.ru/doc/datatype}) va yangilarini yaratish imkoniyatlariga ega, ammo biz o‘zimizni eng asosiylari bilan cheklaymiz:
+
+\begin{itemizex}
+\item integer~--- butun sonlar;
+\item text~--- matnli qatorlar;
+\item boolean~--- mantiqiy tur, \texttt{true} («rost») yoki \texttt{false} («yolg‘on») qiymat qabul qila oladi.
+\end{itemizex}
+
+Ma‘lumotlar turi bilan belgilangan normal qiymatlarga qo‘shimcha ravishda, maydon \textbf{aniqlanmagan qiymat ma‘nosidagi} NULL qiymatiga ega bo‘lishi mumkin - bu “noma‘lum qiymat” yoki “qiymat o‘rnatilmagan” deb hisoblanishi mumkin.
+
+Keling universitetda o‘qitiladigan fanlar jadvalini tuzamiz:
+
+\begin{code}
+test=# \textbf{CREATE TABLE courses(}
+test(#   \textbf{c_no text PRIMARY KEY,}
+test(#   \textbf{title text,}
+test(#   \textbf{hours integer}
+test(# \textbf{);}
+\end{code}
+\begin{codep}
+CREATE TABLE
+\end{codep}
+
+\texttt{Psql} taklifi qanday o‘zgarganiga e‘tibor bering: bu buyruq yangi satrda davom etishiga ishora. Kelajakda qulaylik uchun biz takliflarni har bir satrda takrorlamaymiz.
+
+Ushbu buyruq yordamida \texttt{cour\-ses} nomli jadval uchta ustundan iborat bo‘lishini aniqladik: \texttt{c\_no}~--- kursning matnli raqami, \texttt{title}~--- kurs nomi va \texttt{hours}~--- ma‘ruza soatlarining butun soni.
+
+Ustunlar va ma‘lumotlar turlari bilan birgalikda, siz avtomatik ravishda tekshiriladigan yaxlitlik cheklovlarini kiritishingiz mumkin, 
+bu cheklovlar yordamida - MBBT ma‘lumotlar bazasida noto‘g‘ri ma‘lumotlar paydo bo‘lishiga yo‘l qo‘ymaydi. Bizning misolimiz \texttt{c\_no} ustuniga 
+\texttt{PRIMARY} \texttt{KEY} cheklovini qo‘shadi; endi u takroriy yoki aniqlanmagan qiymatlarga ruxsat bermaydi. Bunday ustun yordamida siz qatorlarni bir-biridan farqlashingiz mumkin. Butunlik cheklovlarining to‘liq ro‘yxati \urld{http}{postgrespro.ru/doc/ddl-constraints} sahifasida mavjud.
+
+\texttt{CREATE} \texttt{TABLE} buyrug‘ining aniq sintaksisini hujjatlarda yoki to‘g‘ridan-to‘g‘ri ~\texttt{psql} da topish mumkin:
+
+\begin{code}
+test=# \textbf{{\BS}help CREATE TABLE}
+\end{code}
+
+Har bir SQL buyrug‘i uchun shunday yordam ma‘lumoti mavjud. Buyruqlarning to‘liq ro‘yxatini \texttt{{\BS}help} buyrug‘ini parametrlarsiz chaqirib ko‘riladi.
+
+
+\section{Jadvallarni to‘ldirish}
+
+Yaratilgan jadvalga bir necha qator qo‘shamiz:
+
+\begin{code}
+test=# {\bfseries{}INSERT INTO courses(c_no, title, hours)
+VALUES ('CS301', 'Базы данных', 30), 
+       ('CS305', 'Сети ЭВМ', 60);}
+\end{code}
+\begin{codep}
+INSERT 0 2
+\end{codep}
+
+\texttt{INSERT} buyrug‘i tashqi manbadan ma‘lumotlarni ommaviy yuklash uchun mos emas, lekin buning uchun maxsus ishlab chiqilgan \texttt{COPY} buyrug‘i mavjud: \urld{https}{postgrespro.ru/doc/sql-copy}.
+
+Keling, ma‘lumotlar bazasida yana ikkita jadval yarataylik: “Talabalar” va “Imtihonlar”. Har bir talaba uchun uning ismi va qabul yili saqlanib qolsin va u talabalik ID raqami bilan aniqlanadigan qilinsin deb talab qo‘yaylik.
+
+\begin{code}
+test=# \textbf{CREATE TABLE students(
+  s_id integer PRIMARY KEY,
+  name text,
+  start_year integer
+);}
+\end{code}
+\begin{codep}
+CREATE TABLE
+\end{codep}
+\begin{codep}
+test=# \textbf{INSERT INTO students(s_id, name, start_year)
+VALUES (1451, 'Анна', 2014), 
+       (1432, 'Виктор', 2014), 
+       (1556, 'Нина', 2015);}
+\end{codep}
+\begin{codep}
+INSERT 0 3
+\end{codep}
+
+Imtihon jadvalida talabalarning turli fanlar bo‘yicha olgan baholari to‘g‘risidagi ma‘lumotlar mavjud. Shunday qilib, talabalar va fanlar bir-biri bilan ko‘p-ko‘p munosabatda bog‘langan: bir talaba ko‘p fanlardan imtihon topshirishi mumkin va ko‘plab talabalar bir fandan imtihon topshirishlari mumkin.
+
+Imtihon jadvalidagi yozuv talaba kartasi raqami va kurs raqami kombinatsiyasi bilan aniqlanadi. Bir vaqtning o‘zida bir nechta ustunlarga qo‘llaniladigan bu yaxlitlik cheklovi \texttt{CONSTRAINT} bandi yordamida aniqlanadi:
+
+\begin{code}
+test=# \textbf{CREATE TABLE exams(
+  s_id integer REFERENCES students(s_id),
+  c_no text REFERENCES courses(c_no),
+  score integer,
+  CONSTRAINT pk PRIMARY KEY(s_id, c_no)
+);}
+\end{code}
+\begin{codep}
+CREATE TABLE
+\end{codep}
+
+Bundan tashqari, \texttt{REFERENCES} bandidan foydalanib, biz \textbf{tashqi kalitlar} deb ataladigan ikkita havolali yaxlitlik cheklovlarini qo‘shdik. Bunday cheklovlar bir jadvaldagi qiymatlar boshqa jadvaldagi qatorlarga \textbf{havola} ekanligini ko‘rsatadi.
+
+Endi har qanday harakat uchun MBBT imtihon jadvalida ko‘rsatilgan barcha \texttt{s\_id} identifikatorlarining haqiqiy talabalarga (ya‘ni talabalar jadvalidagi yozuvlar), shuningdek \texttt{c\_no}~--- raqamining haqiqiy kurslarga muvofiqligini tekshiradi. Shunday qilib, mavjud bo‘lmagan talabaga yoki mavjud bo‘lmagan fanga baho qo‘yish imkoniyati istisno qilinadi - foydalanuvchining harakatlari yoki ilovadagi mumkin bo‘lgan xatolardan qat‘i nazar. 
+Keling, o‘quvchilarimizga bir nechta baholarni beramiz:
+
+\begin{code}
+test=# \textbf{INSERT INTO exams(s_id, c_no, score)
+VALUES (1451, 'CS301', 5),
+       (1556, 'CS301', 5),
+       (1451, 'CS305', 5),
+       (1432, 'CS305', 4);}
+\end{code}
+\begin{codep}
+INSERT 0 4
+\end{codep}
+
+
+
+\section{Ma‘lumotlarni olish}
+
+\subsection{Oddiy so‘rovlar}
+
+Jadvallardan ma‘lumotlarni o‘qish SQL \texttt{SELECT} operatori yordamida amalga oshiriladi. Masalan, \texttt{courses} jadvalidan faqat ikkita ustunni ko‘rsatamiz. \texttt{AS} konstruksiyasi, agar kerak bo‘lsa, ustun nomini o‘zgartirishga imkon beradi:
+
+\begin{code}
+test=# \textbf{SELECT title AS course_title, hours
+FROM courses;}
+\end{code}
+\begin{codep}
+ course_title | hours
+--------------+-------
+ Базы данных  |    30 
+ Сети ЭВМ     |    60
+(2 rows)
+\end{codep}
+
+Barcha ustunlarni ma‘lumotlarini olish uchun yulduzcha belgisini ko‘rsatish kifoya:
+
+\begin{code}
+test=# \textbf{SELECT * FROM courses;}
+\end{code}
+\begin{codep}
+ c_no  |    title    | hours 
+-------+-------------+------- 
+ CS301 | Базы данных |    30
+ CS305 | Сети ЭВМ    |    60
+(2 rows)
+\end{codep}
+
+Ishlab chiqarish kodida so‘rov yanada samarali bajarilishi va natija yangi ustunlar paydo bo‘lishiga bog‘liq bo‘lmasligi uchun faqat kerakli ustunlarni aniq ko‘rsatish yaxshiroqdir. Ammo interaktiv so‘rovlar uchun “yulduzcha” juda qulay.
+
+So‘rov bo‘yicha chiqish bir xil qatorlarni o‘z ichiga olishi mumkin. Barcha ustunlar~--- ko‘rsatilmaganda, ular asl jadvalda bo‘lmagan taqdirda ham dublikatlar (takrorlanuvchilar) paydo bo‘lishi mumkin:
+
+\begin{code}
+test=# \textbf{SELECT start_year FROM students;}
+\end{code}
+\begin{codep}
+ start_year
+------------ 
+       2014 
+       2014 
+       2015
+(3 rows)
+\end{codep}
+
+
+Qabul qilish yilining barcha \textbf{takrorlanmas} qiymatlarini tanlash uchun \texttt{SELECT}-dan keyin \texttt{DISTINCT} so‘zini qo‘shishingiz kerak:
+
+\begin{code}
+test=# \textbf{SELECT DISTINCT start_year FROM students;}
+\end{code}
+\begin{codep}
+ start_year
+------------
+       2014
+       2015
+(2 rows)
+\end{codep}
+
+Qo‘shimcha ma‘lumot olish uchun ushbu havolaga qarang: \urld{https}{postgrespro.ru/doc/sql-select\#SQL-DISTINCT}
+
+Umuman olganda, \texttt{SELECT} so‘zidan keyin istalgan iboralarni ko‘rsatishingiz mumkin va \texttt{FROM} bandisiz so‘rov bitta qatorni qaytaradi. Masalan:
+
+\begin{code}
+test=# \textbf{SELECT 2+2 AS result;}
+\end{code}
+\begin{codep}
+ result
+-------- 
+      4
+(1 row)
+\end{codep}
+
+Odatda, ma‘lumotlarni olishda siz barcha qatorlarni emas, balki faqat ba‘zi shartlarni qondiradigan qatorlarnigina olishni xohlaysiz. Bunday holatlarda filtrlash sharti \texttt{WHERE} bandida yoziladi:
+
+\begin{code}
+test=# \textbf{SELECT * FROM courses WHERE hours > 45;}
+\end{code}
+\begin{codep}
+ c_no  |  title   | hours
+-------+----------+-------
+ CS305 | Сети ЭВМ |    60
+(1 row)
+\end{codep}
+
+Shart mantiqiy turda bo‘lishi kerak. Masalan, \texttt{=}, \texttt{<>} (yoki \texttt{!=}), \texttt{>}, \texttt{>=}, \texttt{<}, \texttt{<=}, operatorlarini o‘z ichiga olishi mumkin, shuningdek oddiy shartlarda bo‘lgani kabi AND, OR, NOT mantiqiy operatorlari va dasturlash tillaridagidek qavslar yordamida oddiyroq shartlarni birlashmasidan xosil bo‘lishi ham mumkin. 
+
+
+Nozik masala - aniqlanmagan \texttt{NULL} qiymatidir. 
+Tanlov faqat filtrlash sharti rost bo‘lgan qatorlarni o‘z ichiga oladi. Agar qiymat noto‘g‘ri yoki \textbf{aniqlanmagan bo‘lsa}, qator o‘chiriladi.
+
+Esda tuting:
+
+\begin{itemizex}
+\item biror narsani aniqlanmagan qiymatga solishtirish natijasi aniqlanmagan;
+\item qiymati aniqlanmagan mantiqiy amallarning natijasi, qoida tariqasida, aniqlanmagan (istisnolar: \codett{true OR NULL = true},\codett{ false AND NULL = false});
+\item qiymatning aniqligini tekshirish uchun \codett{IS NULL} (\codett{IS NOT NULL}) va ~\codett{IS DISTINCT FROM} (\codett{IS NOT DISTINCT FROM}) maxsus operatorlari qo‘llaniladi.
+\end{itemizex}
+
+Nulllar bilan ishlashda \codett{coalesce} ifodasi (“koueles” deb talaffuz qilinadi) ko‘pincha \texttt{NULL}-ni boshqa narsa bilan almashtirish uchun ishlatiladi, masalan, matn turlari uchun bo‘sh qator yoki sonli turlar uchun nol.
+
+Qo‘shimcha ma‘lumot olish uchun havolaga qarang: \urld{https}{postgrespro.ru/doc/functions-comparison}.
+
+\section{Bog‘lanishlar}
+
+Yaxshi ishlab chiqilgan relyatsion ma‘lumotlar bazasida ortiqcha ma‘lumotlar mavjud emas. Misol uchun, imtihon jadvalida talabaning ismi bo‘lmasligi kerak, chunki uni boshqa jadvalda talaba ID raqami orqali topish mumkin.
+
+Shuning uchun, so‘rovda barcha kerakli qiymatlarni olish uchun siz ko‘pincha \texttt{FROM} bandida ularning nomlarini ko‘rsatib, bir nechta jadvallardagi ma‘lumotlarni birlashtirishingiz kerak:
+
+
+\begin{code}
+test=# \textbf{SELECT * FROM courses, exams;}
+\end{code}
+\begin{codep}
+ c_no  |    title    | hours | s_id | c_no  | score 
+-------+-------------+-------+------+-------+-------
+ CS301 | Базы данных |    30 | 1451 | CS301 |     5
+ CS305 | Сети ЭВМ    |    60 | 1451 | CS301 |     5
+ CS301 | Базы данных |    30 | 1556 | CS301 |     5 
+ CS305 | Сети ЭВМ    |    60 | 1556 | CS301 |     5 
+ CS301 | Базы данных |    30 | 1451 | CS305 |     5 
+ CS305 | Сети ЭВМ    |    60 | 1451 | CS305 |     5 
+ CS301 | Базы данных |    30 | 1432 | CS305 |     4 
+ CS305 | Сети ЭВМ    |    60 | 1432 | CS305 |     4
+(8 rows)
+\end{codep}
+
+Biz olgan narsa jadvallarning to‘g‘ridan \- to‘g‘ri yoki dekart ko‘paytmasi deb ataladi~--- bitta jadvalning har bir qatori boshqasining har bir qatoriga qo‘shiladi.
+
+Odatda, \texttt{WHERE} bandida birlashish shartini ko‘rsatib, yanada foydali va mazmunli natijalarga erishishingiz mumkin. Kurslarni ushbu kurs uchun maxsus o‘tkazilgan imtihonlar bilan taqqoslab, barcha fanlar bo‘yicha baholarni so‘raymiz:
+
+\begin{code}
+test=# \textbf{SELECT courses.title, exams.s_id, exams.score
+FROM courses, exams
+WHERE courses.c_no = exams.c_no;}
+\end{code}
+\begin{codep}
+    title    | s_id | score
+-------------+------+------- 
+ Базы данных | 1451 |     5 
+ Базы данных | 1556 |     5 
+ Сети ЭВМ    | 1451 |     5 
+ Сети ЭВМ    | 1432 |     4
+(4 rows)
+\end{codep}
+
+So‘rovlarni \texttt{JOIN} kalit so‘zi yordamida birlashmalarni belgilash orqali boshqa shaklda shakllantirish mumkin. “Kompyuter tarmoqlari” kursi bo‘yicha talabalar va ularning baholarini ko‘rsatamiz:
+
+
+\begin{code}
+test=# \textbf{SELECT students.name, exams.score
+FROM students
+JOIN exams
+  ON students.s_id = exams.s_id
+  AND exams.c_no = 'CS305';}
+\end{code}
+\begin{codep}
+  name  | score
+--------+------- 
+ Анна   |     5 
+ Виктор |     4
+(2 rows)
+\end{codep}
+
+MBBT nuqtai nazaridan, bu shakllar bir-biriga ekvivalentdir, shuning uchun siz vizualroq ko‘rinadigan usuldan foydalanishingiz mumkin.
+
+Ko‘rib turganingizdek, natijada \texttt{JOIN} so‘zining chap tomonida ko‘rsatilgan jadval qatorlari mavjud emas, ular uchun jadvalda ushbu so‘zning o‘ng tomonida ko‘rsatilgan juftlik shartlarga mos ma‘lumotlar yo‘q: shart imtihonlarga qo‘yiladi, lekin talabalar, imtihondan o‘tmaganlar ham bu shartni qanoatlantirmaydi. Namunaga barcha talabalarni kiritish uchun siz tashqi birlashmani ishlatishingiz kerak:
+
+\begin{code}
+test=# \textbf{SELECT students.name, exams.score
+FROM students
+LEFT JOIN exams
+  ON students.s_id = exams.s_id
+  AND exams.c_no = 'CS305';}
+\end{code}
+\begin{codep}
+  name  | score
+--------+------- 
+ Анна   |     5 
+ Виктор |     4 
+ Нина   |
+(3 rows)
+\end{codep}
+
+Endi natijalar chap jadvaldagi qatorlarni ham o‘z ichiga oladi (shuning uchun operatsiya \codett{LEFT JOIN} deb ataladi) garchi ular o‘ng tomondagi juftlik shartini qanoatlantirmasa ham. Bunday holda, o‘ng jadvalning ustunlari uchun null qiymatlar qaytariladi.
+
+\texttt{WHERE} dan keyingi shartlar birlashtirilgan qatorlarga qo‘llaniladi, shuning uchun agar siz fanlar bo‘yicha cheklovni qo‘shilish shartidan \texttt{WHERE} bandiga o‘tkazsangiz, Nina tanlovga kiritilmaydi~--- chunki u uchun \texttt{exams.c\_no} qiymati aniqlanmagan:
+
+\begin{code}
+test=# \textbf{SELECT students.name, exams.score
+FROM students
+LEFT JOIN exams ON students.s_id = exams.s_id
+WHERE exams.c_no = 'CS305';}
+\end{code}
+\begin{codep}
+  name  | score
+--------+------- 
+ Анна   |     5 
+ Виктор |     4
+(2 rows)
+\end{codep}
+
+Bog‘lanishlardan qo‘rqmang. Bu relyatsion MBBTlar uchun odatiy va tabiiy jarayon bo‘lib, PostgreSQL uni amalga oshirish uchun samarali mexanizmlarning butun arsenaliga ega. Ilovada ma‘lumotlarni ulamang, bu ishni bajarish uchun ma‘lumotlar bazasi serveriga ishoning – u bu ishni ajoyib tarzda bajaradi.
+
+Qo‘shimcha ma‘lumot olish uchun hujjatlarga qarang: \urld{https}{postgrespro.ru/doc/sql-select\#SQL-FROM}.
+
+\section{Qismso‘rovlar}
+
+\texttt{SELECT} operatori jadvalni shakllantiradi, jadvalni (biz avval ko‘rganimizdek) natijada ko‘rsatish mumkin yoki jadval mazmunli joylashishi mumkin bo‘lgan har qanday joyda boshqa SQL konstruktsiyasida foydalanish mumkin. Qavslar ichiga olingan ushbu ichki o‘rnatilgan \texttt{SELECT} operatori \textbf{qismso‘rov} deb ataladi.
+
+Agar simso‘rov aynan bitta satr va bitta ustunni qaytarsa, uni oddiy skalyar ifoda kabi ishlatish mumkin:
+
+\begin{code}
+test=# \textbf{SELECT name,
+  (SELECT score
+   FROM exams
+   WHERE exams.s_id = students.s_id 
+   AND exams.c_no = 'CS305')
+FROM students;}
+\end{code}
+\begin{codep}
+  name  | score
+--------+------- 
+ Анна   |     5 
+ Виктор |     4 
+ Нина   | 
+(3 rows)
+\end{codep}
+
+Agar \texttt{SELECT} ifodalari ro‘yxatida qo‘llanilgan skalyar qismso‘rovda qatorlar bo‘lmasa, aniqlanmagan qiymat qaytariladi (bizning misolimizdagi oxirgi qatorida bo‘lgani kabi). Shuning uchun, skalyar qismso‘rovlarni ularni birlashma bilan almashtirish orqali kengaytirish mumkin, lekin har doim tashqi bog‘lanish orqali.
+
+Skalyar qismso‘rovlar filtrlashda ham ishlatilishi mumkin. Keling, 2014 yildan keyin qabul qilingan talabalar tomonidan topshirilgan barcha imtihonlarni olaylik:
+
+\pagebreak[2]
+
+\begin{code}
+test=# \textbf{SELECT *
+FROM exams
+WHERE (SELECT start_year
+       FROM students
+       WHERE students.s_id = exams.s_id) > 2014;}
+\end{code}
+\begin{codep}
+ s_id | c_no  | score
+------+-------+------- 
+ 1556 | CS301 |     5
+(1 row)
+\end{codep}
+
+SQL-da siz ixtiyoriy qatorlar sonini qaytaradigan qismso‘rovlar uchun shartlarni shakllantirishingiz mumkin. Buning uchun bir nechta konstruktsiyalar mavjud, ulardan biri, \texttt{IN} munosabati, qiymat qimsso‘rov tomonidan qaytarilgan jadvalda mavjud yoki yo‘qligini tekshiradi.
+
+Ko‘rsatilgan kursda har qanday baho olgan talabalarni ko‘rsatamiz:
+
+\begin{code}
+test=# \textbf{SELECT name, start_year
+FROM students
+WHERE s_id IN (SELECT s_id
+               FROM exams
+               WHERE c_no = 'CS305');}
+\end{code}
+\begin{codep}
+  name  | start_year 
+--------+------------ 
+ Анна   |      2014 
+ Виктор |      2014
+(2 rows)
+\end{codep}
+
+\codett{NOT IN} operatori teskari natijani qaytaradi. Masalan, birorta ham a‘lo baho olmagan talabalar ro‘yxati:
+
+\begin{code}
+test=# \textbf{SELECT name, start_year
+FROM students
+WHERE s_id NOT IN
+      (SELECT s_id FROM exams WHERE score = 5);}
+\end{code}
+\begin{codep}
+  name  | start_year 
+--------+------------
+ Виктор |       2014
+(1 row)
+\end{codep}
+
+E‘tibor bering, namunaga hech qanday baho olmagan talabalar ham kiradi.
+
+Yana bir imkoniyat~--- qismso‘rov kamida bitta qatorni qaytarganligini tekshiradigan \texttt{EXISTS} predikatidan foydalanish. Undan foydalanib, oldingi so‘rovni boshqa shaklda yozishingiz mumkin:
+
+\begin{code}
+test=# \textbf{SELECT name, start_year
+FROM students
+WHERE NOT EXISTS (SELECT s_id
+                  FROM exams
+                  WHERE exams.s_id = students.s_id
+                  AND score = 5);}
+\end{code}
+\begin{codep}
+  name  | start_year 
+--------+------------
+ Виктор |       2014
+(1 row)
+\end{codep}
+
+Qo‘shimcha ma‘lumot olish uchun hujjatlarga qarang: \urld{https}{postgrespro.ru/doc/functions-subquery}.
+
+Yuqorida biz noaniqlikni oldini olish uchun ustun nomlarini jadval nomlari bilan to‘ldirganmiz, lekin ba‘zida bu yetarli emas. Masalan, so‘rovda bir jadval ikki marta ishlatilishi mumkin yoki \texttt{FROM} bandidagi jadval o‘rnini nomsiz qismso‘rov egallashi mumkin. Bunday hollarda siz qismso‘rovdan keyin uning taxallusini ko‘rsatishingiz mumkin. Oddiy jadvallarga taxalluslar ham berilishi mumkin.
+
+“Ma‘lumotlar bazasi” fanidan o‘quvchilarning ism-shariflari va baholarini ko‘rsatamiz:
+
+\begin{code}
+test=# \textbf{SELECT s.name, ce.score
+FROM students s
+JOIN (SELECT exams.*
+      FROM courses, exams
+      WHERE courses.c_no = exams.c_no
+      AND courses.title = 'Базы данных') ce
+  ON s.s_id = ce.s_id;}
+\end{code}
+\begin{codep}
+ name | score 
+------+------- 
+ Анна |     5 
+ Нина |     5
+(2 rows)
+\end{codep}
+
+Bu yerda \texttt{s}~--- jadval taxallus, \texttt{ce}~--- esa qismso‘rov taxallusidir. Taxalluslarni qisqa, ammo tushunarli qilib qo‘yish yaxshidir.
+
+Xuddi shu so‘rov qismso‘rovlarsiz yozilishi mumkin:
+
+\begin{code}
+test=# \textbf{SELECT s.name, e.score
+FROM students s, courses c, exams e
+WHERE c.c_no = e.c_no
+AND c.title = 'Базы данных'
+AND s.s_id = e.s_id;}
+\end{code}
+
+\section{Tartiblash}
+
+Yuqorida aytib o‘tilganidek, jadvallardagi ma‘lumotlar tartiblanmagan. 
+Natija qatorlarini ma‘lum bir tartibda ko‘rsatish uchun \codett{ORDER BY} bandidan foydalaning. 
+Har bir ifodadan keyin (tartiblash kaliti) yo‘nalishni belgilashingiz mumkin: \texttt{ASC}~--- o‘sish (bu tartib sukut bo‘yicha ishlatiladi)~--- yoki \texttt{DESC}~--- pasayish.
+
+\begin{code}
+test=# \textbf{SELECT *
+FROM exams
+ORDER BY score, s_id, c_no DESC;}
+\end{code}
+\begin{codep}
+ s_id | c_no  | score 
+------+-------+------- 
+ 1432 | CS305 |     4 
+ 1451 | CS305 |     5 
+ 1451 | CS301 |     5 
+ 1556 | CS301 |     5
+(4 rows)
+\end{codep}
+
+Bu erda qatorlar balning os‘ishi bo‘yicha tartiblangan. Agar baholar teng bo‘lsa~--- talaba ID raqamining o‘sish tartibida olinadi. Agar ikkala birinchi kalit ham mos kelsa~--- kurs raqamining kamayish tartibida olinadi.
+
+Natijani olishdan oldin, so‘rov oxirida saralash amalini bajarish mantiqan to‘g‘ri keladi; qismso‘rovlarda odatda ma‘nosiz.
+
+Qo‘shimcha ma‘lumot olish uchun hujjatlarga qarang: \urld{https}{postgrespro.ru/doc/sql-select\#SQL-ORDERBY}.
+
+\section{Guruhlash}
+
+Guruhlashda manba jadvallarining bir necha qatoridagi ma‘lumotlar asosida hisoblangan qiymat natijaning bir qatoriga joylashtiriladi. Agregat funktsiyalari guruhlash bilan birga ishlatiladi. Masalan, o‘tkazilgan imtihonlarning umumiy sonini, ularni topshirgan talabalar sonini va o‘rtacha ballni ko‘rsatamiz:
+
+\begin{code}
+test=# \textbf{SELECT count(*), count(DISTINCT s_id),
+avg(score)
+FROM exams;}
+\end{code}
+\begin{codep}
+ count | count |        avg 
+-------+-------+-------------------- 
+     4 |     3 | 4.7500000000000000
+(1 row)
+\end{codep}
+
+Xuddi shu ma‘lumotni guruhlash kalitlarini ko‘rsatadigan \codett{GROUP BY} bandi yordamida kurs raqami bo‘yicha guruhlab olish mumkin:
+
+\begin{code}
+test=# \textbf{SELECT c_no, count(*),
+count(DISTINCT s_id), avg(score)
+FROM exams
+GROUP BY c_no;}
+\end{code}
+\begin{codep}
+ c_no  | count | count |        avg 
+-------+-------+-------+-------------------- 
+ CS301 |     2 |     2 | 5.0000000000000000 
+ CS305 |     2 |     2 | 4.5000000000000000
+(2 rows)
+\end{codep}
+
+Agregat funktsiyalarning to‘liq ro‘yxati: \urld{https}{postgrespro.ru/doc/functions-aggregate}.
+
+Guruhlashdan foydalanganda, siz birlashtirish natijalariga ko‘ra qatorlarni filtrlashingiz kerak bo‘lishi mumkin. Bunday shartlar HAVING bandida ko‘rsatilishi mumkin. \texttt{WHERE} dan farqi shundaki, guruhlashdan oldin \texttt{WHERE} shartlari qo‘llaniladi (ular manba jadvallari ustunlaridan foydalanishi mumkin) va guruhlashdan keyin \texttt{HAVING}~--- shartlari qo‘llaniladi (va ular natijalar jadvalidagi ustunlardan ham foydalanishlari mumkin).
+
+Har qanday fandan birdan ortiq 5 baho olgan talabalarning ismlarini chiqaramiz:
+
+\begin{code}
+test=# \textbf{SELECT students.name
+FROM students, exams
+WHERE students.s_id = exams.s_id AND exams.score = 5
+GROUP BY students.name
+HAVING count(*) > 1;}
+\end{code}
+\begin{codep}
+ name 
+------ 
+ Анна
+(1 row)
+\end{codep}
+
+Qo‘shimcha ma‘lumot uchun: \urld{https}{postgrespro.ru/doc/sql-select\#SQL-GROUPBY}.
+
+\vspace{-4pt}
+\section{Ma‘lumotlarni o‘zgartirish va o‘chirish}
+
+\vspace{-2pt}
+Jadvaldagi ma‘lumotlarni o‘zgartirish \texttt{WHERE} bandi bilan belgilangan satrlar uchun yangi maydon qiymatlarini belgilaydigan \texttt{UPDATE} bayonoti orqali amalga oshiriladi (\texttt{SELECT} iborasidagi kabi).
+
+Masalan, “Ma‘lumotlar bazalari” kursi uchun ma‘ruza soatlarini ikki baravar oshiramiz:
+
+\vspace{-2pt}
+\begin{code}
+test=# \textbf{UPDATE courses
+SET hours = hours * 2
+WHERE c_no = 'CS301';}
+\end{code}
+\begin{codep}
+UPDATE 1
+\end{codep}
+
+\vspace{-2pt}
+Qo‘shimcha ma‘lumot uchun: \urld{https}{postgrespro.ru/doc/sql-update}.
+
+\texttt{DELETE} operatori belgilangan jadvaldan \texttt{WHERE} bandida ko‘rsatilgan shartlarga mos qatorlarni olib tashlaydi:
+
+\vspace{-2pt}
+\begin{code}
+test=# \textbf{DELETE FROM exams WHERE score < 5;}
+\end{code}
+\begin{codep}
+DELETE 1
+\end{codep}
+
+
+\section{Tranzaksiyalar}
+
+Keling, ma‘lumotlar sxemasini murakkablashtiramiz va o‘quvchilarni guruhlarga taqsimlaymiz va har bir guruhning yetakchisi bo‘lishni ta‘minlaymiz.
+Buning uchun guruhlar jadvalini yaratamiz:
+
+\begin{code}
+test=# \textbf{CREATE TABLE groups(
+  g_no text PRIMARY KEY,
+  monitor integer NOT NULL REFERENCES students(s_id)
+);}
+\end{code}
+\begin{codep}
+CREATE TABLE
+\end{codep}
+
+\vspace{-2pt}
+Bu yerda biz null qiymatlarni taqiqlovchi \texttt{NOT NULL} yaxlitlik cheklovidan foydalandik.
+
+Endi bizga yana bitta ustun kerak~--- guruh raqami. 
+Yaxshiyamki, siz mavjud jadvalga yangi ustun qo‘shishingiz mumkin:
+
+\vspace{-2pt}
+\begin{code}
+test=# \textbf{ALTER TABLE students
+ADD g_no text REFERENCES groups(g_no);}
+\end{code}
+\begin{codep}
+ALTER TABLE
+\end{codep}
+
+\vspace{-2pt}
+\texttt{Psql} buyrug‘i yordamida jadvalda qaysi ustunlar aniqlanganligini har doim ko‘rishingiz mumkin:
+
+\vspace{-2pt}
+\begin{code}
+test=# \textbf{{\BS}d students}
+\end{code}
+\begin{codep}
+      Table "public.students"
+   Column   |  Type   | Modifiers
+------------+---------+---------- 
+ s_id       | integer | not null 
+ name       | text    | 
+ start_year | integer | 
+ g_no       | text    | 
+ ...
+\end{codep}
+
+\vspace{-2pt}
+Ma‘lumotlar bazasida qaysi jadvallar mavjudligini ham ko‘rishingiz mumkin:
+
+\vspace{-2pt}
+\begin{code}
+test=# \textbf{{\BS}d}
+\end{code}
+\begin{codep}
+          List of relations
+ Schema |   Name   | Type  | Owner 
+--------+----------+-------+---------- 
+ public | courses  | table | postgres 
+\end{codep}
+\begin{codep}
+ public | exams    | table | postgres 
+ public | groups   | table | postgres 
+ public | students | table | postgres
+(4 rows)
+\end{codep}
+
+Keling, "A-101" guruhini yarataylik va unga barcha talabalarni joylashtiramiz va Annani bosh qiz qilaylik.
+
+Bu erda ahamiyatsiz bo‘lmagan holat bor. Rahbarni ko‘rsatmasdan guruh yarata olmaysiz, lekin siz talabani u a‘zo bo‘lmagan guruhga yetakchi qilib tayinlay olmaysiz - bu ma‘lumotlar bazasida mantiqan noto‘g‘ri, nomuvofiq ma‘lumotlar paydo bo‘lishiga olib keladi. Bu ikki amal alohida ma‘noga ega emas: ular bir vaqtning o‘zida bajarilishi kerak. 
+Mantiqiy jihatdan bo‘linmaydigan ish birligini tashkil etuvchi amallar guruhi \textbf{tranzaksiya} deyiladi.
+
+Tranzaktsiyani boshlaylik:
+
+\begin{code}
+test=# \textbf{BEGIN;}
+\end{code}
+\begin{codep}
+BEGIN
+\end{codep}
+
+Keyin boshliq bilan birga guruh qo‘shamiz. Biz talabalar raqamlarini yoddan eslab qolishimiz shart emas, shuning uchun biz so‘rovni to‘g‘ridan\-to‘g‘ri qatorlarni qo‘shish buyrug‘ida bajaramiz:
+
+\begin{code}
+test=*# \textbf{INSERT INTO groups(g_no, monitor)
+SELECT 'A-101', s_id
+FROM students
+WHERE name = 'Анна';}
+\end{code}
+\begin{codep}
+INSERT 0 1
+\end{codep}
+
+Taklifdagi “yulduzcha” kutilayotgan tranzaksiyani eslatadi.
+
+Endi yangi terminal oynasini oching va boshqa \texttt{psql} jarayonini boshlang: bu birinchisi bilan parallel ravishda ishlaydigan seans bo‘ladi. Chalkashmaslik uchun biz ikkinchi seansning buyruqlarini chizilgan holda ko‘rsatamiz.
+
+Ikkinchi sessiya kiritilgan o‘zgarishlarni ko‘radimi?
+
+\begin{leftbar}
+\begin{code}
+postgres=# \textbf{{\BS}c test}
+\end{code}
+\begin{codep}
+You are now connected to database "test" as user
+"postgres".
+\end{codep}
+\begin{codep}
+test=# \textbf{SELECT * FROM groups;}
+\end{codep}
+\begin{codep}
+ g_no | monitor 
+------+---------
+(0 rows)
+\end{codep}
+\end{leftbar}
+
+Yo‘q, u buni ko‘rmaydi, chunki tranzaksiya hali tugallanmagan. 
+
+Endi barcha talabalarni yaratilgan guruhga o‘tkazamiz:
+
+\begin{code}
+test=*# \textbf{UPDATE students SET g_no = 'A-101';}
+\end{code}
+\begin{codep}
+UPDATE 3
+\end{codep}
+
+Va yana, ikkinchi seans hali ham tugallanmagan tranzaksiya boshida mavjud bo‘lgan izchil ma‘lumotlarni ko‘radi:
+
+\begin{leftbar}
+\begin{code}
+test=# \textbf{SELECT * FROM students;}
+\end{code}
+\begin{codep}
+ s_id |  name  | start_year | g_no 
+------+--------+------------+------	
+ 1451 | Анна   |       2014 | 
+ 1432 | Виктор |       2014 | 
+ 1556 | Нина   |       2015 |
+(3 rows)
+\end{codep}
+\end{leftbar}
+
+
+Endi kiritilgan barcha o‘zgarishlarni amalga oshirgan holda tranzaksiyani yakunlaymiz:
+
+\begin{code}
+test=*# \textbf{COMMIT;}
+\end{code}
+\begin{codep}
+COMMIT
+\end{codep}
+
+Faqat shu daqiqada tranzaksiyaga kiritilgan barcha o‘zgarishlar xuddi bir vaqtning o‘zida paydo bo‘lgandek, ikkinchi seansda mavjud bo‘ladi:
+
+\begin{leftbar}
+\begin{code}
+test=# \textbf{SELECT * FROM groups;}
+\end{code}
+\begin{codep}
+  g_no | monitor 
+-------+---------	
+ A-101 |    1451
+(1 row)
+\end{codep}
+\begin{codep}
+test=# \textbf{SELECT * FROM students;}
+\end{codep}
+\begin{codep}
+ s_id |  name  | start_year | g_no 
+------+--------+------------+-------	
+ 1451 | Анна   |       2014 | A-101	
+ 1432 | Виктор |       2014 | A-101	
+ 1556 | Нина   |       2015 | A-101	
+(3 rows)
+\end{codep}
+\end{leftbar}
+
+MBBT bir nechta juda muhim kafolatlarni beradi.
+
+Birinchidan, har qanday tranzaksiya yoki to‘liq amalga oshiriladi (bizning misolimizda bo‘lgani kabi) yoki u umuman bajarilmaydi. Agar buyruqlardan birini bajarishda xatolik yuzaga kelsa yoki biz o‘zimiz \texttt{ROLLBACK} buyrug‘i bilan tranzaksiyani to‘xtatgan bo‘lsak, ma‘lumotlar bazasi \texttt{BEGIN} buyrug‘idan oldingi holatda qoladi. Bu xususiyat \textbf{atomlik} deb ataladi.
+
+Ikkinchidan, o‘zgarishlarni amalga oshirishda barcha yaxlitlik cheklovlari bajarilishi kerak, aks holda tranzaksiya to‘xtatiladi. Tranzaktsiyaning boshida ham, operatsiya oxirida ham ma‘lumotlar, albatta, izchil holatda bo‘ladi; Bu xususiyat \textbf{izchillik} deb ataladi.
+
+Uchinchidan, biz misolda ko‘rganimizdek, boshqa foydalanuvchilar tranzaksiya tomonidan hali amalga oshirilmagan ma‘lumotlarni hech qachon ko‘rmaydilar. Bu xususiyat \textbf{izolyatsiya} deb ataladi; Muvofiqligi tufayli MBBT ma‘lumotlarning to‘g‘riligini yo‘qotmasdan ko‘plab seanslarga parallel ravishda xizmat ko‘rsatishga qodir. PostgreSQL-ning o‘ziga xos xususiyati uning izolyatsiyani juda samarali amalga oshirishidir: bir nechta seanslar bir vaqtning o‘zida bir-birini bloklamasdan ma‘lumotlarni o‘qishi va o‘zgartirishi mumkin. Bloklash faqat bir nechta turli jarayonlar bir vaqtning o‘zida bir qatorni o‘zgartirishga harakat qilganda paydo bo‘ladi.
+
+To‘rtinchidan, \textbf{abadiylik} kafolatlanadi: yozib olingan ma‘lumotlar hatto ishlamay qolgan taqdirda ham yo‘qolmaydi (albatta, to‘g‘ri sozlamalar va muntazam zaxira nusxalari kabi amallar bilan).
+
+Bu juda foydali xususiyatlar bo‘lib, ularsiz relyatsion ma‘lumotlar bazasi tizimini tasavvur qilib bo‘lmaydi.
+
+Tranzaktsiyalar haqida ko‘proq ma‘lumot olish uchun \urld{https}{postgrespro.ru/doc/tutorial-transactions} ga qarang (va undan ham ko‘proq~--- \urld{https}{postgrespro.ru/doc/mvcc}).
+
+%\pagebreak
+
+\section{Psql foydali buyruqlari}
+
+%\enlargethispage*{1\baselineskip}
+\begin{description}[parsep=0.82\parsep]
+\item[{\BS}?] \texttt{psql} buyrug‘i haqida yordam olish.
+
+\item[{\BS}h] SQL Yordam: Mavjud buyruqlar ro‘yxati yoki muayyan buyruq uchun sintaksis.
+
+\item[{\BS}x] Jadval chiqishining holatini almashinuvi: oddiy holatdan (ustunlar va qatorlar) kengaytirilgan holatga (har bir ustun alohida satrda) va orqaga o‘tkazish. Bir nechta “keng” qatorlarni ko‘rish uchun qulay.
+
+\item[{\BS}l] Ma‘lumotlar bazalari ro‘yxati.
+
+\item[{\BS}du]  Foydalanuvchilar ro‘yxati.
+
+\item[{\BS}dt]	Jadvallar ro‘yxati.
+
+\item[{\BS}di]	Indekslar ro‘yxati.
+
+\item[{\BS}dv]	Ko‘rinishlar ro‘yxati.
+
+\item[{\BS}df]	Funksiyalar ro‘yxati.
+
+\item[{\BS}dn]	Sxemalar ro‘yxati.
+
+\item[{\BS}dx]	O‘rnatilgan kengaytmalar ro‘yxati.
+
+\item[{\BS}dp]	Imtiyozlar ro‘yxati.
+
+\item[{\BS}d имя]	Muayyan ma‘lumotlar bazasi obyekti haqida batafsil ma‘lumot.
+
+\item[{\BS}d+ имя]	Muayyan obyekt haqida yanada batafsilroq ma‘lumot.
+
+\item[{\BS}timing on]	Operatorlarning bajarilish vaqtlarini ko‘rsatish.
+\end{description}
+
+
+\section{Xulosa}
+
+%\enlargethispage*{1\baselineskip}
+Albatta, biz ma‘lumotlar bazasi haqida bilishingiz kerak bo‘lgan narsalarning ozgina qismini qamrab oldik, ammo PostgreSQL-dan foydalanishni boshlash unchalik qiyin emasligiga ishonchingiz komil degan umiddamiz. SQL tili har xil murakkablikdagi so‘rovlarni shakllantirish imkonini beradi va PostgreSQL yuqori sifatli standart qo‘llab-quvvatlash va samarali amalga oshirishni ta‘minlaydi. Sinab ko‘ring, tajriba!
+
+Va yana bir muhim \texttt{psql} buyrug‘i, seansni tugatish uchun:
+
+\begin{code}
+test=# \textbf{{\BS}q}
+\end{code}
+
+

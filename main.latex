@@ -46,7 +46,7 @@ Omad tilaymiz!
 
 \input{_03_installation.latex}
 
-%\input{_04_trysql.latex}
+\input{_04_trysql.latex}
 
 %\input{_05_demo.latex}
 
