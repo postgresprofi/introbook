@@ -1,0 +1,830 @@
+% po4a: environment codep2
+% po4a: environment codep
+% po4a: environment code
+% po4a: environment code2
+% po4a: environment denseitem
+% po4a: environment denseenum
+% po4a: environment itemize
+% po4a: environment itemizex
+% po4a: environment document
+% po4a: environment leftbar
+% po4a: environment sidewaysfigure 
+\chapter{Demo ma‘lumotlar bazasi}\label{demo}
+
+\section{Tavsif}
+
+\subsection{Umumiy tavsif}
+
+Murakkab so‘rovlar bilan ishlashni o‘rganish uchun bizga ishonchli ma‘lumotlar bilan to‘ldirilgan uchta jadval emas, balki sakkizta jiddiyroq ma‘lumotlar bazasi kerak bo‘ladi.
+
+Biz o‘z sohamiz sifatida havo transportini tanladik. Bizning ma‘lumotlar bazamizda ma‘lum vaqt davomida xayoliy aviakompaniya tomonidan amalga oshirilgan parvozlar haqida ma‘lumotlar mavjud. Samolyotda kim kamida bir marta uchgan bo‘lsa hamma narsa aniq bo‘lishi kerak, ammo har holda biz hamma narsani tushuntiramiz.
+
+Bizning ma‘lumotlar bazamiz diagrammasi ~\pageref{demo-erd} betdagi rasmda ko‘rsatilgan. 
+Biz keraksiz tafsilotlarga yo‘l qo‘ymaslik va shu bilan birga uning misolidan foydalangan holda qiziqarli va mazmunli so‘rovlarni ishlab chiqish uchun ma‘lumotlar sxemasini juda murakkab emas, lekin juda oddiy emas qilishga harakat qildik.
+
+%\pagebreak
+
+Asosiy ob‘ekt - har biriga alohida \textbf{chipta}(\codett{tickets}) beriladigan bir yoki bir nechta yo‘lovchilar uchun \textbf{bron qilish} (\codett{book\-ings}). 
+Biz yo‘lovchini shaxs sifatida (u bizning aviakompaniyamiz bilan bir necha marta uchgan bo'lishi mumkin) mustaqil mazmun sifatida ajrata olmaymiz, chunki u uchun ishonchli yagona identifikator yo‘q. Biz har bir yo‘lovchi reysini unikal deb hisoblaymiz.
+
+Har bir chipta bir yoki bir nechta \textbf{uchishlarga} mos keladi (\codett{ticket\_flights}). Chiptaga bir nechta reyslar - jo‘nash va boradigan punktlar o‘rtasida to‘g‘ridan-to‘g‘ri uchish mavjud bo‘lmaganda (ya‘ni, transfer bilan chipta olinadi) yoki ular bir-biriga to‘g‘ri kelganda (ya‘ni, ikki tomonga, borish va qaytishga chipta olinganda) kiritilgan bo‘ladi.
+
+Bitta bronlashdagi barcha chiptalar bir xil reyslar to‘plamiga ega deb taxmin qilinadi, garchi ma‘lumotlar sxemasida bu borada qat‘iy cheklov yo‘q.
+
+Har bir \textbf{reys}(\codett{flights}) bir \textbf{aeroportdan}(\codett{air\-ports}) boshqasiga boradi. Bir xil raqamlarga ega reyslar bir xil jo‘nash va kelish punktlariga ega, ammo turli sanalar.
+
+Parvozni ro‘yxatdan o‘tkazishda yo‘lovchiga samolyotda o‘tirgan joyini ko‘rsatadigan \textbf{bortga chiqish talonlari} (\codett{boarding\_passes}) beriladi. Agar sizda chipta bo‘lsa, siz faqat reysga ro‘yxatdan o‘tishingiz mumkin. Parvoz va o‘rindiq kombinatsiyasi bir xil o‘rindiq uchun turli xil bortga chiqish talonlari berilmasligini ta‘minlash uchun unikal bo‘lishi kerak.
+
+\begin{sidewaysfigure}
+\includegraphics[angle=0]{erd.pdf}\label{demo-erd}
+\end{sidewaysfigure}
+
+Samolyotdagi \textbf{o‘rindiqlar} (\codett{seats}) soni va ularning xizmat ko‘rsatish sinfi bo‘yicha taqsimlanishi parvozni amalga oshiruvchi \textbf{samolyot} (\codett{aircrafts}) modeliga bog‘liq. 
+Xuddi shu modeldagi samolyotlar bir xil kabina tartibiga ega deb, taxmin qilinadi. Ma‘lumotlar sxemasi bortga chiqish talonida ko‘rsatilgan o‘rindiq mavjudligini tekshirishni nazarda tutmaydi.
+
+\begin{sidewaysfigure}
+%\includegraphics[height=\textheight,angle=270]{05_airlines}
+\vfill
+\begin{tikzpicture}
+\clip (-5.2cm*1.16,-3.35cm*1.16) rectangle (5.2cm*1.16, 3.0cm*1.16);
+\node [rectangle, draw, inner sep=0, outer sep=0] {
+\includegraphics[angle=0,scale=1.16]{airlines.pdf}
+};
+\end{tikzpicture}
+\vfill
+\end{sidewaysfigure}
+
+Keyinchalik, har bir jadvalni, shuningdek, qo‘shimcha ko‘rinishlar va funktsiyalarni batafsil tavsiflaymiz. Har qanday jadvalning aniq ta‘rifi, shu jumladan ma‘lumotlar turlari va ustunlarning to‘liq tavsiflari har doim \texttt{{\BS}d+} buyruq yordamida olinishi mumkin.
+
+\subsection{Bronlash}
+
+Aviakompaniyamiz xizmatlaridan foydalanish niyatida yo‘lovchi oldindan kerakli chiptalarni band qilib qo‘yadi (\texttt{book\_date}, parvozdan maksimal bir oy oldin). 
+Bronlash \texttt{book\_ref} raqami bilan identifikatsiyalanadi (harflar va raqamlarning olti xonali birikmasi).
+
+\texttt{total\_amount} maydonida barcha yo‘lovchilar uchun bronga kiritilgan reyslarning umumiy qiymati saqlanadi.
+
+\subsection{Chipta}
+
+Chiptada 13 ta raqamdan iborat \texttt{ticket\_no} unikal raqami mavjud.
+
+Chipta \texttt{passen\-ger\_id} yo‘lovchini shaxsligini identifikatsiya qiluvchi hujjat raqami, shuningdek uning familiyasi va ismi \texttt{passenger\_name} va bog‘lanish ma‘lumotlari \texttt{contact\_data}-ni o‘z ichiga oladi.
+
+Yo‘lovchining guvohnomasi ham, uning ismi ham doimiy emasligini unutmang (pasportingizni o‘zgartirishingiz mumkin, familiyangizni o‘zgartirishingiz mumkin). 
+Shu sababli, bitta yo‘lovchi uchun barcha chiptalarni aniqlab bo‘lmaydi. Oddiylik uchun barcha yo‘lovchilar unikal deb taxmin qilishimiz mumkin.
+
+\subsection{Parvoz}
+
+Parvoz chiptani parvoz bilan bog‘laydi va ularning ikkita raqami bilan belgilanadi.
+
+Har bir parvoz uchun uning narxi \texttt{amount} va tariflar klassi \texttt{fare\_conditions} ko‘rsatilgan.
+
+\subsection{Reys}
+
+Unikal identifikator tabiiy (agar u real ob‘ektlarning xususiyatlarini o‘z ichiga olgan bo‘lsa) yoki o‘gay (agar tizim tomonidan yaratilgan bo‘lsa, odatda raqamlarning ortib borayotgan ketma-ketligidan) bo‘lishi mumkin.
+
+Parvoz jadvalining tabiiy kaliti \texttt{flight\_no} reys raqami va \texttt{scheduled\_de\-parture} sanasidan iborat. 
+Ushbu jadvaldagi tashqi kalitlarni yanada ixcham qilish uchun birlamchi kalit sifatida \texttt{flight\_id} o‘gay kalit ishlatiladi.
+
+Parvoz har doim ikkita nuqtani bog‘laydi: \texttt{depar\-ture\_airport} va \texttt{arrival\_airport}.
+
+
+“Transferlar bilan parvoz” degan narsa yo‘q: agar aeroportlar o‘rtasida to‘g‘ridan-to‘g‘ri reys bo‘lmasa, barcha kerakli reyslar shunchaki chiptaga kiritilgan.
+
+Har bir reysda jo‘nash \texttt{scheduled\_departure} va kelishlarning (\texttt{scheduled\_ar\-ri\-val}) rejalashtirilgan  sanasi va vaqti mavjud. 
+Haqiqiy jo‘nash vaqti - \texttt{actual\_departure} va haqiqiy kelish vaqti - \texttt{actual\_ar\-rival} farq qilishi mumkin; ko‘pincha ko‘p emas, lekin ba‘zida parvozning kechikishi bir necha soat bo‘lishi mumkin.
+
+\pagebreak[2]
+
+Parvoz holati \texttt{status} quyidagi qiymatlarni olishi mumkin:
+
+\begin{itemizex}
+
+\item Scheduled\\
+Reysni bron qilish mumkin. Qiymat rejalashtirilgan jo‘nash sanasidan bir oy oldin, ma‘lumotlar bazasida parvoz yozuvi paydo bo‘lishi bilan bir vaqtda o‘rnatiladi.
+
+\item On Time\\
+Reys ro‘yxatdan o‘tish uchun tayyor (belgilangan jo‘nash sanasidan bir kun oldin) va kechiktirilmaydi.
+
+\item Delayed\\
+Reys ro‘yhatdan o‘tish uchun tayyor (belgilangan jo‘nash sanasidan bir kun oldin), lekin kechiktirilgan.
+
+\item Departed\\
+Samolyot allaqachon havoga ko‘tarilgan va havoda.
+
+\item Arrived\\
+Samolyot belgilangan manzilga yetib keldi.
+
+\item Cancelled\\
+Reys bekor qilingan.
+
+\end{itemizex}
+
+\subsection{Aeroport}
+
+Har bir aeroport uch harfli \texttt{air\-port\_co\-de} bilan belgilanadi va \texttt{airport\_name} nomga ega.
+
+Shahar nomi \texttt{city} aeroport atributi sifatida ko‘rsatilgan; uning uchun alohida ob‘ekt yo‘q. 
+Ular bitta shaharning aeroportlarini aniqlashda kerak. Koordinatalar (uzunlik va kenglik) \texttt{coordinates} va \texttt{timezone} ham ko‘rsatilgan.
+
+\subsection{Bortga chiqish taloni}
+
+Belgilangan jo‘nash kunidan bir kun oldin, mumkin bo‘lgan reysga ro‘yxatdan o‘tishda yo‘lovchiga bortga chiqish taloni beriladi. 
+U xuddi reys bilan bir xil - chipta va parvoz raqami bo‘yicha identifikatsiyalanadi.
+
+Bortga chiqish talonlariga yo‘lovchilar reysga ro‘yxatdan o‘tish tartibi bo‘yicha ketma-ket \texttt{boarding\_no} raqamlari beriladi (bu raqam faqat ma‘lum bir reys doirasida yagona bo‘ladi). 
+Bortga chiqish talonida o‘rindiq raqami \texttt{seat\_no} ko‘rsatilgan.
+
+\subsection{Samolyot}
+
+Har bir samolyot modeli uch xonali \texttt{aircraft\_code} bilan aniqlanadi. Shu bilan birga modelning nomi - \texttt{model} va kilometrlarda maksimal parvoz masofasi - \texttt{range} ham ko‘rsatilgan bo‘ladi.
+
+\subsection{Joy}
+
+O‘rindiqlar to‘plami har bir modelning ichki tuzlishini belgilaydi. Har bir o‘rindiq \texttt{seat\_no} raqami bilan belgilanadi va unga \texttt{fare\_condi\-tions} xizmat ko‘rsatish sinfi tayinlangan – Economy, Comfort yoki Business.
+
+\subsection{Parvozlar uchun ko‘rinish}
+
+\texttt{flights\_v} ko‘rinishi \texttt{flights} jadvali ustida yaratilgan.
+Ko‘rinishlar xuddi jadvallar kabi so‘rovlarda ishlatilishi mumkin, lekin ma‘lumotlarni saqlash o‘rniga ular qandaydir so‘rovlarni bajaradilar. Ko‘rinish ta‘rifi va u tomonidan saqlangan so‘rovni quyidagi psql buyrug‘i bilan ko‘rish mumkin:
+
+\begin{code}
+postgres=# \textbf{{\BS}d+ flights_v}
+\end{code}
+
+Ushbu ko‘rinish quyidagi ma‘lumotlarni qo‘shadi:
+
+\begin{itemizex}
+\item    \texttt{de\-par\-ture\_airport}, \texttt{departure\_airport\_name},\\
+\texttt{depar\-ture\_city} kabi aeroport jo‘nab ketish haqidagi ma‘lumotlarini dekodlash;
+
+\item    \texttt{arrival\_airport}, \texttt{arrival\_airport\_name}, \\
+\texttt{arrival\_city} kabi aeroport qo‘nish haqidagi ma‘lumotlarini dekodlash;
+
+\item    uchish mahalliy vaqti \\
+\texttt{scheduled\_departure\_local}, \texttt{actual\_departure\_local};
+
+\item    qo‘nish mahalliy vaqti \\
+\texttt{scheduled\_arrival\_local}, \texttt{actual\_arrival\_local};
+
+\item    uchish davomiyligi \\
+\texttt{scheduled\_duration}, \texttt{actual\_duration}.
+\end{itemizex}
+
+\subsection{Marshrutlar uchun ko‘rinishlar}
+
+Parvoz jadvalida ortiqcha ma‘lumotlar mavjud: undan aniq parvoz sanalariga bog‘liq bo‘lmagan marshrut (parvoz raqami, jo‘nash va boradigan aeroportlar, samolyot modeli) haqida ma‘lumot olish mumkin bo‘ladi.
+
+Aynan shu ma‘lumotlar \texttt{routes} ko‘rinishini tashkil qiladi. Bundan tashqari, ushbu ko‘rinish reyslar amalga oshiriladigan haftaning kunlarini \texttt{days\_of\_week} va parvoz davomiyligining rejalashtirilgan qiymati \texttt{duration} ko‘rsatadi.
+
+\subsection{Now funksiyasi}
+
+Demo ma‘lumotlar bazasi ma‘lumotlarning vaqt "bo‘lagi" ni o‘z ichiga oladi – go‘yo bir vaqtda haqiqiy tizimning zaxira nusxasi yaratilgan. Misol uchun, agar ma‘lum bir reysda Departed statusi mavjud bo‘lsa, bu havo kemasi zaxirani nusxalash vaqtida havoda bo‘lganligini anglatadi.
+
+“Tilim” joylashuvi \texttt{bookings.now} funksiyasida saqlanadi. U, odatda \texttt{now} funksiyasi qo‘llaniladigan so‘rovlarda ishlatilishi mumkin.
+
+Bundan tashqari, ushbu funktsiyaning qiymati demo ma‘lumotlar bazasi talqinini aniqlaydi. Kitobning ushbu sonini tayyorlash vaqtidagi joriy talqini 15.08.2017 dan boshlangan.
+
+\section{O‘rnatish}
+
+\subsection{Saytdan o‘rnatish}
+
+Ma‘lumotlar bazasi uchta talqinda mavjud bo‘lib, ular faqat hajmi bo‘yicha farqlanadi:
+
+\begin{itemizex}
+\item    \urld{https}{edu.postgrespro.ru/demo-small.zip}~--- katta bo‘lmagan, parvozlar \\
+to‘g‘risidagi 1 oylik ma‘lumotlar (fayl - 21 МB,  \\
+MB hajmi 280 МB)),
+
+\item    \urld{https}{edu.postgrespro.ru/demo-medium.zip}~--- o‘rtacha, \\
+3 oylik parvozlar haqidagi ma‘lumotlar (fayl - 62 МB, \\
+MB hajmi 702 МB),
+
+\item    \urld{https}{edu.postgrespro.ru/demo-big.zip}~--- katta, \\
+1 yillik parvozlar ma‘lumotlari (fayl - 232 МB, \\
+MB hajmi 2638 МB).
+\end{itemizex}
+
+Kichkina ma‘lumotlar bazasida so‘rovlar yozishni mashq qilishingiz mumkin, ammo optimallashtirish masalalariga sho‘ng‘ish uchun katta ma‘lumotlar yaxshiroq - keyin siz so‘rovlar katta hajmdagi ma‘lumotlarda qanday harakat qilishini darhol ko‘rasiz.
+
+Fayllar \texttt{pg\_dump} yordamchi dasturi tomonidan yaratilgan \texttt{demo} ma‘lumotlar bazasining mantiqiy zaxira nusxasini o‘z ichiga oladi. Esda tutingki, agar sizda allaqachon \texttt{demo} nomli ma‘lumotlar bazasi mavjud bo‘lsa, u zaxiradan qayta tiklanganda o‘chiriladi va qayta yaratiladi. \texttt{demo} ma‘lumotlar bazasining egasi qayta tiklashni amalga oshirgan MBBT foydalanuvchisi bo‘ladi.
+
+Demo ma‘lumotlar bazasini Linux operatsion tizimiga o‘rnatish uchun \texttt{postgres} foydalanuvchisiga o‘tgandan so‘ng fayllardan birini yuklab oling. Masalan, kichik ma‘lumotlar bazasi quyidagicha yuklab olinadi:
+
+\begin{code}
+$ \textbf{sudo su - postgres}
+\end{code}
+\begin{codep}
+$ \textbf{wget https://edu.postgrespro.ru/demo-small.zip}
+\end{codep}
+
+So‘ngra quyidagini bajaring:
+
+\begin{code}
+$ \textbf{zcat demo-small.zip | psql}
+\end{code}
+
+Windows operatsion tizimida istalgan veb-brauzerdan foydalanib, saytdan \urld{https}{edu.postgrespro.ru/demo-small.zip} faylini yuklab oling, so‘ngra arxivni ochish uchun ustiga ikki marta bosing va keyin \texttt{demo-small-20170815.sql}  faylidan \texttt{C:{\BS}Program Files{\BS}PostgreSQL{\BS}14} katalogiga  nusxa oling.
+
+pgAdmin dasturi (~\pageref{pgadmin}-betda muhokama qilingan) bunday zaxira nusxasidan ma‘lumotlar bazasini tiklashga ruxsat bermaydi. Shunday qilib, psql ("SQL Shell (psql)" yorlig‘i) ni ishga tushiring va buyruqni bajaring:
+
+\begin{code}
+postgres# \textbf{{\BS}i demo-small-20170815.sql}
+\end{code}
+
+Agar fayl topilmasa, yorliq xususiyatini tekshiring "Start in" ("Ishchi papka") - fayl ushbu katalogda joylashgan bo'lishi kerak.
+
+
+\section{So‘rovlar misollari}
+
+\subsection{Sxema haqida}
+
+O‘rnatish tugallandi. Psql-ni ishga tushiring va demo ma‘lumotlar bazasiga ulaning:
+
+\begin{code}
+postgres=# \textbf{{\BS}c demo}
+\end{code}
+\begin{codep}
+You are now connected to database "demo" as user
+"postgres".
+\end{codep}
+%\begin{codep}
+%demo=#
+%\end{codep}
+
+Bizni qiziqtirgan barcha ob‘ektlar \texttt{book\-ings} sxemasida. Ma‘lumotlar bazasiga ulanishda ushbu sxema avtomatik ravishda ishlatiladi, shuning uchun uni aniq ko‘rsatishga hojat yo‘q:
+
+\begin{code}
+\microtypesetup{protrusion=false,expansion=false}
+demo=# \textbf{SELECT * FROM aircrafts;}
+\end{code}
+\begin{codep}
+ aircraft_code |        model        | range 
+---------------+---------------------+-------
+ 773           | Боинг 777-300       | 11100
+ 763           | Боинг 767-300       |  7900
+ SU9           | Сухой Суперджет-100 |  3000
+ 320           | Аэробус A320-200    |  5700
+ 321           | Аэробус A321-200    |  5600
+ 319           | Аэробус A319-100    |  6700
+ 733           | Боинг 737-300       |  4200
+ CN1           | Сессна 208 Караван  |  1200
+ CR2           | Бомбардье CRJ-200   |  2700
+(9 rows)
+\end{codep}
+
+Ammo \texttt{bookings.now} funktsiyasini chaqirganda, bu kerak, chunki standart \texttt{now} funksiyasi ham mavjud:
+
+\begin{code}
+demo=# \textbf{SELECT bookings.now();}
+\end{code}
+\begin{codep}
+          now           
+------------------------
+ 2017-08-15 18:00:00+03
+(1 row)
+\end{codep}
+
+Siz allaqachon payqaganingizdek, samolyotlar, aeroportlar va shaharlarning nomlari rus tilida ko‘rsatilgan:
+
+\begin{code}
+demo=# \textbf{SELECT airport_code, city
+FROM airports LIMIT 5;}
+\end{code}
+\begin{codep}
+ airport_code |           city           
+--------------+--------------------------
+ YKS          | Якутск
+ MJZ          | Мирный
+ KHV          | Хабаровск
+ PKC          | Петропавловск-Камчатский
+ UUS          | Южно-Сахалинск
+(5 rows)
+\end{codep}
+
+Va agar tilni aniqlaydigan \texttt{bookings.lang} parametri \texttt{en}ga o‘rnatilgan bo‘lsa, u ingliz tilida bo‘ladi:
+
+\begin{code}
+demo=# \textbf{ALTER DATABASE demo SET bookings.lang = en;}
+\end{code}
+\begin{codep}
+ALTER DATABASE
+\end{codep}
+
+Biz ma‘lumotlar bazasi darajasida tilni o‘zgartirdik; Endi qayta ulanishingiz kerak.
+
+\begin{code}
+demo=# \textbf{{\BS}c}
+\end{code}
+\begin{codep}
+You are now connected to database "demo" as user
+"postgres".
+\end{codep}
+\begin{codep}
+demo=# \textbf{SELECT airport_code, city
+FROM airports
+LIMIT 5;}
+\end{codep}
+\begin{codep}
+ airport_code |       city        
+--------------+-------------------
+ YKS          | Yakutsk
+ MJZ          | Mirnyj
+ KHV          | Khabarovsk
+ PKC          | Petropavlovsk
+ UUS          | Yuzhno-sakhalinsk
+(5 rows)
+\end{codep}
+
+Tilni o‘zgartirish mexanizmini o‘rganish uchun psql \texttt{{\BS}d+} buyrug‘i bilan \texttt{aircrafts} yoki \texttt{airports}-larning ta‘rifiga qarang.
+
+Sxemani boshqarish haqida ko‘proq bilib oling: \urld{https}{postgrespro.ru/doc/ddl-schemas}.
+
+Server parametrlarini sozlash haqida — \urld{https}{postgrespro.ru/doc/config-setting}.
+
+
+\subsection{Oddiy so‘rovlar}
+
+Keling, ushbu sxema uchun bir nechta vazifalarni ko‘rib chiqaylik - eng oddiydan ancha murakkabgacha. Aksariyat muammolarning yechimlari bor, lekin avval javobga qaramasdan so‘rov yozishga harakat qilgan ma‘qul, chunki aks holda siz SQL tilini o‘rgana olmaysiz.
+
+\textbf{Topshiriq.} Kecha bir kun oldin Moskva (SVO) - Novosibirsk (OVB) reysida 1A o‘rindig‘ida kim uchdi va u chiptani qachon bron qilgan?
+
+\textbf{Yechim.} “Kechagi kun” joriy sanadan emas, balki \texttt{booking.now}-dan hisoblanadi.
+
+\pagebreak
+
+\begin{code}
+SELECT t.passenger_name,
+       b.book_date
+FROM   bookings b 
+       JOIN tickets t
+         ON t.book_ref = b.book_ref 
+       JOIN boarding_passes bp
+         ON bp.ticket_no = t.ticket_no 
+       JOIN flights f 
+         ON f.flight_id = bp.flight_id
+WHERE  f.departure_airport = 'SVO'
+AND    f.arrival_airport = 'OVB'
+AND    f.scheduled_departure::date =
+       bookings.now()::date - INTERVAL '2 day'
+AND    bp.seat_no = '1A';
+\end{code}
+
+\textbf{Topshiriq.} Kecha PG0404 reysida nechta o‘rindiq bo‘sh qoldi?
+
+\textbf{Yechim.} Muammoni bir necha usul bilan hal qilish mumkin. Bitta yo‘li, \codett{NOT EXISTS} konstruksiyasidan foydalanib, biz bortga chiqish talonlarisiz bo‘lgan o‘rindiqlarni topamiz:
+
+\begin{code}
+SELECT count(*)
+FROM   flights f 
+       JOIN seats s 
+         ON s.aircraft_code = f.aircraft_code
+WHERE  f.flight_no = 'PG0404'
+AND    f.scheduled_departure::date = 
+       bookings.now()::date - INTERVAL '1 day'
+AND    NOT EXISTS ( 
+         SELECT NULL 
+         FROM   boarding_passes bp 
+         WHERE  bp.flight_id = f.flight_id 
+         AND    bp.seat_no = s.seat_no 
+       );
+\end{code}
+
+Boshqa variantda biz to‘plamlarni ayirishga murojaat qilamiz. 
+Turli xil yechimlar bir xil natija beradi, lekin ba‘zida ishlashda farqlanadi, shuning uchun agar bu muhim bo‘lsa, buni hisobga olishga arziydi.
+
+\begin{code}
+SELECT count(*)
+FROM   ( 
+  SELECT s.seat_no 
+  FROM   seats s 
+  WHERE  s.aircraft_code = ( 
+    SELECT aircraft_code 
+    FROM   flights 
+    WHERE  flight_no = 'PG0404' 
+    AND    scheduled_departure::date = 
+           bookings.now()::date - INTERVAL '1 day' 
+  ) 
+  EXCEPT 
+  SELECT bp.seat_no 
+  FROM   boarding_passes bp 
+  WHERE  bp.flight_id = ( 
+    SELECT flight_id 
+    FROM   flights 
+    WHERE  flight_no = 'PG0404' 
+    AND    scheduled_departure::date = 
+           bookings.now()::date - INTERVAL '1 day' 
+  )
+) t;
+\end{code}
+
+\textbf{Topshiriq.} Qaysi reyslar eng uzoq kechikishlarga duch keldi? Eng uzoq muddatga kechiktirilgan o‘nta reysni sanab o‘ting.
+
+\textbf{Yechim.} Biz faqat bajarilgan parvozlarni hisobga olamiz.
+
+\begin{code}
+SELECT   f.flight_no, 
+         f.scheduled_departure, 
+         f.actual_departure, 
+         f.actual_departure - f.scheduled_departure
+         AS delay
+FROM     flights f
+WHERE    f.actual_departure IS NOT NULL
+ORDER BY f.actual_departure - f.scheduled_departure
+         DESC
+LIMIT 10;
+\end{code}
+
+Xuddi shu shart \texttt{status} ustuni asosida yozilishi mumkin, barcha mos keladigan holatlar ro‘yxati. Yoki \codett{DESC NULLS LAST} tartiblash tartibini belgilash orqali \codett{WHERE} shartisiz bajarishingiz mumkin, shunda aniqlanmagan qiymatlar tanlov boshida emas, balki oxirida tugaydi.
+
+\subsection{Agregat funksiyalar}
+
+\textbf{Topshiriq.} Moskvadan Sankt-Peterburgga har bir mumkin bo‘lgan parvoz uchun minimal va maksimal parvoz davomiyligi qancha va parvoz necha marta bir soatdan ortiq kechiktirildi?
+
+\textbf{Yechim.} Bu yerda kerakli jadvallarning ulanishlarini yozmaslik uchun tayyor \texttt{flights\_v} ko‘rnishidan foydalanish qulay. So‘rovda biz faqat allaqachon tugallangan reyslarni hisobga olamiz.
+
+\begin{code}
+SELECT   f.flight_no,
+         f.scheduled_duration,
+         min(f.actual_duration),
+         max(f.actual_duration),
+         sum(CASE WHEN f.actual_departure > 
+                       f.scheduled_departure + 
+                       INTERVAL '1 hour' 
+                  THEN 1 ELSE 0 
+             END) delays
+FROM     flights_v f
+WHERE    f.departure_city = 'Москва'
+AND      f.arrival_city = 'Санкт-Петербург'
+AND      f.status = 'Arrived'
+GROUP BY f.flight_no, 
+         f.scheduled_duration;
+\end{code}
+
+\textbf{Topshiriq.} Barcha reyslarga birinchi bo‘lib ro‘yxatdan o‘tgan eng intizomli yo‘lovchilarni toping. Faqat kamida ikkita reysni amalga oshirgan yo‘lovchilarni hisobga oling.
+
+\textbf{Yechim.} Biz bortga chiqish talonlari raqamlari ro‘yxatdan o‘tish tartibida berilishidan foydalanamiz.
+
+\begin{code}
+SELECT   t.passenger_name, 
+         t.ticket_no
+FROM     tickets t 
+         JOIN boarding_passes bp 
+           ON bp.ticket_no = t.ticket_no
+GROUP BY t.passenger_name,
+         t.ticket_no
+HAVING   max(bp.boarding_no) = 1
+AND      count(*) > 1;
+\end{code}
+
+
+\textbf{Topshiriq.} Har bir bron qilish uchun qancha yo‘lovchi mos keladi?
+
+\textbf{Yechim.} Keling, avval har bir bronlashda yo‘lovchilar sonini, so‘ngra yo‘lovchilar sonining har bir varianti bilan bandlar sonini hisoblaymiz.
+
+\begin{code}
+SELECT   tt.cnt, 
+         count(*)
+FROM     ( 
+           SELECT   t.book_ref, 
+                    count(*) cnt 
+           FROM     tickets t 
+           GROUP BY t.book_ref 
+         ) tt
+GROUP BY tt.cnt
+ORDER BY tt.cnt;
+\end{code}
+
+\subsection{Oyna funksiyalar}
+
+\textbf{Topshiriq.} Har bir chipta uchun unga kiritilgan reyslarni va keyingi reysga o‘tish uchun qolgan zaxira vaqtni ham ko‘rsating. Saralashingizni yetti kun oldin bron qilingan chiptalar bilan cheklang.
+
+\textbf{Yechim.} Xuddi shu ma‘lumotlarga ikki marta kirishni oldini olish uchun biz oyna funksiyalaridan foydalanamiz.
+
+\begin{code}
+SELECT tf.ticket_no, 
+       f.departure_airport, 
+       f.arrival_airport, 
+       f.scheduled_arrival, 
+       lead(f.scheduled_departure) OVER w 
+       AS next_departure, 
+       lead(f.scheduled_departure) OVER w - 
+         f.scheduled_arrival
+       AS gap
+FROM   bookings b 
+       JOIN tickets t 
+         ON t.book_ref = b.book_ref 
+       JOIN ticket_flights tf 
+         ON tf.ticket_no = t.ticket_no 
+       JOIN flights f 
+         ON tf.flight_id = f.flight_id
+WHERE  b.book_date = 
+       bookings.now()::date - INTERVAL '7 day'
+WINDOW w AS (
+         PARTITION BY tf.ticket_no 
+         ORDER BY f.scheduled_departure);
+\end{code}
+
+Ko‘rib turganingizdek, ba‘zi hollarda transfer zahira vaqti bir necha kungacha bo‘lishi mumkin, chunki ikki tomonlama chiptalar bir tomonlama chiptalar bilan bir xil asosda hisoblanadi, belgilangan joyga sarflangan vaqt esa transfer vaqti bilan bir xilda hisobga olinadi. "Massivlar" bo‘limidagi muammolardan birini hal qilishdan foydalanib, siz ushbu ravshanlikni so‘rovda hisobga olishingiz mumkin.
+
+\textbf{Topshiriq.} Ism va familiyaning qanday kombinatsiyasi eng keng tarqalgan va ular barcha yo‘lovchilarning qaysi qismini tashkil qiladi?
+
+\textbf{Yechim.} Yo‘lovchilarning umumiy sonini hisoblash uchun oyna funksiyasidan foydalaniladi.
+
+\begin{code}
+SELECT   passenger_name, 
+         round( 100.0 * cnt / sum(cnt) OVER (), 2) 
+         AS percent
+FROM     ( 
+           SELECT   passenger_name, 
+                    count(*) cnt 
+           FROM     tickets 
+           GROUP BY passenger_name 
+         ) t
+ORDER BY percent DESC;
+\end{code}
+
+\textbf{Topshiriq.} Oldingi masalani ismlar uchun alohida va familiyalar uchun alohida hal qiling.
+
+\textbf{Yechim.} Bu yerda nomlarni sanash varianti mavjud. Familiyalar uchun yechim faqat \codett{p} qismso‘rovida farqlanadi.
+
+\begin{code}
+WITH p AS ( 
+  SELECT left(passenger_name, 
+              position(' ' IN passenger_name)) 
+         AS passenger_name 
+  FROM   tickets
+)
+SELECT   passenger_name, 
+         round( 100.0 * cnt / sum(cnt) OVER (), 2) 
+         AS percent
+FROM     ( 
+           SELECT   passenger_name, 
+                    count(*) cnt 
+           FROM     p 
+           GROUP BY passenger_name 
+         ) t
+ORDER BY percent DESC;
+\end{code}
+
+Xulosa shuki: agar siz ular bilan alohida ishlamoqchi bo‘lsangiz, bitta matn maydonida bir nechta qiymatlarni birlashtirmang. Ilmiy jihatdan bu "birinchi normal shakl" deb ataladi.
+
+\subsection{Massivlar}
+
+\textbf{Topshiriq.} Chiptada uning bir tomonlama yoki ikki tomonlama ekanligi aniq ko‘rsatilmagan. Ammo buni birinchi jo‘nash nuqtasini oxirgi manzil bilan solishtirish orqali aniqlash mumkin. Har bir chipta uchun jo‘nash va boradigan aeroportlarni ko‘rsating, transferlar bundan mustasno va uning bir tomonlama yoki ikki tomonlama ekanligini ko‘rsating.
+
+\textbf{Yechim.} Ehtimol, eng oson yo‘li bu - \texttt{array\_agg} agregat funktsiyasidan foydalangan holda marshrut bo‘ylab aeroportlar ro‘yxatini massivga yig‘ish va u bilan ishlash bo‘lishi mumkin.
+
+Ikki tomonga chiptalar uchun belgilangan aeroportlarni massivining o‘rta elementini tanlaymiz, bunda borish va qaytishlardagi transferlar soni bir xilligini hisobga olamiz.
+
+\begin{code}
+WITH t AS ( 
+  SELECT ticket_no, 
+         a, 
+         a[1]                  departure, 
+         a[cardinality(a)]     last_arrival, 
+         a[cardinality(a)/2+1] middle 
+  FROM ( 
+    SELECT   t.ticket_no, 
+             array_agg( f.departure_airport 
+               ORDER BY f.scheduled_departure) ||
+            (array_agg( f.arrival_airport 
+               ORDER BY f.scheduled_departure DESC)
+            )[1] AS a 
+    FROM     tickets t 
+             JOIN ticket_flights tf 
+               ON tf.ticket_no = t.ticket_no
+             JOIN flights f 
+               ON f.flight_id = tf.flight_id
+    GROUP BY t.ticket_no 
+  ) t
+)
+\begin{code}
+\pagebreak
+\end{code}
+SELECT t.ticket_no, 
+       t.a, 
+       t.departure, 
+       CASE 
+         WHEN t.departure = t.last_arrival 
+           THEN t.middle 
+         ELSE t.last_arrival 
+       END arrival, 
+       (t.departure = t.last_arrival) return_ticket
+FROM   t;
+\end{code}
+
+Ushbu parametrda chiptalar jadvali faqat bir marta ko‘riladi. Aeroportlar massivi faqat ko‘rish uchun ko‘rsatiladi; Agar katta hajmdagi ma‘lumotlar mavjud bo‘lsa, uni so‘rovdan olib tashlash mantiqan to‘g‘ri keladi, chunki qo‘shimcha ma‘lumotlar ishlash tezligiga yaxshi ta‘sir ko‘rsatmasligi mumkin.
+
+
+\textbf{Topshiriq.} "U yerga" yo‘li "ortga" yo‘li bilan bir xil bo‘lmagan ikki tomonlama chiptalarni toping.
+
+\textbf{Topshiriq.} Haftaning turli kunlarida bir yo‘nalishda va boshqa yo‘nalishda parvoz qiladigan aeroportlar juftligini toping.
+
+\textbf{Yechim.} Haftaning bir qator kunlarini yaratish vazifasining bir qismi allaqachon \texttt{routes} ko‘rinishida hal qilingan. Faqat \texttt{\&\&} operatori yordamida massivlarning kesishishini topish va uning bo‘shligiga ishonch hosil qilish qoladi:
+
+\begin{code}
+SELECT r1.departure_airport, 
+       r1.arrival_airport, 
+       r1.days_of_week dow, 
+       r2.days_of_week dow_back
+FROM   routes r1 
+       JOIN routes r2 
+         ON r1.arrival_airport = r2.departure_airport 
+        AND r1.departure_airport = r2.arrival_airport
+WHERE  NOT (r1.days_of_week && r2.days_of_week);
+\end{code}
+
+\subsection{Rekursiv so‘rovlar}
+
+\textbf{Topshiriq.} Ust-Kutdan (UKX) Neryungriga (CNN) minimal transferlar bilan qanday borish mumkin va havoda qancha vaqt sarflashingiz kerak?
+
+\textbf{Yechim.} Bu yerda siz aslida grafikdagi eng qisqa yo‘lni topishingiz kerak, bu rekursiv so‘rov bilan amalga oshiriladi.
+
+\begin{code}
+WITH RECURSIVE p( 
+  last_arrival,
+  destination, 
+  hops, 
+  flights, 
+  flight_time, 
+  found
+) AS ( 
+  SELECT a_from.airport_code, 
+         a_to.airport_code, 
+         array[a_from.airport_code], 
+         array[]::char(6)[], 
+         interval '0', 
+         a_from.airport_code = a_to.airport_code 
+  FROM   airports a_from, 
+         airports a_to 
+  WHERE  a_from.airport_code = 'UKX' 
+  AND    a_to.airport_code = 'CNN' 
+  UNION ALL 
+  SELECT r.arrival_airport, 
+         p.destination, 
+         (p.hops || r.arrival_airport)::char(3)[], 
+         (p.flights || r.flight_no)::char(6)[], 
+         p.flight_time + r.duration, 
+         bool_or(r.arrival_airport = p.destination)
+           OVER ()
+  FROM   p 
+         JOIN routes r 
+           ON r.departure_airport = p.last_arrival 
+  WHERE  NOT r.arrival_airport = ANY(p.hops) 
+  AND    NOT p.found
+)
+\end{code}
+\pagebreak
+\begin{code}
+SELECT hops, 
+       flights, 
+       flight_time
+FROM   p
+WHERE  p.last_arrival = p.destination;
+\end{code}
+
+Ushbu so‘rov \urld{https}{habr.com/company/postgrespro/blog/318398} maqolasida batafsil, bosqichma-bosqich muhokama qilinadi, shuning uchun biz bu yerda faqat qisqacha sharhlar beramiz.
+
+So‘rovni bajarish paytida qurilgan qo‘nishlar \codett{hops} massivi bo‘yicha tekshirishlar yordamida aylanishning oldi olinadi.
+
+E‘tibor bering, qidiruv "eniga", ya‘ni birinchi topilgan yo‘l transferlar soni bo‘yicha eng qisqa bo‘ladi. Boshqa yo‘llardan o‘tmaslik uchun (ular ko‘p bo‘lishi mumkin va ular allaqachon topilganidan uzunroq) "marshrut topildi" (\texttt{found}) atributidan foydalaniladi. U \texttt{bool\_or} oyna funksiyasi yordamida hisoblanadi.
+
+Ushbu so‘rovning bajarilish tezligini bayroqsiz oddiyroq variant bilan solishtirish juda foydali.
+
+Rekursiv so‘rovlar haqida batafsil ma‘lumotni hujjatlarda topishingiz mumkin: \urld{https}{postgrespro.ru/doc/queries-with}.
+
+\textbf{Topshiriq.} Bir aeroportdan boshqasiga o‘tish uchun maksimal qancha transferlar talab qilinishi mumkin?
+
+\textbf{Yechim.} Yechim uchun asos sifatida oldingi so‘rovni olishingiz mumkin. Ammo endi dastlabki iteratsiya faqat bir juft aeroportni emas, balki barcha mumkin bo‘lgan juftlarni o‘z ichiga olishi kerak: biz har bir aeroportni har biriga ulaymiz. Barcha bunday juftliklar uchun biz eng qisqa yo‘lni qidiramiz va keyin eng kattasini tanlaymiz.
+
+Albatta, bu faqat marshrut grafigi ulangan bo‘lsa amalga oshirilishi mumkin, ammo bizning demo ma‘lumotlar bazasida bu shart bajariladi.
+
+Ushbu so‘rovda "marshrut topildi" atributi ham qo‘llaniladi, ammo bu yerda u har bir aeroport juftligi uchun alohida hisoblanishi kerak.
+
+\begin{code}
+WITH RECURSIVE p( 
+  departure, 
+  last_arrival, 
+  destination, 
+  hops, 
+  found
+) AS ( 
+  SELECT a_from.airport_code, 
+         a_from.airport_code, 
+         a_to.airport_code, 
+         array[a_from.airport_code], 
+         a_from.airport_code = a_to.airport_code 
+  FROM   airports a_from, 
+         airports a_to 
+  UNION ALL
+  SELECT p.departure, 
+         r.arrival_airport, 
+         p.destination, 
+         (p.hops || r.arrival_airport)::char(3)[], 
+         bool_or(r.arrival_airport = p.destination) 
+           OVER (PARTITION BY p.departure, 
+                              p.destination) 
+  FROM   p 
+         JOIN routes r 
+           ON r.departure_airport = p.last_arrival 
+  WHERE  NOT r.arrival_airport = ANY(p.hops) 
+  AND    NOT p.found
+)
+SELECT max(cardinality(hops)-1)
+FROM   p
+WHERE  p.last_arrival = p.destination;
+\end{code}
+
+\pagebreak
+
+
+\textbf{Topshiriq.} Ust-Kutdan (UKX) Neryungriga (CNN) eng qisqa marshrutni aniq parvoz vaqti bo‘yicha toping (qo‘nish vaqtini hisobga olmaganda).
+
+Maslahat: bu marshrut transferlar soni bo‘yicha optimal bo‘lmasligi mumkin.
+
+\textbf{Yechim.} Uzluksiz siklning oldini olish uchun PostgreSQL 14 da kiritilgan \codett{CYCLE} konstruktsiyasi qo‘llaniladi.\label{cycle}
+
+\begin{code}
+WITH RECURSIVE p( 
+  last_arrival, 
+  destination, 
+  flights, 
+  flight_time, 
+  min_time
+) AS (
+  SELECT a_from.airport_code, 
+         a_to.airport_code, 
+         array[]::char(6)[], 
+         interval '0', 
+         NULL::interval 
+  FROM   airports a_from, 
+         airports a_to 
+  WHERE  a_from.airport_code = 'UKX' 
+  AND    a_to.airport_code = 'CNN' 
+  UNION ALL 
+  SELECT r.arrival_airport, 
+         p.destination, 
+         (p.flights || r.flight_no)::char(6)[], 
+         p.flight_time + r.duration, 
+         least( 
+           p.min_time,
+           min(p.flight_time + r.duration) 
+           FILTER ( 
+             WHERE r.arrival_airport = p.destination
+           ) OVER ()
+         ) 
+  FROM   p
+         JOIN routes r 
+           ON r.departure_airport = p.last_arrival 
+\end{code}
+\pagebreak
+\begin{code}
+  WHERE  p.flight_time + r.duration
+         < coalesce(
+             p.min_time,
+             INTERVAL '1 year'
+           )
+)
+CYCLE last_arrival SET is_cycle USING hops
+SELECT hops, 
+       flights, 
+       flight_time
+FROM   ( 
+         SELECT hops, 
+                flights, 
+                flight_time, 
+                min(min_time) OVER () min_time 
+         FROM   p 
+         WHERE  p.last_arrival = p.destination 
+       ) t
+WHERE  flight_time = min_time;
+\end{code}
+
+
+\subsection{Funksiyalar va kengaytmalar}
+
+\textbf{Topshiriq.} Kaliningrad (KGD) va Petropavlovsk-Kamchatskiy (PKC) o‘rtasidagi masofani toping.
+
+\textbf{Yechim.} \codett{airports} jadvali aeroportlarning koordinatalarini o‘z ichiga oladi. Juda uzoq nuqtalar orasidagi masofani aniq hisoblash uchun siz yerning murakkab shaklini hisobga olishingiz kerak. Yaxshisi bu ishni yaxshi hal qiluvchi PostGIS kengaytmasidan foydalanilgani qulay, u yer yuzasini geoid bilan yaqinlashtirishi mumkin.
+
+Ammo bizning maqsadlarimiz uchun oddiy sharsimon model ham ishlaydi. Keling, \texttt{earthdistance} kengaytmasidan foydalanamiz va natijani mildan kilometrga aylantiramiz.
+
+\begin{code}
+CREATE EXTENSION IF NOT EXISTS cube;
+\end{code}
+\begin{codep}
+CREATE EXTENSION IF NOT EXISTS earthdistance;
+\end{codep}
+\begin{codep}
+SELECT round( 
+         (a_from.coordinates <@> a_to.coordinates) *
+         1.609344 
+       )
+FROM   airports a_from, 
+       airports a_to
+WHERE  a_from.airport_code = 'KGD'
+AND    a_to.airport_code = 'PKC';
+\end{codep}
+
+\textbf{Topshiriq.} Aeroportlar orasidagi parvozlar grafigini chizing.
+
