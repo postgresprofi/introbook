@@ -50,11 +50,11 @@ Omad tilaymiz!
 
 \input{_05_demo.latex}
 
-%\input{_06_application.latex}
+\input{_06_application.latex}
 
-%\input{_07_configure.latex}
+\input{_07_configure.latex}
 
-%\input{_08_pgadmin.latex}
+\input{_08_pgadmin.latex}
 
 %\input{_09_additional.latex}
 

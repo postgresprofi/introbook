@@ -1,0 +1,182 @@
+% po4a: environment codep2
+% po4a: environment codep
+% po4a: environment code
+% po4a: environment code2
+% po4a: environment denseitem
+% po4a: environment denseenum
+% po4a: environment itemize
+% po4a: environment itemizex
+% po4a: environment document
+% po4a: environment leftbar
+% po4a: environment sidewaysfigure 
+\chapter{PostgreSQL ni sozlash}\label{configure}
+
+\vspace{-2pt}
+\section{Asosiy sozlashlar}
+
+\vspace{-1pt}
+PostgreSQL sukut bo‘yicha, server hatto eng zaif uskunada ham ishlashi uchun sozlangan, ammo MBBT samarali ishlashi uchun sozlashda siz serverning jismoniy xususiyatlarini ham, dasturni yuklamasini ham hisobga olishingiz kerak.
+
+Bu yerda biz faqat ma‘lumotlar bazasini haqiqiy ekspluatatsiyasida alohida e‘tibor talab qiladigan asosiy sozlamalarni ko‘rib chiqamiz. Muayyan dastur uchun nozik sozlash qo‘shimcha bilimlarni talab qiladi, masalan, PostgreSQL ni boshqaruv kurslarini o‘tish orqali olish mumkin (~\pageref{education}-betga qarang).
+
+\vspace{-2pt}
+\subsection{Konfiguratsiya parametrlarini qanday o‘zgartirish mumkin}
+
+\vspace{-1pt}
+Konfiguratsiya parametrining qiymatini o‘gartirish uchun \filepath{postgresql.conf} faylini oching va kerakli parametrni toping va uning qiymatini o‘zgartiring yoki faylning oxiriga yangi qator qo‘shing - u avval aynan shu faylda o‘rnatilgan qiymatdan ustun bo‘ladi.
+
+Keyin serverga sozlamalarni qayta o‘qishni ayting:
+
+\vspace{-1pt}
+\begin{code}
+postgres=# \textbf{SELECT pg_reload_conf();}
+\end{code}
+
+Shundan so‘ng, \codett{SHOW} buyrug‘i yordamida parametrning joriy qiymatini tekshiring. Agar qiymat o‘zgarmagan bo‘lsa, faylni tahrirlashda xatolik yuz bergan bo‘ladi. Server xabarlari jurnaliga qarang.
+
+Faylni matn muharririda o‘zgartirish o‘rniga, parametr qiymatini SQL yordamida o‘rnatishingiz mumkin (bundan keyin siz sozlamalarni qayta o‘qib chiqishingiz kerak):
+
+\begin{code}
+postgres=# \textbf{ALTER SYSTEM SET work_mem='128MB';}
+\end{code}
+
+Bunday sozlamalar \filepath{postgresql.auto.conf} fayliga kiradi va asosiy faylda o‘rnatilgan qiymatlardan ustun turadi. Ushbu usulning afzalligi shundaki, parametr qiymatlari to‘g‘riligi darhol tekshiriladi.
+
+
+\subsection{Muhimroq parametrlar}
+
+Eng muhimlaridan ba‘zilari~--- PostgreSQL RAMni qanday boshqarishini aniqlaydigan parametrlardir.
+
+\textbf{\textit{shared\_buffers}} parametri bufer keshining kerakli hajmini o‘rnatadi, shuning uchun tez-tez ishlatiladigan ma‘lumotlar bilan ishlash RAMda amalga oshiriladi va ortiqcha diskdan foydalanishni talab qilmaydi. Serverning jami operativ xotirasining 25\% bilan sozlashni boshlashingiz mumkin. Ushbu parametrni o‘zgartirish faqat server qayta ishga tushirilgandan so‘ng kuchga kiradi!
+
+\textbf{\textit{effective\_cache\_size}} parametrining qiymati xotira taqsimotiga ta‘sir qilmaydi, lekin PostgreSQL-ga qanday umumiy kesh hajmini, shu jumladan operatsion tizim keshini ham inobatga olgan holda ishlatishni maqsad qilish kerakligini aytadi. Bu qiymat qanchalik yuqori bo‘lsa, indekslarga ko‘proq ustunlik beriladi. Siz RAMning 50--75\% idan boshlashingiz mumkin.
+
+\textbf{\textit{work\_mem}} parametri birlashma (join) amalga oshirilganda tartiblash yoki xesh jadvallarini yaratish kabi operatsiyalarni bajarish uchun ajratilgan xotira hajmini aniqlaydi. Xotira yetarli emasligining belgisi vaqtinchalik fayllardan faol foydalanish va natijada ishlashning pasayishi hisoblanadi. Ko‘p hollarda 4 MB standart qiymati kamida bir necha marta oshirilishi kerak, lekin serverning operativ xotirasining umumiy hajmidan oshmasligi kerak.
+
+\textbf{\textit{maintenance\_work\_mem}} parametri xizmat jarayonlariga ajratilgan xotira hajmini aniqlaydi. Uni oshirish indeks yaratish va vakuum jarayonini tezlashtirishi mumkin. Odatda \textit{work\_mem} qiymatidan bir necha marta kattaroq qiymatga moslab o‘rnatiladi.
+
+Masalan, 32 GB operativ xotira bilan siz quyidagilarni sozlashdan boshlashingiz mumkin:
+
+\begin{code}
+shared_buffers = '8GB'
+effective_cache_size = '24GB'
+work_mem = '128MB'
+maintenance_work_mem = '512MB'
+\end{code}
+
+\textit{random\_page\_cost} va \textit{seq\_page\_cost} ikkita parametr qiymatlarining nisbati tasodifiy va ketma-ket kirish tezligi nisbatiga mos kelishi kerak. Odatda, tasodifiy kirish ketma-ket kirishdan 4 baravar sekinroq (oddiy HDDlarda hisoblangan) deb hisoblanadi. Biroq, disk massivlari va SSD drayvlar uchun \textbf{\textit{random\_page\_cost}} qiymatini kamaytirish kerak (shunchaki hech qachon \textit{seq\_page\_cost} qiymatini 1 ga o‘zgartirmang).
+
+Masalan, SSD drayvlar uchun quyidagi sozlama yetarli bo‘ladi:
+
+
+\begin{code}
+random_page_cost = 1.2
+\end{code}
+
+Avtotozalashni o‘rnatish (autovacuum) juda muhimdir. Bu jarayon "axlat yig‘ish" bilan shug‘ullanadi va bir qator boshqa tizim uchun muhim vazifalarni bajaradi. Uning konfiguratsiyasi sezilarli darajada dastur va u yaratadigan yuklamaga bog‘liq.
+
+Ko‘pgina hollarda siz quyidagilardan boshlashingiz mumkin:
+
+\begin{itemizex}
+\item tozalash tez-tez va kichikroq qismlarda amalga oshirilishi uchun \textbf{\textit{autovacuum\_vacuum\_scale\_factor}} qiymatini 0,01 ga kamaytirish;
+\item tozalashni tezroq qilish uchun \textbf{\textit{autovacuum\_vacuum\_cost\_limit}} (yoki \textbf{\textit{autovacuum\_vacuum\_cost\_delay}} ni  kamaytiring) qiymatini 10 barobarga oshiring (12 chigacha bo‘lgan talqinlar uchun).
+\end{itemizex}
+
+Bufer keshini va oldindan yozish jurnalini saqlash bilan bog‘liq jarayonlarni o‘rnatish bundan kam ahamiyatga ega emas, lekin u ham muayyan dasturga bog‘liq. \textbf{\textit{checkpoint\_completion\_target}} = 0,9 ni (yuklamani yumshatish uchun) o‘rnatishdan boshlang, \texttt{checkpoint\_timeout} vaqtini 5 daqiqadan 30 ga oshirish (nazorat punktiga qo‘shimcha xarajatlarni kamaytirish uchun) va \textbf{\textit{max\_wal\_size}} ni proporsional ravishda oshirish (xuddi shu maqsadda).
+
+Turli parametrlarni o‘rnatishning nozik jihatlari DBA2 o‘quv kursida batafsil muhokama qilinadi (\pageref{DBA2}-bet).
+
+\subsection{Ulanishni sozlash}
+
+Biz bu masalani \pageref{application} betdagi “Ilova uchun PostgreSQL” bobida muhokama qilganmiz. Eslatib o‘tamiz, odatda \textbf{\textit{listen\_addresses}} parametrini \codett{'*'} ga o‘rnatishingiz va \filepath{pg\_hba.conf} konfiguratsiya fayliga ulanish ruxsatini qo‘shishingiz kerak.
+
+\subsection{Yomon maslahatlar}
+
+Siz hech qachon tinglamasligingiz kerak bo‘lgan samaradorlikni oshirish bo‘yicha maslahatlarni topishingiz mumkin:
+\begin{itemizex}
+\item Avtomatik tozalashni o‘chiring (\textit{autovacuum} = off).\\[0.5\baselineskip]
+Resurslarni bunday "tejash" haqiqatan ham qisqa muddatli samaradorlikni beradi, lekin ma‘lumotlarda "axlat" to‘planishiga va jadvallar va indekslarning o‘sishiga olib keladi. Biroz vaqt o‘tgach, MBBT normal ishlashini to‘xtatadi. Avtomatik tozalashni o‘chirib qo‘ymaslik kerak, lekin to‘g‘ri sozlangan bo‘lishi kerak.
+\item Disk sinxronizatsiyasini o‘chiring (\textit{fsync} = off).\\[0.5\baselineskip]
+O‘chirish haqiqatan ham sezilarli tezlikka olib keladi, lekin serverning har qanday ishlamay qolishi (dasturiy ta‘minot yoki apparat) ma‘lumotlar bazalarining to‘liq yo‘qolishiga olib keladi. Tizimni faqat zaxira nusxasidan tiklash mumkin bo‘ladi (agar, albatta, mavjud bo‘lsa).
+\end{itemizex}
+
+\section{PostgreSQL va 1С}
+
+1C rasmiy ravishda PostgreSQL bilan ishlashni qo‘llab-quvvatlaydi. Bu tijorat MBBTlar uchun qimmat litsenziyalarni tejash uchun ajoyib imkoniyatdir.
+
+Har qanday boshqa ilovalar singari, PostgreSQL to‘g‘ri sozlangan bo‘lsa, 1C mahsulotlari ham ancha samarali ishlaydi. Bundan tashqari, 1C ishlashi uchun o‘ziga xos va zarur bo‘lgan bir qator parametrlar mavjud.
+
+Quyida tezda boshlashingizga yordam beradigan o‘rnatish va dastlabki sozlash ko‘rsatmalari keltirilgan.
+
+\subsection{Talqin va platformalarni tanlash}
+
+1C bilan ishlash uchun sizga PostgreSQL-ning maxsus patchli talqini kerak bo‘ladi. Ushbu talqinni 1C \urld{https}{releases.1c.ru} veb-saytidan olish mumkin yoki siz Postgres Pro Standard yohud Postgres Pro Enterprise MBBT dan foydalanishingiz mumkin, ular ham kerakli patchlarni o‘z ichiga oladi.
+
+PostgreSQL Windows tizimida ham ishlaydi, ammo tanlov imkoniyati bo‘lsa, Linux OT ga ustunlik berishingiz kerak.
+
+O‘rnatishdan oldin siz ma‘lumotlar bazasi uchun maxsus server kerak yoki yo‘qligini hal qilishingiz kerak. Ajratilgan server yuklamani dastur serveri va ma‘lumotlar bazasi serveri o‘rtasida taqsimlash orqali samaraliroq bo‘ladi.
+
+\subsection{Konfiguratsiya parametrlari}
+
+Serverning jismoniy xususiyatlari kutilgan yuklamaga mos kelishi kerak. Quyidagi ma‘lumotlar taxminiy ko‘rsatma sifatida berilishi mumkin. 8 Gb tezkor xotiraga ega 8 yadroli va RAID1 SSD diskga ega maxsus server 100 Gb gacha bo‘lgan ma‘lumotlar bazasi hajmiga, 50 kishigacha bo‘lgan umumiy foydalanuvchilar soniga va kunlik 2000 tagacha hujjatlarga ega bardosh bera olishi kerak. Agar server ajratilmagan bo‘lsa, PostgreSQL ehtiyojlari uchun umumiy server resurslarining tegishli miqdori ajratilgan bo‘lishi kerak.
+
+Yuqorida keltirilgan umumiy tavsiyalar va 1C ilovalarining o‘ziga xos xususiyatlariga asoslanib, bunday server uchun biz quyidagi dastlabki sozlamalarni tavsiya qilamiz:
+
+\begin{code}
+# 1С uchun zarur sozlashlar 
+standard_conforming_strings = off
+escape_string_warning = off
+shared_preload_libraries = 'online_analyze, plantuner'
+plantuner.fix_empty_table = on
+online_analyze.enable = on
+online_analyze.table_type = 'temporary'
+online_analyze.local_tracking = on
+online_analyze.verbose = off
+\end{code}
+\begin{codep}
+# Tezkor xotiraga bog‘liq parametrlar 
+shared_buffers = '2GB'         # 25\percent ОЗУ
+effective_cache_size = '6GB'   # 75\percent ОЗУ
+work_mem = '64MB'              # 64-128MB
+maintenance_work_mem = '256MB' # 4*work_mem
+# vaqtinchalik jadvallar bilan faol ishlaganda
+temp_buffers = '32MB'          # 32-128MB
+\end{codep}
+\begin{codep}
+# oz‘garishsiz 64 bo‘lgan qiymatdan ko‘ra ko‘proq blocklashlar talab etilganda
+max_locks_per_transaction = 256
+\end{codep}
+
+\subsection{Ulanishni sozlash}
+
+\filepath{postgresql.conf} faylidagi \textit{listen\_addresses} parametri \codett{'*'} ga o‘rnatilishi kerak.
+
+Siz \filepath{pg\_hba.conf} konfiguratsiya faylining boshiga quyidagi qatorni qo‘shishingiz kerak, "1C server IP manzili" ni ma‘lum bir manzil va qism tarmoq maskasi bilan almashtiring:
+
+\begin{code}
+host    all    all    IP-адрес-сервера-1С   md5
+\end{code}
+
+PostgreSQL-ni qayta ishga tushirgandan so‘ng, \filepath{postgresql.conf} va \filepath{pg\_hba.conf} fayllaridagi barcha o‘zgarishlar kuchga kiradi va server 1C ga ulanishga tayyor bo‘ladi.
+
+Ulanish uchun 1C superuser rolidan foydalanadi, odatda \codett{postgres}. Uning uchun parol o‘rnating:
+
+\begin{code}
+postgres=# \textbf{ALTER ROLE postgres PASSWORD 'p@ssw0rd';}
+\end{code}
+\begin{codep}
+ALTER ROLE
+\end{codep}
+
+\setlength\columnsep{0.65cm}
+\setlength\intextsep{0pt}
+\begin{wrapfigure}[16]{r}{0pt}
+\includegraphics[width=0.51\textwidth]{07_1c}
+\end{wrapfigure}
+
+1C ma‘lumotlar bazasi sozlamalarida ma‘lumotlar bazasi serveri sifatida PostgreSQL serverining IP manzili va portini belgilang va "PostgreSQL" MBBT turini tanlang. Foydalanadigan ma‘lumotlar bazasi nomini belgilang 1C-ni oching va " Создать базу данных в случае ее отсутствия " katagiga belgi qo‘ying (PostgreSQL yordamida ma‘lumotlar bazasini yaratishning hojati yo‘q). Ulanish uchun foydalaniladigan superuser rolining nomi va parolini belgilang.
+
+Yuqoridagi maslahatlar sizni ishni tezda boshlashingiz uchun yetarli, albatta, ular kerakli darajada ishlashni kafolatlamaydi.
+
+{“Инфософт” kompaniyasidan Anton Doroshkevichga ushbu materialni tayyorlashda yordam bergani uchun o‘z minnatdorchiligimizni bildiramiz.\parfillskip=0pt\par}
+

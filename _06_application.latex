@@ -1,0 +1,390 @@
+% po4a: environment codep2
+% po4a: environment codep
+% po4a: environment code
+% po4a: environment code2
+% po4a: environment denseitem
+% po4a: environment denseenum
+% po4a: environment itemize
+% po4a: environment itemizex
+% po4a: environment document
+% po4a: environment leftbar
+% po4a: environment sidewaysfigure 
+\chapter{PostgreSQL ilovalar uchun}\label{application}
+
+\section{Alohida foydalanuvchi}
+
+Oldingi bobda biz ma‘lumotlar bazasi serveriga MBBT o‘rnatilgandan so‘ng darhol mavjud bo‘lgan \texttt{postgres} foydalanuvchisi sifatida ulandik. Ammo \texttt{postgres} superfoydalanuvchi huquqlariga ega va siz ushbu huquqlarga ega bo‘lgan dastur orqali ma‘lumotlar bazasiga ulanmasligingiz kerak. Yangi foydalanuvchi yaratib, uni alohida ma‘lumotlar bazasi egasi qilib qo‘ygan ma‘qul - keyin uning imkoniyatlari ushbu ma‘lumotlar bazasi bilan cheklanadi.
+
+\begin{code}
+postgres=# \textbf{CREATE USER app PASSWORD 'p@ssw0rd';}
+\end{code}
+\begin{codep}
+CREATE ROLE
+\end{codep}
+\begin{codep}
+postgres=# \textbf{CREATE DATABASE appdb OWNER app;}
+\end{codep}
+\begin{codep}
+CREATE DATABASE
+\end{codep}
+
+Foydalanuvchilar va imkoniyatlarni boshqarish haqida qo‘shimcha ma‘lumot olish uchun ushbu murojatga qarang: \urld{https}{postgrespro.ru/doc/user-manag} va \urld{https}{postgrespro.ru/doc/ddl-priv}.
+
+Yangi ma‘lumotlar bazasiga ulanish va yaratilgan foydalanuvchi nomidan u bilan ishlash uchun quyidagilarni bajaring:
+
+\begin{code}
+postgres=# \textbf{{\BS}c appdb app localhost 5432}
+\end{code}
+\begin{codep}
+Password for user app: \textbf{***}
+You are now connected to database "appdb" as user 
+"app" on host "127.0.0.1" at port "5432".
+\end{codep}
+\begin{codep}
+appdb=>
+\end{codep}
+
+Buyruqda ketma-ket ma‘lumotlar bazasi nomini (appdb), foydalanuvchi nomini (app), xostni (localhost yoki 127.0.0.1) va port raqamini (5432) ko‘rsatiladi.
+
+E‘tibor bering, so‘rovda faqat ma‘lumotlar bazasi nomi o‘zgargan emas, endi u "xesh" o‘rniga "katta" belgisini ko‘rsatadi. Xesh belgilari Unix operatsion tizimidagi \texttt{root} foydalanuvchiga o‘xshash superfoydalanuvchi rolini bildiradi.
+
+\texttt{app} foydalanuvchisi o‘z ma‘lumotlar bazasi bilan cheklovlarsiz ishlaydi. Masalan, unda jadval yaratishingiz mumkin:
+
+\begin{code}
+appdb=> \textbf{CREATE TABLE greeting(s text);}
+\end{code}
+\begin{codep}
+CREATE TABLE
+\end{codep}
+\begin{codep}
+appdb=> \textbf{INSERT INTO greeting VALUES ('Привет, мир!');}
+\end{codep}
+\begin{codep}
+INSERT 0 1
+\end{codep}
+
+\section{Uzoq masofadan ulanish}
+
+Bizning misolimizda mijoz va MBBT bitta kompyuterda. Albatta, PostgreSQL-ni maxsus serverga o‘rnatishingiz va unga boshqa mashinadan (masalan, dastur serveridan) ulanishingiz mumkin. Bunday holda, localhost o‘rniga MBBT joylashgan serveringiz manzilini ko‘rsatishingiz kerak. Ammo bu yetarli emas: o‘zgarishlarsiz, xavfsizlik nuqtai nazaridan PostgreSQL faqat mahalliy ulanishlarga ruxsat beradi.
+
+Ma‘lumotlar bazasiga tashqi ulanishni amalga oshirish uchun siz ikkita faylni tahrirlashingiz kerak.
+
+Birinchidan, \filepath{postgresql.conf}~--- bu \textbf{asosiy sozlamalar fayli} (odatda ma‘lumotlar bazasi katalogida joylashgan).
+
+PostgreSQL qaysi tarmoq interfeyslarini tinglashini ko‘rsatadigan qatorni toping:
+
+\begin{code}
+  #listen_addresses = 'localhost'
+\end{code}
+
+va uni quyidagiga almashtiring:
+
+\begin{code}
+  listen_addresses = '*'
+\end{code}
+
+Ikkinchidan, \filepath{pg\_hba.conf}~--- bu \textbf{autentifikatsiya sozlamalariga ega fayl}.
+
+Mijoz serverga ulanganda, ushbu faylda to‘rtta parametrda ulanishga mos keladigan yuqoridan birinchi qator tanlanadi: ulanish turi, ma‘lumotlar bazasi nomi, foydalanuvchi nomi va mijozning IP-manzili. Xuddi shu qatorda foydalanuvchi o‘zini tanitganda haqiqatdan ham aynan u ekanligini qanday tasdiqlashi kerakligini ko‘rsatiladi.
+
+Masalan, Debian va Ubuntu-da ushbu fayl, boshqalaridan tashqari holda, quyidagi sozlamani o‘z ichiga oladi (xesh bilan boshlangan yuqori qator sharh hisoblanadi):
+
+\begin{code}
+# TYPE  DATABASE  USER  ADDRESS       METHOD
+local   all       all                 peer
+\end{code}
+
+Unda aytilishicha, har qanday foydalanuvchi (\texttt{all}) nomidan har qanday ma‘lumotlar bazasiga (\texttt{all}) mahalliy ulanishlar (\texttt{local}) \texttt{peer} usuli yordamida tekshirilishi kerak (mahalliy ulanishlar uchun IP-manzil, albatta, ko‘rsatilmaydi).
+
+\texttt{peer} usuli PostgreSQL operatsion tizimdan joriy foydalanuvchi nomini so‘rashini anglatadi va OT allaqachon kerakli tekshiruvni amalga oshirgan deb taxmin qiladi (u foydalanuvchidan parol so‘ragan deb biladi). 
+Shuning uchun, Linuxga o‘xshash operatsion tizimlarda mahalliy serverga ulanishda odatda parolni kiritish talab qilinmaydi.
+
+Ammo Windows-da mahalliy ulanishlar qo‘llab-quvvatlanmaydi va u yerda sozlamalar quyidagicha ko‘rinadi:
+
+\begin{code}
+# TYPE  DATABASE  USER  ADDRESS       METHOD
+host    all       all   127.0.0.1/32  md5
+\end{code}
+
+Bu shuni anglatadiki, mahalliy manzildan (\texttt{127.0.0.1}) istalgan foydalanuvchi (\texttt{all}) nomidan istalgan ma‘lumotlar bazasiga (\texttt{all}) tarmoq ulanishlari (\texttt{host}) \texttt{md5} usuli yordamida tekshirilishi kerak. Ushbu usul foydalanuvchidan parolni kiritishni talab qiladi.
+
+To‘g‘ri parolni ko‘rsatishda \codett{app} foydalanuvchisiga \codett{appdb} ma‘lumotlar bazasiga istalgan manzildan kirish huquqini berish uchun \codett{pg\_hba.conf} oxiriga quyidagi qatorni qo‘shing:
+
+\begin{code}
+host    appdb     app   all           md5
+\end{code}
+
+Konfiguratsiya fayllariga o‘zgartirishlar kiritilgandan so‘ng, serverdan sozlamalarni qayta o‘qishni so‘rashni unutmang:
+
+\begin{code}
+postgres=# \textbf{SELECT pg_reload_conf();}
+\end{code}
+
+Autentifikatsiya sozlamalari haqida batafsil ma‘lumot: \urld{https}{postgrespro.ru/doc/client-authentication}.
+
+\section{Aloqani tekshirish}
+
+Dasturingizdan PostgreSQL-ga ulanish uchun mos kutubxonani toping va MBBT drayverini o‘rnating. Drayver odatda PostgreSQL mijoz-server protokolining standart ilovasi bo‘lgan \codett{libpq}~--- uchun qoplama hisoblanadi, ammo boshqa variantlari ham mavjud. Kutubxona dastur ishlab chiquvchilarga past darajadagi protokol imkoniyatlaridan qulay foydalanish imkonini beradi.
+
+Quyida bir nechta mashhur dasturlash tillarida oddiy kod misollari keltirilgan. Ular o‘rnatilgan va sozlangan ma‘lumotlar bazasiga ulanishni tezda tekshirishga yordam beradi.
+
+Yuqoridagi dasturlar oddiy ma‘lumotlar bazasi so‘rovini bajarish va natijani chiqarish uchun faqat minimal zarur kodni o‘z ichiga oladi. Ular bundan tashqari hech narsa bermaydilar, jumladan, xatolarni qayta ishlash ham inobatga olinmagan. Ushbu kod parchalarini ta‘qib qilish uchun misol sifatida qabul qilmaslik kerak.
+
+Windows ostida turli alifbolar belgilarini to‘g‘ri ko‘rsatish uchun buyruq satri oynasida shriftni TrueType ga o‘zgartirishingiz kerak bo‘lishi mumkin (masalan, "Lucida Console" yoki "Consolas") va shu orqali kod sahifasini ozgartirasiz. Shunday qilib, rus tilida chiqish uchun quyidagi buyruqlarni bering:
+
+\begin{code}
+C:{\BS}> \textbf{chcp 1251}
+\end{code}
+\begin{codep}
+Active code page: 1251
+\end{codep}
+\begin{codep}
+C:{\BS}> \textbf{set PGCLIENTENCODING=WIN1251}
+\end{codep}
+
+\subsection{PHP}
+
+PHP tilida PostgreSQL bilan ishlash maxsus kengaytma yordamida tashkil etiladi. Linux ostida, PHP-dan tashqari, sizga ushbu kengaytma paketi kerak bo‘ladi:
+
+\begin{code}
+$ \textbf{sudo apt-get install php-cli php-pgsql}
+\end{code}
+
+Windows uchun PHP \urld{http}{windows.php.net/download} saytida mavjud. PostgreSQL kengaytmasi allaqachon kiritilgan, ammo \filepath{php.ini} faylida siz quyidagi qatorni topishingiz va izoh belgisini olib tashlashingiz (nuqtali vergulni olib tashlashingiz) kerak:
+
+\begin{code}
+  ;extension=php_pgsql.dll
+\end{code}
+
+Dastur misoli (\filepath{test.php}):
+
+
+\begin{code}
+<?php
+  $conn = pg_connect('host=localhost port=5432 ' . 
+                     'dbname=appdb user=app ' . 
+                     'password=p@ssw0rd') or die; 
+  $query = pg_query('SELECT * FROM greeting') or die; 
+  while ($row = pg_fetch_array($query)) \{
+    echo $row[0].PHP_EOL; 
+  \}
+  pg_free_result($query); 
+  pg_close($conn);
+?>
+\end{code}
+
+Bajaramiz:
+
+\begin{code}
+$ \textbf{php test.php}
+\end{code}
+\begin{codep}
+Привет, мир!
+\end{codep}
+
+PostgreSQL kengaytmasi ushbu hujjatlarda tasvirlangan: \\ 
+\urld{http}{php.net/manual/ru/book.pgsql.php}.
+
+
+\subsection{Perl}
+
+Perlda ma‘lumotlar bazalari bilan ishlash DBI interfeysi yordamida tashkil etiladi. Perlning o‘zi Debian va Ubuntu-da oldindan o‘rnatilgan, shuning uchun sizga qo‘shimcha ravishda drayver kerak bo‘ladi:
+
+\begin{code}
+$ \textbf{sudo apt-get install libdbd-pg-perl}
+\end{code}
+
+Windows uchun bir nechta Perl yig‘ma paketlari mavjud, ular \urld{http}{perl.org/get.html} da keltirilgan. Mashhur ActiveState Perl va Strawberry Perl yig‘ma paketlari allaqachon PostgreSQL uchun zarur bo‘lgan drayverni o‘z ichiga oladi.
+
+Na‘muna dastur (\filepath{test.pl}):
+
+\begin{code}
+use DBI;
+use open ':std', ':utf8';
+my $conn = DBI->connect( 
+  'dbi:Pg:dbname=appdb;host=localhost;port=5432', 
+  'app',
+  'p@ssw0rd') or die;
+my $query = $conn->prepare('SELECT * FROM greeting');
+$query->execute() or die;
+while (my @row = $query->fetchrow_array()) \{
+  print @row[0]."{\BS}n";
+\}
+$query->finish();
+$conn->disconnect();
+\end{code}
+
+Bajaramiz:
+
+\begin{code}
+$ \textbf{perl test.pl}
+\end{code}
+\begin{codep}
+Привет, мир!
+\end{codep}
+
+Interfeys hujjatlarda tasvirlangan: \\
+\urld{http}{metacpan.org/pod/DBD::Pg}.
+
+
+
+\subsection{Python}
+
+Python odatda PostgreSQL bilan ishlash uchun psycopg kutubxonasidan ("syco-pee-gee" deb talaffuz qilinadi) foydalanadi.
+
+Debian va Ubuntu ning zamonaviy talqinlari oldindan o‘rnatilgan Python 3-talqini bilan birga keladi, shuning uchun sizga faqat drayver kerak bo‘ladi:
+
+\begin{code}
+$ \textbf{sudo apt-get install python3-psycopg2}
+\end{code}
+
+Windows operatsion tizimi uchun Python ni \urld{http}{python.org} saytidan olish mumkin. Psycopg kutubxonasi \urld{http}{initd.org/psycopg} loyiha veb-saytida mavjud (o‘rnatilgan Python versiyasiga mos keladigan versiyani tanlang). 
+
+Kerakli hujjatlar ham u yerda joylashgan. Na‘muna dastur (\filepath{test.py}):
+
+
+\begin{code}
+import psycopg2
+conn = psycopg2.connect(
+  host='localhost', 
+  port='5432', 
+  database='appdb', 
+  user='app', 
+  password='p@ssw0rd')
+cur = conn.cursor()
+cur.execute('SELECT * FROM greeting')
+rows = cur.fetchall()
+for row in rows:
+  print(row[0])
+conn.close()
+\end{code}
+
+Bajaramiz:
+\begin{code}
+$ \textbf{python3 test.py}
+\end{code}
+\begin{codep}
+Привет, мир!
+\end{codep}
+
+
+\subsection{Java}
+
+Java tilida ma‘lumotlar bazalari bilan ishlash JDBC interfeysi orqali tashkil etiladi. Java SE 11 ni o‘rnating; Bundan tashqari, bizga JDBC drayveri bo‘lgan paket kerak:
+
+\begin{code}
+$ \textbf{sudo apt-get install openjdk-11-jdk}
+\end{code}
+\begin{codep}
+$ \textbf{sudo apt-get install libpostgresql-jdbc-java}
+\end{codep}
+
+Windows OT uchun JDK ni \urld{http}{oracle.com/technetwork/java/javase/downloads} dan yuklab olish mumkin. 
+JDBC drayveri \urld{http}{jdbc.postgresql.org} saytida mavjud (siz o‘rnatgan JDK talqiniga mos keladigan talqinni tanlang). Hujjatlar ham u yerda joylashgan. 
+
+Na‘muna dastur (\filepath{Test.java}):
+
+
+\begin{code}
+import java.sql.*;
+public class Test \{ 
+  public static void main(String[] args) 
+  throws SQLException \{ 
+    Connection conn = DriverManager.getConnection( 
+      "jdbc:postgresql://localhost:5432/appdb", 
+      "app", "p@ssw0rd"); 
+    Statement st = conn.createStatement(); 
+    ResultSet rs = st.executeQuery( 
+      "SELECT * FROM greeting"); 
+    while (rs.next()) \{ 
+      System.out.println(rs.getString(1)); 
+    \} 
+    rs.close(); 
+    st.close(); 
+    conn.close(); 
+  \}
+\}
+\end{code}
+
+Biz dasturni kompilyatsiya qilamiz va bajaramiz, kalitda JDBC drayverlari sinfiga yo‘lni ko‘rsatamiz (Windowsda yo‘llar ikki nuqta bilan emas, balki nuqta-vergul bilan ajratiladi):
+
+\begin{code}
+$ \textbf{javac Test.java}
+\end{code}
+\begin{codep}
+$ \textbf{java -cp .:/usr/share/java/postgresql-jdbc4.jar \BS
+Test}
+\end{codep}
+\begin{codep}
+Привет, мир!
+\end{codep}
+
+\section{Zaxira uchun nusxa yaratish}
+
+Biz yaratgan ma‘lumotlar bazasida faqat bitta jadval mavjud bo‘lsa-da, ma‘lumotlar xavfsizligi haqida o‘ylash zarar qilmaydi. Ilovada ko‘p ma‘lumotlar bo‘lmasa-da, zaxira uchun nusxa yaratishning eng oson yo‘li \texttt{pg\_dump} yordamchi dasturidir:
+
+\begin{code}
+$ \textbf{pg_dump appdb > appdb.dump}
+\end{code}
+
+Olingan \filepath{appdb.dump} fayli barcha \codett{appdb} obyektlarini yaratadigan va ma‘lumotlar bilan to‘ldiruvchi oddiy SQL buyruqlarini o‘z ichiga oladi. Ushbu fayl \codett{psql} uchun argument sifatida berilib va ma‘lumotlar bazasi tarkibini tiklash mumkin. Masalan, siz yangi ma‘lumotlar bazasini yaratishingiz va unga ma‘lumotlarni yuklashingiz mumkin:
+
+\begin{code}
+$ \textbf{createdb appdb2}
+\end{code}
+\begin{codep}
+$ \textbf{psql -d appdb2 -f appdb.dump}
+\end{codep}
+
+Aynan shu shaklda biz oldingi bobda tanishgan demo bazasi tarqatiladi.
+
+\texttt{pg\_dump}-da tanishishga arziydigan ko‘plab xususiyatlar mavjud: \urld{https}{postgrespro.ru/doc/app-pgdump}. Ulardan ba‘zilari faqat ma‘lumotlar maxsus ichki formatda yuklanganda mavjud; bunday holda, tiklash uchun siz psql emas, balki \texttt{pg\_restore} yordamchi dasturidan foydalanishingiz kerak.
+
+Ikkala holatda ham \texttt{pg\_dump} faqat bitta ma‘lumotlar bazasi tarkibini o‘chiradi. Agar siz barcha ma‘lumotlar bazalari, foydalanuvchilar va jadval maydonlarini o‘z ichiga olgan klasterning zaxira nusxasini yaratmoqchi bo‘lsangiz, boshqa, shunga o‘xshash bo‘lgan \texttt{pg\_dumpall} buyrug‘idan foydalanishingiz kerak.
+
+Katta, jiddiy loyihalar o‘ylangan davriy zaxira strategiyasini talab qiladi. Buning uchun \texttt{pg\_basebackup} yordamchi dasturi tomonidan yaratilgan klasterning fizik "ikkilik" nusxasi ko‘proq mos keladi:
+
+\begin{code}
+$ \textbf{pg_basebackup -D backup}
+\end{code}
+
+Ushbu buyruq \filepath{backup} katalogidagi barcha ma‘lumotlar bazasi klasterining zaxira nusxasini yaratadi. Tizimni yaratilgan nusxadan tiklash uchun uni ma‘lumotlar bazasi katalogiga nusxalash va serverni ishga tushirish kifoya.
+
+Hujjatlarda mavjud bo‘lgan barcha zaxira va tiklash vositalari haqida ko‘proq ma‘lumot olishingiz mumkin: \urld{https}{postgrespro.ru/doc/backup}, shuningdek, DBA3 o‘quv kursidan ham foydalanishingiz mumkin (\pageref{DBA3}-bet).
+
+Standart PostgreSQL vositalari sizga kerak bo‘lgan deyarli hamma narsani bajarishga imkon beradi, lekin avtomatlashtirishni talab qiladigan ko‘plab qadamlarni bajarish kerak bo‘ladi. Shuning uchun ko‘pgina kompaniyalar o‘zlarining zaxira va tiklash vositalarini yaratadilar. Bizning Postgres Professional kompaniyamiz ham shunday vositaga ega - \texttt{pg\_probackup}. Asbobning bepul talqini sahifa darajasida bosqichma-bosqich zaxira nusxalarini yaratish, ma‘lumotlar yaxlitligini kuzatish, parallellik va siqish orqali katta hajmdagi ma‘lumotlar bilan ishlash va turli xil zaxira strategiyalarini amalga oshirish imkonini beradi. To‘liq hujjatlar \urld{https}{postgrespro.ru/doc/app-pgprobackup} saytida \mbox{mavjud}.
+
+
+\section{Keyin nima?}
+
+Endi siz ilovangizni ishlab chiqishga tayyorsiz. Ma‘lumotlar bazasiga nisbatan u har doim ikki qismdan iborat bo‘ladi: server va mijoz. Server qismi ma‘lumotlar bazasi bilan bog‘liq bo‘lgan barcha narsalar: jadvallar, indekslar, ko‘rinishlar, triggerlar, saqlangan funktsiyalar va protseduralar. Mijoz – ma‘lumotlar bazasidan tashqarida ishlaydigan va unga ulanadigan hamma narsa. Ma‘lumotlar bazasi nuqtai nazaridan, u qalin mijoz yoki dastur serveri bo‘ladimi, muhim emas.
+
+Aniq to‘g‘ri javob bo‘lmagan muhim savol: dasturning biznes mantig‘i qayerda to‘planishi kerak?
+
+Ommabop yondashuv - bu barcha mantiq mijozda, ma‘lumotlar bazasidan tashqarida yotishi. Bu ko‘proq ishlab chiquvchilar relyatsion MBBT ning barcha imkoniyatlarini bilmasa va ular faqat amaliy kod yozishni bilishgandagina, ya‘ni dastur kodi bilan ishlaganda tanlanadi.
+
+Bunday holda, ma‘lumotlar bazasi dasturning o‘ziga xos ikkilamchi elementiga aylanadi va faqat ma‘lumotlarning "qat‘iyligi" va uning ishonchli saqlanishini ta‘minlaydi. Ko‘pincha, ma‘lumotlar bazasi ma‘lumotlar bazasi qo‘shimcha abstraktsiya qatlami bilan o‘ralgan, masalan, ishlab chiquvchilarga tanish bo‘lgan dasturlash tilidagi konstruktsiyalardan ma‘lumotlar bazasiga so‘rovlarni avtomatik ravishda ishlab chiqaradigan ORM. Ba‘zan bu qaror ilovaning har qanday ma‘lumotlar bazasiga ko‘chirilishini ta‘minlash istagi bilan izohlanadi.
+
+Yondashuv mavjud bo‘lish huquqiga ega va shu tarzda qurilgan tizim ishlasa hamda unga yuklatilgan vazifalarni bajarsa, nega endi yo‘q?
+
+\pagebreak
+
+Ammo bu yechimning aniq kamchiliklari ham bor:
+
+\begin{itemizex}
+
+\item \textbf{Ma‘lumotlar izchilligi ilova tomonidan ta‘minlanadi.}\\
+Ma‘lumotlar bazasiga ma‘lumotlarning izchilligini ta‘minlashni ishonib topshirish o‘rniga (bu aynan relyatsion tizimlarning kuchli deb qaraladigan tomoni), dastur o‘z-o‘zidan kerakli tekshiruvlarni amalga oshiradi. Ertami-kechmi noto‘g‘ri ma‘lumotlar ma‘lumotlar bazasiga tushishi aniq. Ushbu xatolarni tuzatish kerak bo‘ladi - yoki dastur ular bilan ishlashga o‘rgatilgan bo‘lishi kerak. Ammo bir ma‘lumotlar bazasida bir nechta turli xil ilovalar yaratilgan holatlar mavjud. Bunday holda, MBBT yordamisiz buni amalga oshirish mumkin emas.
+
+\item \textbf{Ishlab turishi yanada yaxshi ishlashga umid qoldiradi.}\\
+ORM tizimlari sizga ma‘lum darajada ma‘lumotlar bazasidan ma‘lumot olish imkonini beradi, ammo ular yaratadigan SQL so‘rovlarining sifati juda shubhali. Odatda, ko‘plab kichik so‘rovlar bajariladi, ularning har biri o‘z-o‘zidan juda tezdir. Ushbu sxema faqat kichik hajmdagi ma‘lumotlarga kichik yuklamalarga bardosh bera oladi va MBBT tomonidan hech qanday optimallashtirishga amalda mos kelmaydi.
+
+\item \textbf{Ilova kodi yanada murakkablashadi.}\\
+Avtomatik va adekvat ravishda SQL ga tarjima qilinadigan amaliy dasturlash tilida chinakam murakkab so‘rovni shakllantirish mumkin emas. Shuning uchun murakkab ishlov berish (agar kerak bo‘lsa, albatta) dastur darajasida dasturlashtirilgan bo‘lishi kerak, birinchi navbatda ma‘lumotlar bazasidan barcha kerakli ma‘lumotlarni tanlab olish kerak. Lekin, birinchidan, bu tarmoq orqali ma‘lumotlarni keraksiz uzatishni o‘z ichiga oladi, ikkinchidan, ma‘lumotlar bazasida skanerlash, qo‘shilish, saralash va yig‘ish kabi algoritmlar o‘n yillar davomida diskka moslab qilingan, optimallashtirilgan va dastur kodidan ko‘ra yaxshiroq vazifani bajarishi kafolatlangan.
+
+\end{itemizex}
+
+Albatta, barcha yaxlitlik cheklovlarini va saqlangan funktsiyalarda ma‘lumotlar bilan ishlash mantig‘ini amalga oshirish bilan ma‘lumotlar bazasidan to‘liq foydalanish uning xususiyatlari va imkoniyatlarini chuqur o‘rganishni talab qiladi. So‘rovlarni yozish uchun SQL tilini va funksiyalar va triggerlarni yozish uchun ba‘zi server dasturlash tilini (odatda PL/pgSQL) o‘zlashtirishingiz kerak bo‘ladi. Buning evaziga siz har qanday axborot tizimi arxitekturasining muhim “qurilish bloklaridan” biri bo‘lgan ishonchli vositani o‘zlashtirasiz.
+
+Qanday bo‘lmasin, biznes mantig‘ini qayerda - serverda yoki mijozda joylashtirish masalasini o‘zingiz hal qilishingiz kerak bo‘ladi. Faqat shuni qo‘shimcha qilaylikki, haddan tashqari narsalar har doim ham zarur emas va ko‘pincha haqiqatni o‘rtada qidirish kerak.
+

@@ -1,0 +1,100 @@
+% po4a: environment codep2
+% po4a: environment codep
+% po4a: environment code
+% po4a: environment code2
+% po4a: environment denseitem
+% po4a: environment denseenum
+% po4a: environment itemize
+% po4a: environment itemizex
+% po4a: environment document
+% po4a: environment leftbar
+% po4a: environment sidewaysfigure 
+\chapter{pgAdmin}\label{pgadmin}
+
+pgAdmin~--- PostgreSQL boshqaruvi uchun mashhur grafik muhit. Dastur asosiy boshqaruv vazifalarini soddalashtiradi, ma‘lumotlar bazasi obyektlarini ko‘rsatadi va SQL so‘rovlarini bajarishga imkon beradi.
+
+Uzoq vaqt davomida pgAdmin 3 de-fakto standart edi, lekin EnterpriseDB ishlab chiquvchilari uni qo‘llab-quvvatlashni to‘xtatdilar va 2016 yilda mahsulotni C++ dan Python va veb-texnologiyalarga to‘liq qayta yozib, yangi, to‘rtinchi talqinni chiqardilar. O‘zgartirilgan interfeys tufayli pgAdmin 4 dastlab juda sovuqqonlik bilan qabul qilindi, ammo ishlab chiqilish va takomillashtirishda davom etmoqda.
+
+\section{O‘rnatish}
+
+Windows tizimida pgAdmin 4 ni ishga tushirish uchun \urld{https}{pgadmin.org/download} manzilidagi o‘rnatuvchidan foydalaning. O‘rnatish jarayoni oddiy va tushunarli, barcha tavsiya etilgan qiymatlar o‘zgarishsiz qoldirilishi mumkin.
+
+Debian va Ubuntu uchun PostgreSQL bazasini ulang (\pageref{linux}-betda tasvirlanganidek) va quyidagi buyruqni amalga oshiring
+
+\begin{code}
+$ \textbf{sudo apt-get install pgadmin4}
+\end{code}
+
+Mavjud dasturlar ro‘yxatida “pgAdmin4” paydo bo‘ladi.
+
+Foydalanuvchi interfeysi tilini rus tiliga o‘zgartirish uchun \textbf{Настроить pgAdmin} (Configure pgAdmin) belgisini bosing va sozlamalar oynasida \textbf{Разное > Язык пользователя} (Miscellaneous > User language) tanlang. So‘ngra veb-brauzeringizda sahifani qayta yuklang.
+
+\section{Serverga ulanish}
+
+Avvalo, serverga ulanishni sozlaymiz. \textbf{Добавить новый сервер} - Yangi server qo‘shish (Add New Server) belgisini bosing va paydo bo‘lgan oynaning \textbf{Общие} - Umumiy (General) taxlamida ulanish uchun ixtiyoriy \textbf{имя} - nom (Name) ni kiriting.
+
+\textbf{Соединение} (Connection) taxlamida \textbf{имя сервера} (Host name/address) - server nomi, \textbf{порт}  (Port) - port, \textbf{имя пользователя} (Username) - foydalanuvchi nomi va \textbf{пароль} (Password) - parolni kiriting.
+
+Agar siz har safar parolingizni qo‘lda kiritishni xohlamasangiz, \textbf{Сохранить пароль} (Save password) – “Parolni saqlash” katagiga belgi qo‘ying. Parollar asosiy parol yordamida shifrlangan holda saqlanadi, pgAdmin uni birinchi ishga tushirganingizda o‘rnatishingizni so‘raydi.
+
+E‘tibor bering, foydalanuvchi paroli o‘rnatilgan bo‘lishi kerak. Masalan, \codett{postgres} uchun bu quyidagi buyruq bilan amalga oshirilishi mumkin:
+
+\begin{code}
+postgres=# \textbf{ALTER ROLE postgres PASSWORD 'p@ssw0rd';}
+\end{code}
+
+\textbf{Сохранить} - saqlash tugmasini bosganingizda dastur belgilangan parametrlar bilan server mavjudligini tekshiradi va yangi ulanishni eslab qoladi.
+
+\vskip 1em
+\includegraphics[width=0.795\textwidth]{08_connect}
+\vskip 1em
+
+\section{Navigator}
+
+Oynaning chap tomonida obyekt navigatori joylashgan. Ro‘yxat elementlarini kengaytirib, biz LOCAL deb atagan serverga o‘tishingiz mumkin. Quyida unda mavjud bo‘lgan ma‘lumotlar bazalari ro‘yxati keltirilgan:
+
+\begin{itemize}
+\item \texttt{appdb} biz turli dasturlash tillaridan PostgreSQL-ga ulanishlarni sinab ko‘rish uchun yaratdik;
+\item \texttt{demo}~--- demo ma‘lumotlar bazasi;
+\item \texttt{postgres} MBBTni o‘rnatishda doimo yaratiladi;
+\item \texttt{test} SQL bilan tanishganda ishlatdik.
+\end{itemize}
+
+\vskip 1em
+\includegraphics[width=\textwidth]{08_navigator}
+\vskip 1.5em
+
+\texttt{demo} ma‘lumotlar bazasi uchun \textbf{Схемы} (Schemas) – “Sxemalar” elementini ochish orqali siz barcha jadvallarni topishingiz, ularning ustunlarini, yaxlitlik cheklovlarini, indekslarni, triggerlarni va boshqalarni ko‘rishingiz mumkin.
+
+Har bir turdagi obyekt uchun kontekst menyusi (sichqonchaning o‘ng tugmasi) u bilan bajarilishi mumkin bo‘lgan harakatlar ro‘yxatini o‘z ichiga oladi. Masalan, faylga yuklash yoki fayldan yuklash, imtiyozlar berish, o‘chirish.
+
+Oynaning o‘ng tomonida ma‘lumotnoma ma‘lumotlari alohida yorliqlarda ko‘rsatiladi:
+
+\begin{itemizex}
+\item \textbf{Панель информации} (Dashboard)~--- Axborot paneli - tizim faoliyatini aks ettiruvchi grafiklarni ko‘rsatadi;
+
+\item \textbf{Свойства} (Properties)~--- xossalar – tanlangan obyektning xossalari (ustun uchun uning ma’lumotlar turi va hokazolar ko‘rsatiladi);
+
+\item \textbf{SQL}~--- navigatorda tanlangan obyektni yaratish uchun SQL buyrug‘i;
+
+\item \textbf{Статистика} (Statistics)~--- statistika - optimallashtiruvchi tomonidan so‘rovlarni bajarish rejalarini tuzish uchun foydalaniladigan va vaziyatni tahlil qilish uchun ma‘lumotlar bazasi ma‘muri tomonidan ko‘rilishi mumkin bo‘lgan ma‘lumotlar;
+
+\item \textbf{Зависимости}, \textbf{Зависимые} (Dependencies, Dependents)~--- bog‘liqliklar, bog‘liq bo‘lganlar - tanlangan obyekt va ma‘lumotlar bazasidagi boshqa obyektlar o‘rtasidagi bog‘liqlikni ko‘rsatadi.
+\end{itemizex}
+
+\section{So‘rovlarni bajarish}
+
+So‘rovni bajarish uchun menyudan \textbf{Инструменты~--- Запросник} (Tools~--- Query tool) - Asboblar - So‘rovlar vositasini tanlash orqali SQL oynasi bilan yangi taxlamni oching.
+
+Oynaning yuqori qismida so‘rovingizni kiriting va F5 tugmasini bosing. So‘rov natijasi oynaning pastki qismida \textbf{Результат} (Data Output) taxlamida paydo bo‘ladi.
+
+\vskip 1em
+\includegraphics[width=\textwidth]{08_query}
+\vskip 1em
+
+Yangi so‘rovni kiritish uchun oldingisini o‘chirish shart emas: kerakli kod qismini ajratib ko‘rsatish va F5 tugmasini bosish kifoya. Keyin harakatlaringiz tarixi har doim ko‘rinadi - odatda bu \textbf{История запросов} (Query History) – “So‘rovlar tarixi” yorlig‘idagi buyruqlar tarixida kerakli so‘rovni qidirishdan ko‘ra qulayroqdir.
+
+\section{Boshqa}
+
+pgAdmin dasturi standart PostgreSQL yordam dasturlari, tizim katalogi ma‘lumotlari, administratorlik funktsiyalari va SQL buyruqlari uchun grafik interfeysni taqdim etadi. Biz, ayniqsa, o‘rnatilgan PL/pgSQL kodini tuzatuvchiga e‘tibor qaratamiz. Ushbu dasturning barcha xususiyatlarini mahsulotning \urld{https}{pgadmin.org} veb-saytida yoki dasturning yordam tizimida topish mumkin.
+
