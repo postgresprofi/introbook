@@ -1,0 +1,109 @@
+% po4a: environment codep2
+% po4a: environment codep
+% po4a: environment code
+% po4a: environment code2
+% po4a: environment denseitem
+% po4a: environment denseenum
+% po4a: environment itemize
+% po4a: environment itemizex
+% po4a: environment document
+% po4a: environment leftbar
+% po4a: environment sidewaysfigure 
+\chapter{Kompaniya haqida}\label{pgpro}
+
+Postgres Professional kompaniyasi 2015 yilda tashkil topgan bo‘lib, uning tarkibiga jahon hamjamiyati tomonidan PostgreSQL rivojlanishiga qo‘shgan hissasi e‘tirof etilgan asosiy rossiyalik dasturchilar kirgan. Unda MBBT sohasi bo‘yicha malakali mahalliy kadrlar tayyorlanadi. Hozirgi kunda kompaniyada taxminan 250 dasturchi, arxitektor, muhandis va boshqa mutaxassislar ishlaydi.
+
+Postgres Professional PostgreSQL asosida qurilgan Postgres Pro tizimining bir nechta talqinlarini chiqaradi, MBBT yadro darajasida va kengaytmalarda ishlab chiqishlar amalga oshiradi, dasturiy tizimlarni loyihalash va qo‘llab-quvvatlash hamda PostgreSQLga migratsiya qilish bo‘yicha xizmatlar ko‘rsatadi.
+
+Kompaniya ta‘lim faoliyatiga katta e‘tibor qaratadi, Moskvada har yili o‘tkaziladigan eng yirik xalqaro konferentsiya PgConf.Russia ni tashkil qiladi va butun dunyo bo‘ylab konferentsiyalarda ishtirok etadi.
+
+Aloqa ma‘lumotlari: 
+
+\begin{itemizex}
+\item[] 117036, г. Москва, ул. Дмитрия Ульянова, д. 7А
+\item[] +7 495 150-06-91
+\item[] \urld{mailto}{info@postgrespro.ru}
+\end{itemizex}
+
+\pagebreak
+
+\section{Postgres Pro MBBT}
+
+Postgres Professional kompaniyasining Postgres Pro — bu erkin tarqatiladigan PostgreSQL ma‘lumotlar bazasi boshqaruvi tizimiga asoslangan va korporativ mijozlarning talablari bo‘yicha ishlab chiqilgan Rossiyaning tijorat MBBT hisoblanadi. U Rossiya dasturiy ta‘minot reestriga kiritilgan.
+
+\textbf{Postgres Pro Standard} PostgreSQL ning barcha funksional imkoniyatlarini o‘z ichiga oladi va turli kengaytmalar va patchlar bilan to‘ldirilgan, jumladan hali hamjamiyat tomonidan qabul qilinmaganlarini ham. Mijoz navbatdagi PostgreSQL chiqarilishini kutmasdan foydali funksional imkoniyatlardan foydalanish va ishlash tezligini oshirish imkoniyatiga ega bo‘ladi.
+
+\textbf{Postgres Pro Enterprise} — bu chuqur qayta ishlangan MBBT talqini bo‘lib, yuqori ishonchliligi va oshirilgan unumdorligi tufayli jiddiy sanoat vazifalarini hal qilish uchun mos keladi.
+
+Axborotni himoya qilish uchun zarur vositalar bilan to‘ldirilgan har ikkala Postgres Pro talqini \textbf{FSTEK sertifikatidan} o‘tgan.
+
+Postgres Pro ning har qanday talqinidan foydalanish uchun litsenziya sotib olish kerak. Sizni qiziqtirgan MBBT talqinini sinovdan o‘tkazish, imkoniyatlarini o‘rganish va dasturiy ta‘minotni ishlab chiqish uchun bepul olishingiz mumkin.
+
+Ta‘lim muassasalariga Postgres Pro Standard MBBT uchun bepul akademik litsenziya taqdim etiladi. 
+
+Postgres Pro versiyalari imkoniyatlari va farqlari haqida batafsil ma‘lumotni quyidagi veb-sahifada o‘qishingiz mumkin: \urld{https}{postgrespro.ru/products/postgrespro}.
+
+\section{Postgres Pro Enterprise Manager}
+
+Postgres Pro Enterprise Manager (PPEM) — bu Postgres Pro Enterprise MBBT uchun integratsiyalashgan boshqaruv paneli.
+
+PPEM yagona konsolni taqdim etadi, oddiy monitoring va boshqaruv interfeysi bilan birga, asosiy adminstratorlik harakatlarini brauzer oynasidan bajarish imkonini beradi, barcha serverlarga va ma‘lumotlar bazalariga markazlashgan kirishni ta‘minlaydi. PPEM ma‘lumotlar bazasi xizmat ko‘rsatish guruhining mahsuldorligini oshiradi va kundalik ma‘muriy vazifalarni bajarishni osonlashtiradi. 
+
+Batafsil: \urld{https}{postgrespro.ru/products/PPEM}.
+
+\section{Postgres Pro Backup Enterprise}
+
+Postgres Pro Backup Enterprise (pg_probackup) — bu PostgreSQL ma‘lumotlar bazasi klasterlarini zaxira qilish va tiklashni boshqarish uchun mo‘ljallangan utilita.
+
+Ushbu utilita markazlashtirilgan nusxa katalogi bilan ishlaydi, u mahalliy yoki masofaviy, jumladan, S3 xotirasida joylashishi mumkin.
+
+Ushbu utilita sahifa darajasidagi inkremental zaxira nusxalari, zaxira nusxalarini saqlash siyosatlari, ma‘lumotlar yaxlitligini tekshirish va belgilangan vaqtga tiklash imkoniyatlarini qo‘llab-quvvatlaydi. Shuningdek, u parallel zaxiralash va tiklash, ma‘lumotlarni siqish va CFS fayl tizimi bilan ishlashni ta‘minlaydi.
+
+Batafsil: \urld{https}{postgrespro.ru/products/pg_probackup}.
+
+\section{Shardman}
+
+Shardman — bu PostgreSQL asosida yaratilgan taqsimlangan relyatsion ma‘lumotlar bazasi boshqaruv tizimi bo‘lib, Postgres Pro MBBT ning kengaytirilgan imkoniyatlariga ega.
+
+Shardman PostgreSQL bilan mos keladi, ma‘lumotlarning izolyatsiyasi va izchilligiga qat‘iy kafolatlar beradi, gorizontal masshtablashni ta‘minlaydi va o‘rnatilgan nosozliklarga chidamlilikka ega.
+
+Batafsil: \urld{https}{postgrespro.ru/products/shardman}.
+
+\section{Karyera}
+
+Biz Postgres ekotizimi mahsulotlarini ishlab chiqishga va ochiq dasturiy ta‘minotni rivojlantirishga tayyor bo‘lgan mutaxassislarni faol izlayapmiz.
+
+Postgres Professional jamoasida Rossiyadagi ko‘pgina Postgres mutaxassislari ishlaydi. Biz PostgreSQL yadrosi va uning kengaytmalari darajasida ishlab chiqish bilan shug‘ullanamiz, monitoring va MBBT boshqaruvi uchun ekotizim mahsulotlarini yaratamiz. Bizning mutaxassislarimiz DBaaS xizmatini ishlab chiqadi, texnik audit va ma‘lumotlarni migratsiya qiladi, texnik yordam ko‘rsatadi, tadqiqotlar olib boradi va innovatsion mahsulotlar yaratadi.
+
+Biz tizim dasturchilari, backend va frontend dasturchilari, DevOps mutaxassislari, QA muhandislari, ma‘lumotlar bazasi administratorlari va boshqa yo‘nalishlardagi mutaxassislar bilan hamkorlik qilishga ochiqmiz. Batafsil ma‘lumotni bizning karyera saytimizda olishingiz mumkin: \urld{https}{career.postgrespro.ru}.
+
+
+\section{Xizmatlar}
+
+\textbf{Postgres MBBT uchun nosozliklarga chidamli yechimlar}
+
+Yuqori yuklamali, yuqori samarali va nosozliklarga chidamli sanoat tizimlarini loyihalashtirish va yaratishda ishtirok etish, konsalting xizmatlari. Postgres MBBTni joriy etish va konfiguratsiyani optimallashtirish.
+
+\vspace{5pt}
+\textbf{Vendorlik texnik qo‘llab-quvvatlash}
+
+Postgres Pro va PostgreSQL uchun 24/7 texnik qo‘llab-quvvatlash. Monitoring, ishlash qobiliyatini tiklash, kutilmagan holatlarni tahlil qilish, samaradorlikni oshirish, MBBT va kengaytmalardagi xatolarni tuzatish.
+
+\vspace{5pt}
+\textbf{Ilovalar tizimlarini Postgres MBBTga ko‘chirish}
+
+Boshqa MBBTlardan Postgresga migratsiya qilishning murakkabligini baholash. Yangi yechim arxitekturasini ishlab chiqish va zaruriy yaxshilanishlarni amalga oshirish. Ilovalar tizimlarini Postgres MBBTga ko‘chirish va migratsiya jarayonida qo‘llab-quvvatlash.
+
+\vspace{5pt}
+\textbf{Postgres bo‘yicha o‘qitish.}
+
+Ma‘lumotlar bazasi administratorlari, dasturchilar va ilova tizimlari arxitektorlarini Postgres MBBTning xususiyatlari va uning afzalliklaridan samarali foydalanishga o‘rgatish.
+
+\vspace{5pt}
+\textbf{MBBT auditi}
+
+MBBT holatining ekspert bahosi. Postgres asosidagi tizimlarning axborot xavfsizligi auditi.
+
+\vspace{5pt}
+Xizmatlarning to‘liq tavsifi: \urld{https}{postgrespro.ru/services}.
+

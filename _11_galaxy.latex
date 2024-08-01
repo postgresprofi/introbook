@@ -1,0 +1,80 @@
+% po4a: environment codep2
+% po4a: environment codep
+% po4a: environment code
+% po4a: environment code2
+% po4a: environment denseitem
+% po4a: environment denseenum
+% po4a: environment itemize
+% po4a: environment itemizex
+% po4a: environment document
+% po4a: environment leftbar
+% po4a: environment sidewaysfigure 
+\chapter{Galaktika bo‘yicha yo‘riqnoma}\label{galaxy}
+
+\section{Yangiliklar va muhokamalar}
+
+Har qanday qiziquvchi yangiliklar bilan tanishib, PostgreSQL ning yangi imkoniyatlari va kelgusi nashri haqida ma‘lumot olib, umuman olganda, voqealardan xabardor bo‘lishi mumkin.
+
+Ko‘plab qiziqarli va foydali materiallar turli tematik bloglarda chop etiladi. Ingliz tilidagi maqolalar bilan to‘liq tanishish uchun \urld{https}{planet.postgresql.org} sayti-aggregatoridan foydalanish qulay, rus tilidagi maqolalar esa (shu jumladan, bizning kompaniyamiz tomonidan ham) Xabr da chop etiladi: \urld{https}{habr.com/hub/postgresql}. Youtube kanallariga ham e‘tibor bering:
+\urld{https}{youtube.com/RuPostgres} va \urld{https}{youtube.com/PostgresTV}.
+
+Shuningdek, \urld{https}{wiki.postgresql.org} viki-loyihasi mavjud bo‘lib, u yerda odatiy savollarga javoblar, o‘quv materiallari va maqolalar, sozlash va optimallashtirish bo‘yicha ma‘lumotlar, turli MBBT lardan migratsiya xususiyatlari va boshqalar mavjud. Ushbu materiallarning bir qismi rus tilida ham mavjud: \urld{https}{wiki.postgresql.org/wiki/Russian}. Har kim ingliz tilidagi maqolani tarjima qilib, hamjamiyatga yordam berishi mumkinligini unutmang.
+
+Deyarli 12 000 rus tilida so‘zlashuvchi foydalanuvchilar “pgsql — PostgreSQL” telegram kanaliga obuna bo‘lgan (\urld{https}{t.me/pgsql}); ayni paytda bu yerda eng faol va yordam berishga tayyor hamjamiyat yig‘ilgan.
+
+Deyarli 600 o‘zbek tilida so‘zlashuvchi foydalanuvchilar “pgsql — PostgreSQL Uzbekistan” telegram kanaliga obuna bo‘lgan (\urld{https}{t.me/pgsql_uzbekistan}); ayni paytda bu yerda eng faol va yordam berishga tayyor hamjamiyat yig‘ilgan.
+
+Profilli saytlarda qo‘shimcha savollar berish mumkin, masalan, \urld{https}{stackoverflow.com} (ingliz tilida),  \urld{https}{ru.stackoverflow.com} saytlarda (rus tilida, har qanday holatda ham postgresql tegini qo‘shishni unutmang)
+
+
+Postgres Professional o‘zining shaxsiy maqolalarini ushbu adresda jamlab boradi \urld{https}{postgrespro.ru/blog}.
+
+\section{Pochta ro‘yxatlari}
+
+Blogda kimdir maqola yozishini kutish shart emas, pochta ro‘yxatiga obuna bo‘lish mumkin. PostgreSQL ishlab chiquvchilari barcha masalalarni faqat elektron pochta orqali muhokama qilish an‘anasiga ega.
+
+Barcha pochta ro‘yxatlarining to‘liq ro‘yxati \urld{https}{postgresql.org/list} manzilida mavjud. Ular orasida:
+
+\begin{itemizex}
+\item pgsql-hackers (odatda “hackers” deb ataladi) — rivojlanish bilan bog‘liq barcha masalalar bo‘yicha asosiy ro‘yxat;
+\item pgsql-general umumiy savollarni muhokama qilish uchun;
+\item pgsql-bugs topilgan xatolar haqida xabar berish uchun;
+\item pgsql-docs hujjatlarni muhokama qilish uchun;
+\item pgsql-translators tarjimonlar uchun;
+\pagebreak
+\item pgsql-announce yangi mahsulot versiyalari chiqishi haqidagi yangiliklar uchun...
+\end{itemizex}
+
+...va ko‘pgina boshqalar.
+
+Ushbu ro‘yxatlardan biriga obuna bo‘lganingizda, siz muntazam ravishda elektron pochta orqali xabarlarni olasiz va istasangiz, muhokamalarda ishtirok etishingiz mumkin. Yana bir variant — \urld{https}{postgresql.org/list} yoki bizning kompaniya saytimizdagi \urld{https}{postgrespro.ru/list} da xabarlar arxivini o‘qish.
+
+\section{Commitfest}
+
+Yana bir ko‘p vaqt sarflamasdan voqealardan xabardor bo‘lish usuli — \urld{https}{commitfest.postgresql.org} saytiga nazar tashlash. Ushbu tizimda davriy ravishda “oynalar” ochiladi, bu davrda ishlab chiquvchilar o‘z patchlarini ro‘yxatdan o‘tkazishlari kerak. Masalan, \PGYEAR-yil 1-martdan \PGYEAR\-yil 31-martgacha bo‘lgan oyna PostgreSQL \PGVER versiyasiga tegishli edi, undan keyingi oyna esa \PGYEAR-yil 1-iyuldan \PGYEAR-yil 31-iyulgacha bo‘lib, keyingi talqinga tegishli edi. Bu yangi talqin chiqishidan taxminan olti oy oldin yangi imkoniyatlarni qabul qilishni to‘xtatish va kodni barqarorlashtirish uchun amalga oshiriladi.
+
+Patchlar bir necha bosqichdan o‘tadi: ular ko‘rib chiqiladi va taqriz natijalariga ko‘ra tuzatiladi, keyin esa qabul qilinadi yoki keyingi oynaga o‘tkaziladi yoki — muvaffaqiyatsizlik bo‘lsa — rad etiladi.
+
+Shu tariqa, siz yangi talqinga allaqachon kiritilgan va kiritilishi rejalashtirilayotgan imkoniyatlar haqida bilib olishingiz mumkin.
+
+\section{Konferensiyalar}
+
+Moskva, Sankt-Peterburg va Rossiyaning boshqa shaharlarida muntazam ravishda yuzlab PostgreSQL foydalanuvchilari va ishlab chiquvchilarni yig‘adigan yirik xalqaro \textbf{PGConf} (\urld{https}{pgconf.ru}) konferensiyasi o‘tkaziladi.
+
+Bundan tashqari, mamlakatning turli shaharlarida ma‘lumotlar bazalari, shu jumladan PostgreSQL yo‘nalishini qamrab oladigan kengroq mavzular bo‘yicha konferensiyalar o‘tkaziladi. Shulardan ba‘zilarini qayd etamiz:
+
+\begin{itemizex}
+\item[] \textbf{CodeFest} - Novosibirskda  (\urld{https}{codefest.ru});
+\item[] \textbf{HighLoad++} - Moskva va boshqa shaharlarda (\urld{https}{highload.ru}).
+\end{itemizex}
+
+Albatta, konferensiyalar boshqa mamlakatlarda ham o‘tkaziladi. Ularning eng yiriklari:
+
+\begin{itemizex}
+%\item[] февраль~--- Fosdem в Брюсселе (\urld{https}{fosdempgday.org});
+\item[] \textbf{PGCon} - Ottavada (\urld{https}{pgcon.org});
+\item[] Yevropacha \textbf{PGConf Europe} (\urld{https}{pgconf.eu}).
+\end{itemizex}
+
+Konferensiyalardan tashqari, norasmiy uchrashuvlar, shu jumladan, onlayn uchrashuvlar ham o‘tkaziladi.
+

@@ -60,7 +60,7 @@ Omad tilaymiz!
 
 \input{_10_education.latex}
 
-%\input{_11_galaxy.latex}
+\input{_11_galaxy.latex}
 
 %\input{_12_pgpro.latex}
 
