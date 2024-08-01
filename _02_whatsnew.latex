@@ -9,14 +9,14 @@
 % po4a: environment document
 % po4a: environment leftbar
 % po4a: environment sidewaysfigure 
-\chapter{PostgreSQL \PGVER - dagi yangiliklar }\label{whatsnew}
+\chapter{PostgreSQL \PGVER yangiliklari }\label{whatsnew}
 
 Agar siz PostgreSQL ning oldingi talqinlari bilan tanish bo‘lsangiz, ushbu bob sizga o‘tgan yil ichida nima o‘zgarganligi haqida ma‘lumotlar beradi. 
 Faqat ba‘zi o‘zgarishlargina bu yerda keltirilgan. To‘liq ro‘yxat uchun nashr eslatmalariga qarang: \urld{https}{postgrespro.ru/docs/postgresql/\PGVER/release-\PGVER}. Postgres Pro tomonidan yuritiladigan Habr-dagi blogda yangi mahsulotlar bilan tezda tanishishingiz mumkin: \urld{https}{habr.com/ru/companies/postgrespro/articles/}.
 
 \section{SQL buyruqlari}
 
-\textbf{\codett{FROM} bandidagi qism so‘rovlar uchun taxalluslar endi ixtiyoriy bo‘lib,} hatto ular foydali bo‘lmagan taqdirda nom berish zaruriyatini olib tashlash imkonini yaratdi.
+\textbf{\codett{FROM} bandidagi qism so‘rovlar uchun taxalluslar endi ixtiyoriy bo‘lib,} ular foydali bo‘lmagan taqdirda nom berish zaruriyatini olib tashlash imkonini yaratdi.
 
 Endilikda \textbf{kengaytirilgan statistika uchun nom o‘ylab topishga} hojat yo‘q. \codett{CREATE INDEX} buyrug‘i nomlashni boshqara oladi va \codett{CREATE STATISTICS} ham huddi shunday.
 
