@@ -1,0 +1,1122 @@
+% po4a: environment codep2
+% po4a: environment codep
+% po4a: environment code
+% po4a: environment code2
+% po4a: environment denseitem
+% po4a: environment denseenum
+% po4a: environment itemize
+% po4a: environment itemizex
+% po4a: environment document
+% po4a: environment leftbar
+% po4a: environment sidewaysfigure 
+\chapter{Qo‘shimcha imkoniyatlar}\label{additional}
+
+\section{Umummatn qidiruv}\label{tsearch}
+
+Umummatnli qidiruv - bu hujjatlarni tabiiy tillarda qidirish, odatda tegishliligi bo‘yicha saralanadi. Eng oddiy va odatiy holatda so‘rov so‘zlar to‘plamiga aylanadi va mos keladigan mezon ularning hujjatdagi uchrash chastotasi hisoblanadi. Google va Yandex shunga o‘xshash tarzda so‘rovlarimiz uchun qidiruvni amalga oshiradi. Biroq, SQL so‘rovlar tilining barcha kuchi ham bunday ma‘lumotlar bilan samarali ishlash uchun yetarli emas. Bu, ayniqsa, so‘nggi paytlarda, axborot bazalari katta ma‘lumotlarning ko‘chkiga o‘xshash oqimi bilan to‘ldirilganida va ularning ko‘pi ko‘pincha yomon tuzilgan va tuzilishini yasash imkoni bo‘lmaganida sezilarli bo‘ldi.
+
+Mavjud bo‘lgan barcha hujjatlarni indekslash va juda yuqori sifatli qidiruvni tashkil qilish imkonini beruvchi pullik va bepul ko‘plab qidiruv tizimlari mavjud. Bunday hollarda indeks - muhim vosita va qidiruv tezlatgichi – ma‘lumotlar bazasining bir qismi emas. Bu shuni anglatadiki, ma‘lumotlar bazasi tarkibini sinxronlashtirish, tranzaksiya, metama‘lumotlarga kirish, ularning yordami bilan qidiruv maydonini cheklash, hujjatlarga kirish siyosatini tartibga solish va boshqa ko‘p narsalar kabi MBBT foydalanuvchilari tomonidan qadrlanadigan xususiyatlardan foydalanish uchun imkoniyat mavjud bo‘lmaydi.
+
+Hujjatga yo‘naltirilgan ma‘lumotlar bazasining tobora ommalashib borayotgan kamchiliklari odatda bir xil: to‘liq matnli qidiruv vositalari ishlab chiqilgan, ammo xavfsizlik va sinxronizatsiya ustuvor ahamiyatga ega emas. Bundan tashqari, ular odatda (masalan, MongoDB) NoSQL MBBT sinfiga kiradi, ya‘ni ta‘rifiga ko‘ra, ular o‘nlab yillar davomida to‘plangan SQL kuchidan mahrum bo‘lishadi.
+
+Boshqa tomondan, an‘anaviy SQL MBBT-lari o‘zlarida o‘rnatilgan matn qidirish imkoniyatlariga ega. \texttt{LIKE} operatori standart SQL sintaksisining bir qismidir, ammo uning moslashuvchanligi yetarli darajada emas, shu sababli ishlab chiquvchilar SQL standartiga o‘zlarining kengaytmalarini qo‘shishlari kerak bo‘lgan. PostgreSQL-da bular \texttt{ILIKE}, \texttt{\textasciitilde}, \texttt{{\textasciitilde}*} taqqoslash operatorlari, ammo ular ham barcha muammolarni hal qilmaydi, chunki ular so‘z o‘zgarishini hisobga olmaydi, reyting algoritmi uchun mos kelmaydi va juda tez ishlamaydi.
+
+Agar biz to‘liq matnli qidiruv vositalari haqida gapiradigan bo‘lsak, ularning standartlashuvi hali ham uzoqda  ekanligini tushunish kerak - har bir ma‘lumotlar bazasining ularni qo‘llash bo‘yicha o‘z sintaksisi va o‘ziga xos yondashuvlari mavjud. Shu munosabat bilan PostgreSQL rus foydalanuvchisi uchun juda qulay: to‘liq matnli qidiruv rus ishlab chiquvchilari tomonidan amalga oshiriladi va agar kerak bo‘lsa, mutaxassislar bilan bevosita bog‘lanish yoki hatto ularning ma‘ruzalarida qatnashish orqali uni batafsilroq tushunishingiz mumkin. Biz oddiy misollar bilan cheklanamiz.
+
+Umummatnli qidiruv imkoniyatlarini o‘rganish uchun demo ma‘lumotlar bazasida boshqa jadval yarataylik. Bular ma‘ruza bo‘limlariga bo‘lingan asosiy eslatmalar bo‘lsin:
+
+\begin{code}
+test=# \textbf{CREATE TABLE course_chapters( 
+  c_no text REFERENCES courses(c_no), 
+  ch_no text, 
+  ch_title text,
+  txt text,
+  CONSTRAINT pkt_ch PRIMARY KEY(ch_no, c_no)
+);}
+\end{code}
+\begin{codep}
+CREATE TABLE
+\end{codep}
+
+Keling, bizga tanish CS301 va CS305 mutaxassisliklari bo‘yicha birinchi ma‘ruza matnlarini jadvalga kiritamiz:
+
+\begin{code}
+test=# \textbf{INSERT INTO course_chapters(
+  c_no, ch_no,ch_title, txt)
+VALUES
+('CS301', 'I', 'Базы данных',
+ 'С этой главы начинается наше знакомство ' ||
+ 'с увлекательным миром баз данных'),
+('CS301', 'II', 'Первые шаги',
+ 'Продолжаем знакомство с миром баз данных. ' ||
+ 'Создадим нашу первую текстовую базу данных'),
+('CS305', 'I', 'Локальные сети',
+ 'Здесь начнется наше полное приключений ' ||
+ 'путешествие в интригующий мир сетей');}
+\end{code}
+\begin{codep}
+INSERT 0 3
+\end{codep}
+
+Natijani tekshiramiz:
+
+\begin{code}
+test=# \textbf{SELECT ch_no AS no, ch_title, txt
+FROM course_chapters {\BS}gx}
+\end{code}
+\begin{codep}
+-[ RECORD 1 ]-----------------------------------------
+no       | I
+ch_title | Базы данных
+txt      | С этой главы начинается наше знакомство с
+           увлекательным миром баз данных
+-[ RECORD 2 ]-----------------------------------------
+no       | II
+ch_title | Первые шаги
+txt      | Продолжаем знакомство с миром баз данных. 
+           Создадим нашу первую текстовую базу данных
+\end{codep}
+\begin{codep}
+-[ RECORD 3 ]-----------------------------------------
+no       | I
+ch_title | Локальные сети
+txt      | Здесь начнется наше полное приключений 
+           путешествие в интригующий мир сетей
+\end{codep}
+
+
+\texttt{LIKE} operatoridan foydalanib, an‘anaviy SQL vositalaridan foydalangan holda jadvaldagi ma‘lumotlar bazasi ma‘lumotlarini topamiz:
+
+\begin{code}
+test=# \textbf{SELECT txt
+FROM course_chapters
+WHERE txt LIKE '{\percent}базы данных\percent' {\BS}gx}
+\end{code}
+
+Natija qanday bo‘lishini taxmin qilish oson: 0 qator. Axir, \texttt{LIKE} operatori “базы” so‘zini genitiv va akustiv shakllarda (“баз”, “базы”) tanimaydi. Quyidagiga binoan esa
+
+\begin{code}
+test=# \textbf{SELECT txt
+FROM course_chapters
+WHERE txt LIKE '{\percent}базу данных\percent' {\BS}gx}
+\end{code}
+
+--- ikkinchi bobdagi satr ko‘rsatiladi, lekin I bobdan emas, chunki unda bu so‘z boshqa kelishikda turibdi:
+
+\begin{code}
+-[ RECORD 1 ]-----------------------------------------
+txt | Продолжаем знакомство с миром баз данных. 
+      Создадим нашу первую текстовую базу данных
+\end{code}
+
+Postgres-da \texttt{ILIKE} operatori mavjud bo‘lib, bu sizga hech bo‘lmaganda katta va kichik harflar orasidagi farq haqida o‘ylamaslik imkonini beradi. Albatta, yaratilishi san‘at darajasida bo‘lgan to‘g‘rilovchi (regular) iboralar (qidiruv qoliplari) ham mavjud, ammo ba‘zida biz uchun o‘ylaydigan vositaga ega bo‘lishni xohlaymiz. Shuning uchun, boblar jadvaliga maxsus ma‘lumotlar turi - \texttt{tsvector}li yana bir ustun qo‘shamiz:
+
+\begin{code}
+test=# \textbf{ALTER TABLE course_chapters
+  ADD txtvector tsvector;}
+test=# \textbf{UPDATE course_chapters
+  SET txtvector = to_tsvector('russian',txt);}
+test=# \textbf{SELECT txtvector 
+FROM course_chapters {\BS}gx}
+\end{code}
+\begin{codep}
+-[ RECORD 1 ]-----------------------------------------
+txtvector | 'баз':10 'глав':3 'дан':11 'знакомств':6 
+            'мир':9 'начина':4 'наш':5 'увлекательн':8
+-[ RECORD 2 ]-----------------------------------------
+txtvector | 'баз':5,11 'дан':6,12 'знакомств':2 
+            'мир':4 'наш':8 'перв':9 'продолжа':1 
+            'создад':7 'текстов':10
+-[ RECORD 3 ]-----------------------------------------
+txtvector | 'интриг':8 'мир':9 'начнет':2 'наш':3 
+            'полн':4 'приключен':5 'путешеств':6 
+            'сет':10
+\end{codep}
+
+Biz ko‘ramizki satrlarda:
+
+\begin{enumerate}[label=\arabic*)]
+\item so‘zlar o‘zgarmas qismlarga qisqartirildi (leksemma),
+\item so‘zning matndagi o‘rnini ko‘rsatadigan raqamlar paydo bo‘ldi (ba‘zi so‘zlar ikki marta kiritilganligi ko‘rinib turibdi),
+\item predloglar qatorga kiritilmagan (shuningdek, qidiruv uchun ahamiyatsiz bo‘lgan birikmalar va boshqa gap birliklarini – to‘xtash so‘zlarini o‘z ichiga olmaydi).
+\end{enumerate}
+
+Agar siz uning maydoniga bo‘lim sarlavhalarini qo‘shsangiz va shu bilan birga ularga matnning qolgan qismiga qaraganda kattaroq og‘irlik bersangiz (bu setweight funksiyasi bilan amalga oshiriladi) qidiruv yanada yaxshi ishlaydi. 
+Keling, jadvalni to‘g‘rilaymiz:
+
+\enlargethispage*{1\baselineskip}
+\begin{code}
+test=# \textbf{UPDATE course_chapters
+  SET txtvector =
+      setweight(to_tsvector('russian',ch_title),'B')
+      || ' ' ||
+      setweight(to_tsvector('russian',txt),'D');}
+\end{code}
+\begin{codep}
+UPDATE 3
+\end{codep}
+\pagebreak
+\begin{codep}
+test=# \textbf{SELECT txtvector
+FROM course_chapters {\BS}gx}
+\end{codep}
+\begin{codep}
+-[ RECORD 1 ]-----------------------------------------
+txtvector | 'баз':1B,12 'глав':5 'дан':2B,13 
+            'знакомств':8 'мир':11 'начина':6 'наш':7 
+            'увлекательн':10
+-[ RECORD 2 ]-----------------------------------------
+txtvector | 'баз':7,13 'дан':8,14 'знакомств':4 
+            'мир':6 'наш':10 'перв':1B,11 'продолжа':3
+            'создад':9 'текстов':12 'шаг':2B
+-[ RECORD 3 ]-----------------------------------------
+txtvector | 'интриг':10 'локальн':1B 'мир':11 
+            'начнет':4 'наш':5 'полн':6 'приключен':7 
+            'путешеств':8 'сет':2B,12
+\end{codep}
+
+Endi leksemalar nisbiy salmog‘iga ega bo‘ldi – B va D (mumkin bo‘lgan to‘rttadan – A, B, C, D). So‘rovlarni yaratishda biz haqiqiy vaznni o‘rnatamiz. Bu ularga qo‘shimcha moslashuvchanlikni beradi.
+
+Keling, to‘liq qurollangan holda qidiruvga qaytaylik. \texttt{to\_tsvector} funksiyasi \texttt{to\_tsquery} funksiyasiga simmetrik bo‘lib, u ramziy ifodani so‘rovlarda qo‘llaniladigan \texttt{tsquery} ma‘lumotlar turiga aylantiradi.
+
+\begin{code}
+test=# \textbf{SELECT ch_title
+FROM course_chapters
+WHERE txtvector @@
+      to_tsquery('russian','базы & данные');}
+\end{code}
+\begin{codep}
+  ch_title 
+------------- 
+ Базы данных 
+ Первые шаги
+(2 rows)
+\end{codep}
+
+Xuddi shu so‘zlarning boshqa grammatik shakllari (\texttt{\textquotesingle база \& данных\textquotesingle}) bilan qidiruv so‘rovi bir xil natija berishiga ishonch hosil qilishingiz mumkin. Bu yerda biz \texttt{@@} taqqoslash operatoridan foydalandik, u to‘liq matnli qidiruv uchun \texttt{LIKE}~--- operatori odatdagi qidiruv uchun bajaradigan rolni bajaradi. \texttt{@@} operatori tabiiy tildagi ifodalarda bo‘shliqlarni ishlatish uchun ruxsat bermaydi, shuning uchun so‘rovdagi so‘zlar mantiqiy AND operatori bilan birlashtiriladi.
+
+\texttt{russian} argumenti MBBT tomonidan qo‘llaniladigan konfiguratsiyani ko‘rsatadi va qaysi lug‘atlarni ulash kerakligini va iborani leksemalarga ajratish uchun qaysi tahlilchidan foydalanish kerakligini belgilaydi.
+
+Lug‘atlar o‘z nomiga qaramay, leksemalarni turli yo‘llar bilan o‘zgartirish imkonini beradi. Misol uchun, standart oddiy stemmer lug‘ati snowball so‘zning faqat o‘zgarmas qismini qoldiradi, shuning uchun qidiruv so‘rovdagi so‘zlarning oxirini e‘tiborsiz qoldiradi. 
+Siz boshqalarini ham ulashingiz mumkin, masalan:
+
+\begin{denseitem}
+\item morfologiyani aniqroq hisoblash uchun \texttt{ispell}, \texttt{myspell} yoki \texttt{hunspell} kabi “muntazam” lug‘atlar;
+\item sinonimlar lug‘ati;
+\item tezaurus;
+\item “ё” harfini “e”ga aylantirish uchun \texttt{unaccent}.
+\end{denseitem}
+
+Belgilangan vaznlar tufayli yozuvlar reytingning kamayishi tartibida ko‘rsatiladi:
+
+\begin{code}
+test=# \textbf{SELECT ch_title, 
+     ts_rank_cd('\{0.1, 0.0, 1.0, 0.0\}', txtvector, q)
+FROM course_chapters, 
+     to_tsquery('russian','базы & данных') q
+WHERE txtvector @@ q
+ORDER BY ts_rank_cd DESC;}
+\end{code}
+\begin{codep}
+  ch_title   | ts_rank_cd 
+-------------+------------ 
+ Базы данных |    1.11818 
+ Первые шаги |       0.22
+(2 rows)
+\end{codep}
+
+
+{0.1, 0.0, 1.0, 0.0} massivi og‘irliklarni belgilaydi. Bu \texttt{ts\_rank\_cd} funksiyasining majburiy argumenti emas, sukut bo‘yicha {0.1, 0.2, 0.4, 1.0} massivi D, C, B, A ga to‘g‘ri keladi. So‘zning og‘irligi topilgan qatorning ahamiyatiga ta‘sir qiladi.
+
+Yakuniy tajribada biz chiqishni o‘zgartiramiz. Biz html sahifasida qalin harf bilan topilgan so‘zlarni ajratib ko‘rsatishni xohlaymiz deb taxmin qilamiz. 
+\texttt{ts\_headline} funktsiyasi so‘zni o‘rab oluvchi belgilar to‘plamini, shuningdek, qatordagi so‘zlarning minimal va maksimal sonini belgilaydi:
+
+\begin{code}
+test=# \textbf{SELECT ts_headline( 
+  'russian', 
+  txt, 
+  to_tsquery('russian', 'мир'), 
+  'StartSel=<b>, StopSel=</b>, MaxWords=50, MinWords=5'
+)
+FROM course_chapters
+WHERE to_tsvector('russian', txt) @@ 
+      to_tsquery('russian', 'мир');}
+\end{code}
+\begin{codep}
+-[ RECORD 1 ]-----------------------------------------
+ts_headline | знакомство с увлекательным <b>миром</b> 
+              баз данных
+-[ RECORD 2 ]-----------------------------------------
+ts_headline | <b>миром</b> баз данных. Создадим нашу
+-[ RECORD 3 ]-----------------------------------------
+ts_headline | путешествие в интригующий <b>мир</b> 
+              сетей
+\end{codep}
+
+\pagebreak[2]
+
+Umummatnli qidiruvni tezlashtirish uchun maxsus GiST, GIN va RUM indekslari qo‘llaniladi, ular ma‘lumotlar bazasidagi oddiy indekslardan farq qiladi. Ammo ular, umummatnli qidiruv bo‘yicha boshqa ko‘plab foydali bilimlar singari, ushbu qisqa qo‘llanma doirasidan tashqarida qoladi.
+
+Umummatnli qidiruv haqida batafsil ma‘lumotni \urld{https}{postgrespro.ru/doc/textsearch} manzilidagi PostgreSQL hujjatlarida topishingiz mumkin.
+
+\section{JSON va JSONB bilan ishlash}\label{json}
+
+SQL-dan foydalanadigan relyatsion ma‘lumotlar bazalari katta xavfsizlik chegarasi bilan yaratilgan: ularning iste‘molchilarining birinchi tashvishi ma‘lumotlarning yaxlitligi va xavfsizligi edi va ma‘lumotlar hajmi zamonaviylari bilan taqqoslanmas edi. Ma‘lumotlar bazasining yangi avlodi - NoSQL paydo bo‘lganda, jamoa o‘ylay boshladi: qat‘iy izchillikni va sezilarli darajada soddalashtirilgan ma‘lumotlar modelini qo‘llab-quvvatlashdan bosh tortish (dastlab bu asosan kalit-qiymat juftliklari edi) qidiruvni sezilarli darajada tezlashtirishga imkon berdi. NoSQL ma‘lumotlar bazalari misli ko‘rilmagan hajmdagi ma‘lumotlarni qayta ishlay olardi va parallel hisoblashdan to‘liq foydalangan holda osonlikcha kengaytirilishi mumkin edi.
+
+Birinchi zarba o‘tib ketganda, ko‘pchilikka haqiqiy hayot muammolari uchun oddiy tuzilma yetarli emasligi aniq bo‘ldi. Murakkab kalitlar, so‘ngra kalitlar guruhlari paydo bo‘la boshladi. Relyatsion ma‘lumotlar bazasini yaratuvchilari hayotdan orqada qolishni xohlamadilar va NoSQLga xos xususiyatlarni qo‘shishni boshladilar.
+
+Relyatsion MBBT-larda ma‘lumotlar sxemasini o‘zgartirish yuqori xarajatlar bilan bog‘liq bo‘lganligi sabab, foydali yangi ma‘lumotlar turi – JSON paydo bo‘ldi. U ierarxik tuzilmasi bo‘yicha XML ga o‘xshab, JavaScript-da dasturlash uchun mo‘ljallangan (nomi ham shundan kelib chiqqan), shu jumladan, AJAX ilovalarini ishlab chiqish uchun ham. JSON-ning moslashuvchanligi dastur ishlab chiquvchilarga har safar ma‘lumotlar bazasi sxemasini qayta ishlamasdan turib, oldindan aytib bo‘lmaydigan tuzilmalarga ega ma‘lumotlarni qo‘shish imkonini berdi.
+
+Aytaylik, endi siz shaxsiy ma‘lumotlarni talabalar demo ma‘lumotlar bazasiga kiritishingiz mumkin: biz so‘rovnomani ishga tushirdik va o‘qituvchilardan so‘radik. Anketaning barcha bandlarini to‘ldirish shart emas, ba‘zilari esa “boshqa” (другое) va “o‘z ixtiyoringiz bilan ma‘lumotlarni qo‘shing” (добавьте данные на свое усмотрение) kabi javoblarga ruxsat beradi. An‘anaviy yondashuv bilan, joriy tuzilishga mos kelmaydigan yangi ma‘lumotlar ko‘p sonli bo‘sh maydonlarga ega bo‘lgan ko‘plab jadvallar yoki ustunlarni qo‘shishni talab qiladi va tobora ko‘proq yangi ma‘lumotlarning paydo bo‘lishi butun ma‘lumotlarni doimiy ravishda qayta chizishga olib keladi.
+
+Bu muammo \texttt{json} turi va keyinroq yaratilgan \texttt{jsonb} yordamida hal qilinadi, u ma‘lumotlarni iqtisodiy ikkilik shaklda saqlaydi va \texttt{json}dan farqli o‘laroq, indekslarni yaratish uchun moslashtiriladi, bu esa tartiblash bo‘yicha qidiruvni tezlashtiradi.
+
+Keling, JSON obyektlari bilan jadval yarataylik:
+
+\begin{code}
+test=# \textbf{CREATE TABLE student_details( 
+  de_id int, 
+  s_id int REFERENCES students(s_id), 
+  details json, 
+  CONSTRAINT pk_d PRIMARY KEY(s_id, de_id)
+);}
+\end{code}
+\begin{codep}
+test=# \textbf{INSERT INTO student_details
+  (de_id, s_id, details)
+VALUES
+(1, 1451,
+'\{ "достоинства": "отсутствуют", 
+   "недостатки": 
+   "неумеренное употребление мороженого",
+   "статус": "отчислена"
+\}'
+),
+(2, 1432,
+'\{ "хобби": 
+     \{ "гитарист": 
+         \{ "группа": "Постгрессоры", 
+           "гитары":["страт","телек"] 
+         \} 
+     \}
+\}'
+),}
+\end{codep}
+\begin{codep}
+\textbf{(3, 1556,
+'\{ "хобби": "косплей", 
+   "достоинства": 
+     \{ "мать-героиня": 
+         \{ "Вася": "м", 
+           "Семен": "м", 
+           "Люся": "ж", 
+           "Макар": "м", 
+           "Саша":"сведения отсутствуют" 
+         \}
+     \}
+\}'
+);}
+\end{codep}
+
+Keling, barcha ma‘lumotlar joyida yoki yo‘qligini tekshirib ko‘ramiz. Qulaylik uchun, avval, \texttt{WHERE} bandidan foydalanib \texttt{student\_details} va studentlar jadvallarini qo‘shamiz, chunki yangi jadvalda talaba ismlari mavjud emas:
+
+\begin{code}
+test=# \textbf{SELECT s.name, sd.details 
+FROM student_details sd, students s
+WHERE s.s_id = sd.s_id {\BS}gx}
+\end{code}
+\begin{codep}
+-[ RECORD 1 ]--------------------------------------
+name    | Анна
+details | \{ "достоинства": "отсутствуют",          +
+        |    "недостатки":                         +
+        |    "неумеренное употребление мороженого",+
+        |    "статус": "отчислена"                 +
+        | \}
+-[ RECORD 2 ]--------------------------------------
+name    | Виктор
+details | \{ "хобби":                               +
+        |      \{ "гитарист":                       +
+        |          \{ "группа": "Постгрессоры",     +
+        |            "гитары":["страт","телек"]    +
+        |          \}                               +
+        |      \}                                   +
+        | \}
+\end{codep}
+\pagebreak
+\begin{codep}
+-[ RECORD 3 ]--------------------------------------
+name    | Нина
+details | \{ "хобби": "косплей",                    +
+        |    "достоинства":                        +
+        |      \{ "мать-героиня":                   +
+        |          \{ "Вася": "м",                  +
+        |            "Семен": "м",                 +
+        |            "Люся": "ж",                  +
+        |            "Макар": "м",                 +
+        |            "Саша":"сведения отсутствуют" +
+        |          \}                               +
+        |      \}                                   +
+        | \}
+\end{codep}
+
+Aytaylik, biz talabalarning xizmatlari haqida ma‘lumotni o‘z ichiga olgan yozuvlarga qiziqamiz. Keling, \texttt{->{}>} operatoridan foydalanib, “достоинство” kalitining qiymatiga murojat qilamiz:
+
+
+\begin{code}
+test=# \textbf{SELECT s.name, sd.details 
+FROM  student_details sd, students s
+WHERE s.s_id = sd.s_id
+AND   sd.details ->> 'достоинства' IS NOT NULL {\BS}gx}
+\end{code}
+\begin{codep}
+-[ RECORD 1 ]--------------------------------------
+name    | Анна
+details | \{ "достоинства": "отсутствуют",          +
+        |    "недостатки":                         +
+        |    "неумеренное употребление мороженого",+
+        |    "статус": "отчислена"                 +
+        | \}
+-[ RECORD 2 ]--------------------------------------
+name    | Нина
+details | \{ "хобби": "косплей",                    +
+        |    "достоинства":                        +
+        |      \{ "мать-героиня":                   +
+        |          \{ "Вася": "м",                  +
+        |            "Семен": "м",                 +
+        |            "Люся": "ж",                  +
+        |            "Макар": "м",                 +
+        |            "Саша":"сведения отсутствуют" +
+        |          \}                               +
+        |      \}                                   +
+        | \}
+\end{codep}
+
+Ishonchimiz komil bo‘ldiki, ikkita yozuv Anna va Ninaning xizmatlari bilan bog‘liq, ammo bunday javob bizni qoniqtirishi dargumon: aslida Annaning xizmatlari “yo‘q”. Keling, so‘rovni moslashtiramiz:
+
+\begin{code}
+test=# \textbf{SELECT s.name, sd.details 
+FROM  student_details sd, students s
+WHERE s.s_id = sd.s_id
+AND   sd.details ->> 'достоинства' IS NOT NULL
+AND   sd.details ->> 'достоинства' != 'отсутствуют';}
+\end{code}
+
+Ushbu so‘rov ro‘yxatda haqiqiy xarakatlari bor bo‘lgan, Ninani qoldirishiga ishonch hosil qiling.
+
+Ammo bu usul har doim ham ishlamaydi. Keling, musiqachi Vitya qanday gitara chalayotganini topishga harakat qilaylik:
+
+\begin{code}
+test=# \textbf{SELECT sd.de_id, s.name, sd.details 
+FROM  student_details sd, students s
+WHERE s.s_id = sd.s_id
+AND   sd.details ->> 'гитары' IS NOT NULL {\BS}gx}
+\end{code}
+
+So‘rov hech narsani qaytarmaydi. Gap shundaki, tegishli kalit-qiymat juftligi JSON ierarxiyasi ichida joylashgan, ya‘ni yuqori darajadagi juftliklarga joylashtirilgan:
+
+\begin{code}
+name    | Виктор
+details | \{ "хобби":                               +
+        |      \{ "гитарист":                       +
+        |          \{ "группа": "Постгрессоры",     +
+        |            "гитары":["страт","телек"]    +
+        |          \}                               +
+        |      \}                                   +
+        | \}
+\end{code}
+
+Gitaralarga o‘tish uchun biz \texttt{\#>} operatoridan foydalanamiz va “хобби” dan ierarxiya bo‘ylab pastga tushamiz:
+
+\begin{code}
+test=# \textbf{SELECT sd.de_id, s.name, 
+      sd.details #> '\{хобби,гитарист,гитары\}' 
+FROM  student_details sd, students s
+WHERE s.s_id = sd.s_id
+AND   sd.details #> '\{хобби,гитарист,гитары\}'
+      IS NOT NULL;}
+\end{code}
+
+--- va Viktor Fender muxlisi ekanligiga ishonch hosil qilamiz:
+
+\begin{code}
+ de_id |  name  |     ?column? 
+-------+--------+------------------- 
+     2 | Виктор | ["страт","телек"]
+\end{code}
+
+\texttt{json} ma‘lumotlar turi kichik ukasi \texttt{jsonb}ga ega. “b” harfi ma‘lumotlarni va uning tuzilishini saqlashning ikkilik (matn emas) usulini bildiradi, bu ko‘p hollarda qidiruvni tezlashtiradi. So‘nggi paytlarda \texttt{jsonb} \texttt{json}ga qaraganda tez-tez ishlatiladi.
+
+\begin{code}
+test=# \textbf{ALTER TABLE student_details
+ADD details_b jsonb;}
+\end{code}
+\begin{codep}
+test=# \textbf{UPDATE student_details
+SET details_b = to_jsonb(details);}
+\end{codep}
+\begin{codep}
+test=# \textbf{SELECT de_id, details_b
+FROM student_details {\BS}gx}
+\end{codep}
+\begin{codep}
+-[ RECORD 1 ]-----------------------------------------
+de_id     | 1
+details_b | \{"недостатки": "неумеренное употребление 
+            мороженого", "достоинства": "отсутствуют",
+            "статус": "отчислена"\}
+-[ RECORD 2 ]-----------------------------------------
+de_id     | 2
+details_b | \{"хобби": \{"гитарист": \{"гитары": 
+            ["страт", "телек"], "группа": 
+            "Постгрессоры"\}\}\}
+-[ RECORD 3 ]-----------------------------------------
+de_id     | 3
+details_b | \{"хобби": "косплей", "достоинства": 
+            \{"мать-героиня": \{"Вася": "м", "Люся": 
+            "ж", "Саша": "сведения отсутствуют", 
+            "Макар": "м", "Семен": "м"\}\}\}
+\end{codep}
+
+Qayd etishning boshqa shakliga qo‘shimcha ravishda, siz juftlikdagi qiymatlar tartibi o‘zgarganini ham sezishingiz mumkin: Sasha, biz bilganimizdek uning haqida hech qanday ma‘lumot yo‘q. U endi ro‘yxatda Makardan oldingi o‘rinni egallaydi. Bu \texttt{jsonb} ning \texttt{json}ga nisbatan kamchiligi emas, balki axborotni saqlash xususiyati.
+
+\texttt{json} bilan ishlashdan ko‘ra \texttt{jsonb} bilan ishlash uchun operatorlar ko‘proq. Eng foydalilaridan biri json uchun \texttt{\#>} ga o‘xshash \texttt{@>} obyektni ichiga kirishini tekshirish operatoridir.
+
+Misol uchun, qahramonona qizi Lyusi tilga olingan yozuvni topamiz:
+
+\begin{code}
+test=# \textbf{SELECT s.name, 
+      jsonb_pretty(sd.details_b) json
+FROM  student_details sd, students s
+WHERE s.s_id = sd.s_id
+AND   sd.details_b @> 
+      '\{"достоинства":\{"мать-героиня":\{\}\}\}' {\BS}gx}
+\end{code}
+\begin{codep}
+-[ RECORD 1 ]-------------------------------------
+name | Нина
+json | \{                                          +
+     |     "хобби": "косплей",                    +
+     |     "достоинства": \{                       +
+     |         "мать-героиня": \{                  +
+     |             "Вася": "м",                   +
+     |             "Люся": "ж",                   +
+     |             "Саша": "сведения отсутствуют",+
+     |             "Макар": "м",                  +
+     |             "Семен": "м"                   +
+     |         \}                                  +
+     |     \}                                      +
+     | \}
+\end{codep}
+
+Biz \texttt{jsonb} tipidagi chiqishni formatlaydigan \texttt{jsonb\_pretty()} funksiyasidan foydalandik.
+
+Yoki kalit-qiymat juftligini hosil qiluvchi \texttt{jsonb\_each()} funksiyasidan foydalanishingiz mumkin:
+
+\begin{code}
+test=# \textbf{SELECT s.name, 
+      jsonb_each(sd.details_b) 
+FROM  student_details sd, students s
+WHERE s.s_id = sd.s_id
+AND   sd.details_b @> 
+      '\{"достоинства":\{"мать-героиня":\{\}\}\}' {\BS}gx}
+\end{code}
+\begin{codep}
+-[ RECORD 1 ]--------------------------------------
+name       | Нина
+jsonb_each | (хобби,"""косплей""")
+-[ RECORD 2 ]--------------------------------------
+name       | Нина
+jsonb_each | (достоинства,"\{""мать-героиня"": 
+             \{""Вася"": ""м"", ""Люся"": ""ж"",
+             ""Саша"": ""сведения отсутствуют"", 
+             ""Макар"": ""м"", ""Семен"": ""м""\}\}")
+\end{codep}
+
+Aytgancha, Nina bolaning ismi o‘rniga so‘rovda bo‘sh joy \texttt{\{\}} qoldirildi. Ushbu sintaksis real ilovalarni ishlab chiqish jarayoniga moslashuvchanlikni qo‘shadi.
+
+Lekin \texttt{jsonb}~---da asosiy narsa, ehtimol, \texttt{@>} operatorini, uning teskari \texttt{<@} va boshqalarni qo‘llab-quvvatlaydigan indekslardir (GIN indeksi odatda eng samarali ishlaydi). \texttt{json} turi indekslarni qo‘llab-quvvatlamaydi, shuning uchun og‘ir yuklamali ilovalar uchun \texttt{jsonb} ni tanlash yaxshidir.
+
+\texttt{json} va \texttt{jsonb} turlari va ular bilan ishlash funksiyalari haqida qo‘shimcha ma‘lumotni PostgreSQL hujjatlarining \urld{https}{postgrespro.ru/doc/datatype-json} va \urld{https}{postgrespro.ru/doc/functions-json} sahifalarida topishingiz mumkin.
+
+SQL/JSON Path tilini o‘z ichiga olgan SQL:2016 standarti chiqarilganda, Postgres Professional \codett{jsonpath} turini qo‘shadigan dasturni ishlab chiqdi. U PostgreSQL 12 da paydo bo‘ldi:
+
+\begin{itemizex}
+\item \codett{\$.a.b.c} --- buni PostgreSQL 11 da siz \codett{\textquotesingle a\textquotesingle->\textquotesingle b\textquotesingle->\textquotesingle c\textquotesingle} kabi yozishingiz kerak bo‘ladi.
+\item \codett{\$} --- joriy kontekstni, ya‘ni qayta ishlanayotgan JSON hujjat fragmentini ifodalaydi.
+\item \codett{@} --- filtr ifodasidagi joriy element. \codett{\$} ifodada mavjud bo‘lgan yo‘llar olinadi.
+\item \codett{*} --- metabelgi (wildcard). \codett{\$} yoki \codett{@} lardagi ifodalarda ierarxiyani hisobga olgan holda yo‘l bo‘limining istalgan qiymatini olishni anglatadi.
+\item \codett{**} --- \codett{\$} yoki \codett{@} ifodaning bir qismi sifatida ierarxiyani hisobga olmagan holda har qanday yo‘l segmenti qiymatini olishni anglatishi mumkin. Elementlarning joylashish darajasi noma‘lum bo‘lganda foydalidir.
+\item \codett{?} \codett{WHERE} ga o‘xshash filtrni tashkil qilish imkonini beradi, masalan, \codett{\$.a.b.c ? (@.x > 10)}.
+\end{itemizex}
+
+“косплей” ishqibozlarini qidirish uchun \codett{jsonb\_path\_query()} funksiyasi bilan so‘rov quyidagicha ko‘rinishi mumkin:
+
+\begin{code}
+test=# \textbf{SELECT s_id, jsonb_path_query(
+    details::jsonb,
+    '$.хобби ? (@  == "косплей")'
+) 
+FROM student_details;}
+\end{code}
+\begin{codep}
+ s_id | jsonb_path_query 
+------+------------------
+ 1556 | "косплей"
+(1 row)
+\end{codep}
+
+So‘rov faqat “хобби” kaliti bilan boshlanadigan JSON tarmog‘iga qaraydi va tegishli qiymat “косплей” ga teng yoki yo‘qligini tekshiradi. Ammo agar biz “косплей” ni “гитарист” bilan almashtirsak, hech narsa ko‘rsatilmaydi, chunki bizning jadvalimizda “гитарист” qiymat emas, balki o‘rnatilgan \mbox{yozuvning} kalitidir.
+
+So‘rovda ikkita ierarxiya qo‘llaniladi: biri qidiruvni cheklovchi \codett{\$} ifodasi ichida ishlaydi, ikkinchisi esa \codett{@} ifodasi, ya‘ni qidiruv vaqtida almashtiriladigan ifoda ichida ishlaydi. Bu sizga bir xil maqsadga turli yo‘llar bilan erishish imkonini beradi. Masalan, bu so‘rov
+
+\begin{code}
+test=# \textbf{SELECT s_id, jsonb_path_query(
+  details::jsonb, 
+  '$.хобби.гитарист.группа?(@=="Постгрессоры")'
+) 
+FROM student_details;}
+\end{code}
+--- va bunisi
+\begin{code}
+test=# \textbf{SELECT s_id, jsonb_path_query(
+  details::jsonb, 
+  '$.хобби.гитарист?(@.группа=="Постгрессоры").группа'
+) 
+FROM student_details;}
+\end{code}
+--- дадут одинаковый результат:
+\begin{code}
+ s_id | jsonb_path_query 
+------+------------------
+ 1432 | "Постгрессоры"
+(1 row)
+\end{code}
+
+Birinchi marta biz “хобби.гитарист.группа” filialidagi har bir yozuv uchun qidiruv doirasini o‘rnatdik, agar siz JSON-ning o‘ziga qarasangiz, bitta qiymatga – “Постгрессоры” ga mos keladi, shuning uchun tartiblash uchun hech narsa yo‘q edi. Ikkinchi variantda “хобби.гитарист” tarmog‘ida keladigan barcha filiallar bo‘ylab yurib chiqish kerak edi, ammo filtr ifodasida biz “группа” tarmoq-yo‘lini ko‘rsatdik - aks holda yozuv topilmasdi. Ushbu sintaktik dizaynda biz JSON ichidagi ierarxiyani oldindan bilishimiz kerak. Ammo biz uni bilmasak nima qilish kerak?
+Bunday holda, qo‘sh meta-belgi ** mos keladi. Juda ham foydali imkoniyat! Aytaylik, biz “страт” nima ekanligini unutib qo‘ydik - balandda uchadigan sharmi u, yoki gitara yoki yuqori ijtimoiy qatlam vakili, ammo bu so‘z bizning jadvalimizda bor yoki yo‘qligini aniqlashimiz kerak. JSON bilan oldingi amaliyotlardagi kabi yondashuv bilan murakkab so‘rov tuzishimiz kerak (agar siz jsonb turi bilan uni matnga aylantirmasdan ishlasangiz). Endi bunday deyishimiz mumkin:
+
+\begin{code}
+test=# \textbf{SELECT s_id, jsonb_path_exists(
+  details::jsonb, 
+  '$.** ? (@ == "страт")'
+) 
+FROM student_details;}
+\end{code}
+\begin{codep}
+ s_id | jsonb_path_exists 
+------+-------------------
+ 1451 | f
+ 1432 | t
+ 1556 | f
+ 1451 | f
+(4 rows)
+\end{codep}
+
+SQL/JSON Path imkoniyatlarini nafaqat hujjatlarda (\urld{https}{postgrespro.ru/doc/datatype-json\#DATATYPE-JSONPATH}), balki “What was frozen in feature freeze 2019. Part I. JSONPath” (\urld{https}{habr.com/ru/company/postgrespro/blog/448612/}) maqolasida ham topish mumkin.
+
+%%%%%%%%%%%%%%%%5
+
+SQL:2016 standarti JSON bilan ishlash uchun boshqa ko‘plab qulay funksiya va ifodalarni taqdim etadi. Ularning ilovalari asta-sekin PostgreSQL-ga qo‘shilmoqda. Biz barcha yangi funksiyalar va operatorlarni sanab o‘tmaymiz, ular haqida hujjatlarda o‘qishingiz mumkin: \urld{https}{postgrespro.ru/docs/postgresql/16/functions-json}.
+
+Keling, bizning talabalar guruhining hikoyasini davom ettiramiz - Anna, Viktor va Ninalar qahramonlarimiz. Ularning oldiga media-sotsiologlar kelib, yoshlar qanday serial tomosha qilayotganini bilishdi. Natijalarni jadvalda qayd etishdi:
+
+\begin{code}
+test=# \textbf{CREATE TABLE tv_series(
+  se_id int,
+  s_id int REFERENCES students(s_id),
+  se_details jsonb,
+  CONSTRAINT pk_se PRIMARY KEY(s_id, se_id)
+);}
+\end{code}
+\begin{codep}
+test=# \textbf{INSERT INTO tv_series (se_id, s_id, se_details)
+VALUES
+(1, 1451, 
+'\{"название": ["Игра престолов", 
+               "Слово пацана"]\}'
+),
+(2, 1432, 
+'\{"название": "17 мгновений весны"\}'
+),
+(3, 1556, 
+'\{"название": ["Twin peaks", 
+               "Слово пацана"]\}'
+);}
+\end{codep}
+
+Dasturchilar natijalarni qayta ishlaydilar. Endi ular quyidagi kuchli vositalarga ega: agregatsiya funktsiyalari, tekshirish predikatlari, \codett{json(b)} elementlarni manipulyatsiya qilish vositalari.
+
+Massiv elementlarini \codett{jsonb\_array\_elements} funktsiyasi yordamida alohida yozuvlarga bo‘lish (\codett{unnest}) kerak, ammo bu yerda muammo bor:
+
+\begin{code}
+text=# \textbf{SELECT jsonb_array_elements(
+  se_details->'название'
+)
+FROM tv_series;}
+\end{code}
+\begin{codep}
+ERROR:  cannot extract elements from a scalar
+\end{codep}
+
+Albatta, ma‘lumotlar so‘rovlardan ma‘lumotlar bazasiga noto‘g‘ri uzatilgan: talabaning 1432 raqami massiv emas. Buni \codett{IS [NOT] JSON ARRAY} predikati yordamida tekshiramiz:
+
+\begin{code}
+text=# \textbf{SELECT se_id, se_details 
+FROM tv_series 
+WHERE se_details->'название' IS NOT JSON ARRAY \BS{}gx}
+\end{code}
+\begin{codep}
+-[ RECORD 1 ]----------------------------------
+se_id      | 2
+se_details | \{"название": "17 мгновений весны"\}
+\end{codep}
+
+Keling, \codett{jsonb} ning ichki qismlariga kira oladigan \codett{jsonb\_set} funktsiyasidan foydalanib turni to‘g‘rilaymiz:
+
+\begin{code}
+text=# \textbf{UPDATE tv_series 
+SET se_details = jsonb_set(
+  se_details, '\{название\}', '["17 мгновений весны"]'
+)
+WHERE se_id = 2;}
+\end{code}
+
+Endi:
+
+\begin{code}
+test=# \textbf{SELECT DISTINCT jsonb_array_elements(
+  se_details->'название'
+) 
+FROM tv_series;}
+\end{code}
+\begin{codep}
+ jsonb_array_elements 
+----------------------
+ "Twin peaks"
+ "17 мгновений весны"
+ "Слово пацана"
+ "Игра престолов"
+(4 rows)
+\end{codep}
+
+Ro‘yxat tayyor. E‘tibor bering, \codett{IS JSON ARRAY} predikati \codett{IS JSON SCALAR}, \codett{IS JSON OBJECT} va umumiyroq \codett{IS JSON} dan iborat o‘xshashlar guruhining bir qismidir. Sizga eslatib o‘tamizki, siz ular haqida hujjatlarda o‘qishingiz mumkin: \urld{https}{postgrespro.ru/docs/postgresql/16/functions-json}.
+
+%%%%%%%%%%%%%%%%5
+
+\section{Tashqi tizimlar bilan integratsiya}\label{fdw}
+
+Ilovalar yolg‘iz emas, balki o‘z turlari orasida yashaydi va ko‘pincha bir-biri bilan muloqot qiladi. Bunday aloqa ilovalarning o‘zlari yordamida amalga oshirilishi mumkin, masalan, veb-xizmatlar yoki fayl almashinuvi yordamida yoki siz MBBT vositalaridan foydalanishingiz mumkin.
+
+PostgreSQL maxsus tashqi ma‘lumotlarni o‘rash (foreign data wrapper) mexanizmi orqali tashqi ma‘lumot manbalari bilan SQLda ishlash uchun ISO/IEC 9075-9 (SQL/MED, Tashqi ma‘lumotlarni boshqarish) standartini qo‘llab-quvvatlaydi.
+
+Mexanizmning g‘oyasi shundan iboratki, tashqi (uchinchi tomon) ma‘lumotlariga oddiy jadvallar kabi kirish mumkin. Buning uchun birinchi navbatda uchinchi tomon jadvallari (xorijiy jadvallar) yaratiladi, ular o‘zlari ma‘lumotlarni o‘z ichiga olmaydi, lekin barcha chaqirishlarni tashqi manbaga yo‘naltiradi. Ushbu yondashuv ilovalarni ishlab chiqishni soddalashtiradi, chunki u ma‘lum bir tashqi manba bilan ishlashning o‘ziga xos xususiyatlarini bilishni talab qilmaydi.
+
+Uchinchi tomon jadvallarini yaratish jarayoni bir necha ketma-ket bosqichlardan iborat.
+
+\begin{enumerate}
+\item  \codett{CREATE FOREIGN DATA WRAPPER} buyrug‘i yordamida kutubxonani ma‘lum bir ma‘lumot manbai bilan ishlashga ulaymiz. 
+\item  \codett{CREATE SERVER} buyrug‘i yordamida tashqi ma‘lumotlar manbai joylashgan serverni aniqlaymiz. Buning uchun buyruq odatda server nomi, port raqami va ma‘lumotlar bazasi nomi kabi parametrlarni ko‘rsatadi.
+\item Turli PostgreSQL foydalanuvchilari bir xil tashqi ma‘lumotlar manbasiga turli hisoblar yordamida ulanishlari mumkin, shuning uchun nom xaritasini belgilash uchun \codett{CREATE USER MAPPING} buyrug‘idan foydalaning.
+\item 4.	Masofaviy serverning kerakli jadvallari va ko‘rinishlari uchun biz \codett{CREATE FOREIGN TABLE} buyrug‘i bilan uchinchi tomon jadvallarini yaratamiz va \codett{IMPORT FOREIGN SCHEMA} buyrug‘i belgilangan sxemadan jadvallarning barcha yoki bir qismi tavsiflarini import qilish imkonini beradi.
+\end{enumerate}
+
+Biz PostgreSQL ning eng mashhur MBBT-lar bilan integratsiyasini ko‘rib chiqamiz: Oracle, MySQL, SQL Server va PostgreSQL. 
+Lekin birinchi navbatda ma‘lumotlar bazalari bilan ishlash uchun tegishli kutubxonalarni o‘rnatishingiz kerak.
+
+\subsection{Kengaytmalarni o‘rnatish}
+
+PostgreSQL distributiviga ikkita uchinchi tomon ma‘lumotlar paketini o‘z ichiga oladi: \codett{postgres\_fdw} va \codett{file\_fdw}. Birinchisi masofaviy PostgreSQL ma‘lumotlar bazalari bilan, ikkinchisi - serverdagi fayllar bilan ishlash uchun mo‘ljallangan. Bundan tashqari, jamoa ko‘plab umumiy ma‘lumotlar bazasi tizimlariga kirish uchun kutubxonalarni ishlab chiqdi va ularga xizmat ko‘rsatdi. Ularning ro‘yxatini \urld{https}{pgxn.org/tag/fdw} saytida ko‘rish mumkin.
+
+Oracle, MySQL va SQL Server uchun uchinchi tomon ma‘lumotlar o‘ramlari kengaytmalar sifatida mavjud:
+
+\begin{itemizex}
+\item Oracle ---  \urld{https}{github.com/laurenz/oracle\_fdw};
+\item MySQL --- \urld{https}{github.com/EnterpriseDB/mysql\_fdw};
+\item SQL Server --- \urld{https}{github.com/tds-fdw/tds\_fdw}.
+\end{itemizex}
+
+Ushbu saytlardagi ko‘rsatmalarga rioya qiling shunda yig‘ish va o‘rnatish muammosiz bo‘ladi. Agar hamma narsa to‘g‘ri bajarilgan bo‘lsa, tegishli uchinchi tomon ma‘lumotlar paketlari mavjud kengaytmalar ro‘yxatida paydo bo'ladi. Masalan, \codett{oracle\_fdw} uchun:
+
+\begin{code}
+test=# {\bfseries{}SELECT name, default_version
+FROM pg_available_extensions
+WHERE name = 'oracle_fdw' {\BS}gx}
+\end{code}
+\begin{codep}
+-[ RECORD 1 ]---+-----------
+name            | oracle_fdw
+default_version | 1.2
+\end{codep}
+
+\subsection{Oracle}
+
+Avvaliga, kengaytmani o‘rnating, bu esa o‘z navbatida uchinchi tomon ma‘lumotlari uchun o‘ramni yaratadi:
+
+\begin{code}
+test=# \textbf{CREATE EXTENSION oracle_fdw;}
+\end{code}
+\begin{codep}
+CREATE EXTENSION
+\end{codep}
+
+Tegishli o‘ram yaratilganligini tekshiramiz:
+
+\begin{code}
+test=# \textbf{{\BS}dew}
+\end{code}
+\begin{codep}
+List of foreign-data wrappers
+-[ RECORD 1 ]-------------------
+Name      | oracle_fdw
+Owner     | postgres
+Handler   | oracle_fdw_handler
+Validator | oracle_fdw_validator
+\end{codep}
+
+Keyingi qadam uchinchi tomon ma‘lumotlar serverini yaratishdir. \codett{OPTIONS} bandi \codett{dbserver} parametrini belgilaydi, u Oraclega ulanish uchun xos ma‘lumotlarni aniqlashni so‘raydi: server nomi, port raqami va misol nomi.
+
+\begin{code}
+test=# {\bfseries{}CREATE SERVER oracle_srv 
+  FOREIGN DATA WRAPPER oracle_fdw
+  OPTIONS (dbserver '//localhost:1521/orcl');}
+\end{code}
+\begin{codep}
+CREATE SERVER 
+\end{codep}
+
+PostgreSQL foydalanuvchisi \codett{postgres} Oracle ga \codett{scott} sifatida ulanadi.
+
+\begin{code}
+test=# {\bfseries{}CREATE USER MAPPING FOR postgres
+  SERVER oracle_srv
+  OPTIONS (user 'scott', password 'tiger');}
+\end{code}
+\begin{codep}
+CREATE USER MAPPING 
+\end{codep}
+
+\pagebreak[2]
+
+Biz uchinchi tomon jadvallarini alohida sxemaga import qilamiz. Keling, uni yarataylik:
+
+\begin{code}
+test=# \textbf{CREATE SCHEMA oracle_hr;}
+\end{code}
+\begin{codep}
+CREATE SCHEMA 
+\end{codep}
+
+Masofaviy jadvallar tavsiflarini import qilish. Keling, ikkita mashhur \codett{dept} va \codett{emp} jadvallari bilan cheklanamiz:
+
+\begin{code}
+test=# {\bfseries{}IMPORT FOREIGN SCHEMA "SCOTT"
+  LIMIT TO (dept, emp) 
+  FROM SERVER oracle_srv
+  INTO oracle_hr;}
+\end{code}
+\begin{codep}
+IMPORT FOREIGN SCHEMA 
+\end{codep}
+
+E‘tibor bering, Oracle ma‘lumotlar lug‘atida obyekt nomlari katta harflarda, PostgreSQL tizim katalogida esa kichik harflarda saqlanadi. Shuning uchun, PostgreSQL-da tashqi ma‘lumotlar bilan ishlaganda, kichik harflarga o‘tkazmaslik uchun Oracle sxemasi nomini katta harflar va qo‘sh tirnoq ichida yozing.
+
+\pagebreak[2]
+
+Keling, uchinchi tomon jadvallari ro‘yxatini ko‘rib chiqaylik:
+
+\begin{code}
+test=# \textbf{{\BS}det oracle_hr.*}
+\end{code}
+\begin{codep}
+     List of foreign tables
+  Schema   | Table |   Server   
+-----------+-------+------------
+ oracle_hr | dept  | oracle_srv
+ oracle_hr | emp   | oracle_srv
+(2 rows)
+\end{codep}
+
+Endi masofaviy ma‘lumotlarni olish uchun biz uchinchi tomon jadvallariga so‘rovlarni bajaramiz:
+
+\begin{code}
+test=# \textbf{SELECT * FROM oracle_hr.emp LIMIT 1 {\BS}gx}
+\end{code}
+\begin{codep}
+-[ RECORD 1 ]-------------------
+empno    | 7369
+ename    | SMITH
+job      | CLERK
+mgr      | 7902
+hiredate | 1980-12-17
+sal      | 800.00
+comm     |
+deptno   | 20
+\end{codep}
+
+Ma‘lumotlarni faqatgina o‘qish emas, balki o‘zgartirish ham mumkin:
+
+\begin{code}
+test=# {\bfseries{}INSERT INTO oracle_hr.dept(deptno, dname, loc)
+  VALUES (50, 'EDUCATION', 'MOSCOW');}
+\end{code}
+\begin{codep}
+INSERT 0 1
+\end{codep}
+\begin{codep}
+test=# {\bfseries{}SELECT * FROM oracle_hr.dept;}
+\end{codep}
+\begin{codep}
+ deptno |   dname    |   loc    
+--------+------------+----------
+     10 | ACCOUNTING | NEW YORK
+     20 | RESEARCH   | DALLAS
+     30 | SALES      | CHICAGO
+     40 | OPERATIONS | BOSTON
+     50 | EDUCATION  | MOSCOW
+(5 rows)
+\end{codep}
+
+\subsection{MySQL}
+
+Biz kengaytma va u bilan birga uchinchi tomon ma‘lumotlari uchun o‘ramni yaratamiz:
+
+\begin{code}
+test=# \textbf{CREATE EXTENSION mysql_fdw;}
+\end{code}
+\begin{codep}
+CREATE EXTENSION
+\end{codep}
+
+Ulanadigan nusxani tavsiflovchisi uchinchi tomon serveri \codett{host} va \codett{port} parametrlari bilan aniqlanadi:
+
+\begin{code}
+test=# \textbf{CREATE SERVER mysql_srv
+    FOREIGN DATA WRAPPER mysql_fdw 
+    OPTIONS (host 'localhost', port '3306');}
+\end{code}
+\begin{codep}
+CREATE SERVER 
+\end{codep}
+
+Biz MySQL superuseri bo‘lib ulanamiz:
+
+\begin{code}
+test=# \textbf{CREATE USER MAPPING FOR postgres
+  SERVER mysql_srv
+  OPTIONS (username 'root', password 'p@ssw0rd');}
+\end{code}
+\begin{codep}
+CREATE USER MAPPING 
+\end{codep}
+
+Qobiq \codett{IMPORT FOREIGN SCHEMA} buyrug‘ini qo‘llab-quvvatlaydi, ammo siz tashqi jadvalni qo‘lda yaratishingiz mumkin:
+
+\begin{code}
+test=# \textbf{CREATE FOREIGN TABLE employees (
+  emp_no      int,
+  birth_date  date,
+  first_name  varchar(14),
+  last_name   varchar(16),
+  gender      varchar(1),
+  hire_date   date)
+SERVER mysql_srv
+  OPTIONS (dbname 'employees',
+           table_name 'employees');}
+\end{code}
+\begin{codep}
+CREATE FOREIGN TABLE 
+\end{codep}
+
+\pagebreak[2]
+
+Tekshiramiz:
+
+\begin{code}
+test=# \textbf{SELECT * FROM employees LIMIT 1 {\BS}gx}
+\end{code}
+\begin{codep}
+-[ RECORD 1 ]----------
+emp_no     | 10001
+birth_date | 1953-09-02
+first_name | Georgi
+last_name  | Facello
+gender     | M
+hire_date  | 1986-06-26
+\end{codep}
+
+Oracle singari, \codett{mysql\_fdw} o‘rami nafaqat o‘qish, balki ma‘lumotlarni o‘zgartirish imkonini beradi.
+
+\subsection{SQL Server}
+
+Kengaytmani va u bilan birga uchinchi tomon ma‘lumotlari uchun o‘ramni yaratamiz:
+
+\begin{code}
+test=# \textbf{CREATE EXTENSION tds_fdw;}
+\end{code}
+\begin{codep}
+CREATE EXTENSION
+\end{codep}
+
+Uchinchi tomon serverni yaratamiz:
+
+\begin{code}
+test=# \textbf{CREATE SERVER sqlserver_srv
+  FOREIGN DATA WRAPPER tds_fdw 
+  OPTIONS (servername 'localhost', port '1433',
+           database 'AdventureWorks');}
+\end{code}
+\begin{codep}
+CREATE SERVER 
+\end{codep}
+
+Taqdim etilgan ma‘lumotlar o‘zgarmaydi: siz server nomini, port raqamini, ma‘lumotlar bazasini ko‘rsatishingiz kerak. Ammo \codett{OPTIONS} bandidagi parametrlarning soni va nomlari biz \codett{oracle\_fdw} va \codett{mysql\_fdw} uchun ko‘rganimizdan farq qiladi.
+
+\pagebreak[2]
+
+Biz SQL Serverning superuser hisobi ostida ulanamiz:
+
+\begin{code}
+test=# \textbf{CREATE USER MAPPING FOR postgres
+    SERVER sqlserver_srv
+    OPTIONS (username 'sa', password 'p@ssw0rd');}
+\end{code}
+\begin{codep}
+CREATE USER MAPPING 
+\end{codep}
+
+Keling, uchinchi tomon jadvallari uchun alohida sxema yarataylik:
+
+\begin{code}
+test=# \textbf{CREATE SCHEMA sqlserver_hr;}
+\end{code}
+\begin{codep}
+CREATE SCHEMA
+\end{codep}
+
+Biz \codett{HumanResources} sxemasini butunlayicha yaratilgan PostgreSQL sxemasiga import qilamiz:
+
+\begin{code}
+test=# \textbf{IMPORT FOREIGN SCHEMA HumanResources 
+    FROM SERVER sqlserver_srv
+    INTO sqlserver_hr;}
+\end{code}
+\begin{codep}
+IMPORT FOREIGN SCHEMA 
+\end{codep}
+
+\pagebreak[2]
+
+Import qilingan jadvallar ro‘yxatini \codett{{\BS}det} buyrug‘i bilan tekshirish mumkin yoki tizim katalogida quyidagi so‘rov bilan topish mumkin:
+
+\begin{code}
+test=# \textbf{SELECT ft.ftrelid::regclass AS "Table"
+FROM pg_foreign_table ft;}
+\end{code}
+\begin{codep}
+                 Table
+----------------------------------------
+ sqlserver_hr.Department
+ sqlserver_hr.Employee
+ sqlserver_hr.EmployeeDepartmentHistory
+ sqlserver_hr.EmployeePayHistory
+ sqlserver_hr.JobCandidate
+ sqlserver_hr.Shift
+(6 rows)
+\end{codep}
+
+Obyekt nomlari katta-kichik harflarga sezgir, shuning uchun ular PostgreSQL da qo‘sh tirnoq ichida havola qilinishi kerak:
+
+\begin{code}
+test=# \textbf{SELECT "DepartmentID", "Name", "GroupName"
+FROM sqlserver_hr."Department"
+LIMIT 4;}
+\end{code}
+\begin{codep}
+ DepartmentID |    Name     |        GroupName
+--------------+-------------+-------------------------
+            1 | Engineering | Research and Development
+            2 | Tool Design | Research and Development
+            3 | Sales       | Sales and Marketing
+            4 | Marketing   | Sales and Marketing
+(4 rows)
+\end{codep}
+
+Hozirda \codett{tds\_fdw} faqat o‘qishni qo‘llab-quvvatlaydi, ma‘lumotlarni o‘zgartirmaydi.
+
+\subsection{PostgreSQL}
+
+Kengaytma va o‘ramni yaratamiz:
+
+\begin{code}
+test=# \textbf{CREATE EXTENSION postgres_fdw;}
+\end{code}
+\begin{codep}
+CREATE EXTENSION
+\end{codep}
+
+Biz xuddi shu klasterning boshqa ma‘lumotlar bazasiga ulanamiz, shuning uchun uchinchi tomon serverini yaratishda faqat \codett{dbname} parametrini ko‘rsatish kifoya qiladi va \codett{host}, \codett{port} va boshqa parametrlarni o‘tkazib yuborish mumkin:
+
+\begin{code}
+test=# \textbf{CREATE SERVER postgres_srv
+  FOREIGN DATA WRAPPER postgres_fdw 
+  OPTIONS (dbname 'demo');}
+\end{code}
+\begin{codep}
+CREATE SERVER 
+\end{codep}
+
+Xuddi shu ma‘lumotlar bazasi klasterining foydalanuvchilarini moslashtirganda parolni ko‘rsatish shart emas:
+
+\begin{code}
+test=# \textbf{CREATE USER MAPPING FOR postgres
+  SERVER postgres_srv
+  OPTIONS (user 'postgres');}
+\end{code}
+\begin{codep}
+CREATE USER MAPPING 
+\end{codep}
+
+\codett{book\-ings} sxemasiga tegishli barcha jadvallar va ko‘rinishlarni import qilamiz:
+
+\begin{code}
+test=# \textbf{IMPORT FOREIGN SCHEMA bookings
+  FROM SERVER postgres_srv
+  INTO public;}
+\end{code}
+\begin{codep}
+IMPORT FOREIGN SCHEMA 
+\end{codep}
+
+Tekshiramiz:
+
+\begin{code}
+test=# \textbf{SELECT * FROM bookings LIMIT 3;}
+\end{code}
+\begin{codep}
+ book_ref |       book_date        | total_amount 
+----------+------------------------+--------------
+ 000004   | 2015-10-12 14:40:00+03 |     55800.00
+ 00000F   | 2016-09-02 02:12:00+03 |    265700.00
+ 000010   | 2016-03-08 18:45:00+03 |     50900.00
+ 000012   | 2017-07-14 09:02:00+03 |     37900.00
+ 000026   | 2016-08-30 11:08:00+03 |     95600.00
+(5 rows)
+\end{codep}
+
+\codett{postgres\_fdw} haqida ko‘proq hujjatlarda o‘qishingiz mumkin: \urld{https}{postgrespro.ru/doc/postgres-fdw}.
+
+Uchinchi tomon ma‘lumotlarini o‘rash mexanizmi ham qiziq, chunki u hamjamiyat tomonidan PostgreSQL-ga o‘rnatilgan shardingni yaratish uchun asos sifatida ko‘rib chiqiladi. Sharding qismlarga ajratishga o‘xshaydi: ikkala holatda ham jadval qandaydir xarakteristikaga ko‘ra bir-biridan alohida saqlanadigan bir nechta qismlarga bo‘linadi. Farqi shundaki, bo‘limlar bir xil serverda, shardlar esa boshqalarida joylashgan. PostgreSQL-da bo‘linish ancha vaqtdan beri mavjud. 10-talqindan boshlab ushbu mexanizm faol rivojlanmoqda: deklarativ sintaksis qo‘shildi, bo‘limlarni dinamik ravishda chiqarib tashlash, parallel ishlov berish va boshqa yaxshilanishlar amalga oshirildi. Tashqi jadvallar bo‘limlar sifatida ham ishlatilishi mumkin, shuning uchun bo‘linish parchalanishga aylanadi.
+
+Sharding haqiqatan ham ishlatilishi uchun bu yo‘lda - hali ko‘p ish qilinishi kerak:
+\begin{itemizex}
+\item izchillik kafolatlanmaydi: tashqi serverlar bilan ishlash bitta taqsimlangan tranzaksiyada emas, balki alohida lokal tranzaksiyalarda amalga oshiriladi;
+\item nosozliklarga chidamliligini oshirish uchun bir xil ma‘lumotlarni bir nechta serverlarda takrorlash imkoniyati yo‘q;
+\item shardlar va mos keladigan tashqi jadvallar bo‘yicha jadvallar yaratish uchun barcha kerakli harakatlar hali ham qo‘lda bajarilishi kerak.
+\end{itemizex}
+
+Ro‘yxatdagi vazifalar bizning Shardman vositamizda (\urld{https}{postgrespro.ru/products/shardman}) hal qilingan.
+
+PostgreSQL ma‘lumotlar bazalari bilan ishlash uchun distributivda yana bir kengaytma mavjud - \codett{dblink}. 
+U ulanishlarni aniq boshqarish (ulanish, uzish), so‘rovlarni bajarish va asinxron natijalarni olish imkonini beradi: \urld{https}{postgrespro.ru/doc/dblink}.
+

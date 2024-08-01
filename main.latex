@@ -56,7 +56,7 @@ Omad tilaymiz!
 
 \input{_08_pgadmin.latex}
 
-%\input{_09_additional.latex}
+\input{_09_additional.latex}
 
 %\input{_10_education.latex}
 
