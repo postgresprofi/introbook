@@ -58,7 +58,7 @@ Omad tilaymiz!
 
 \input{_09_additional.latex}
 
-%\input{_10_education.latex}
+\input{_10_education.latex}
 
 %\input{_11_galaxy.latex}
 

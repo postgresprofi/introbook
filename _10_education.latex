@@ -1,0 +1,955 @@
+% po4a: environment codep2
+% po4a: environment codep
+% po4a: environment code
+% po4a: environment code2
+% po4a: environment denseitem
+% po4a: environment denseenum
+% po4a: environment itemize
+% po4a: environment itemizex
+% po4a: environment document
+% po4a: environment leftbar
+% po4a: environment sidewaysfigure 
+\chapter{Ta‘lim va sertifikatlash}\label{education}
+
+\section{Hujjatlar}
+
+PostgreSQL bilan jiddiy ishlash uchun hujjatlarni o‘qish zarur. Bu faqat MBBTning barcha imkoniyatlari tavsifi emas, balki har doim qo‘lingizda bo‘lishi kerak bo‘lgan to‘liq ma‘lumotnoma qo‘llanmasidir. Hujjatlarni o‘qib, siz birlamchi manbadan qisqa va aniq ma‘lumotlarni olasiz — ular to‘g‘ridan-to‘g‘ri ishlab chiquvchilar tomonidan yozilgan va har doim dolzarbligini saqlab turadi.
+
+Bizning Postgres Professional kompaniyamizda PostgreSQLning barcha hujjatlari to‘plami, jumladan, eng so‘nggi talqini ham rus tiliga tarjima qilingan — ular \urld{https}{postgrespro.ru/docs} saytida mavjud.
+
+Bizning tarjima uchun tuzgan lug‘atimiz \urld{https}{postgrespro.ru/education/glossary} manzilida e‘lon qilingan. Ingliz tilidagi hujjatlarni to‘g‘ri tarjima qilish va rus tilidagi materiallar uchun hamma uchun tushunarli yagona terminologiyani qo‘llash uchun uni ishlatishni tavsiya qilamiz.
+
+Ingliz tilidagi asl hujjatlarni afzal ko‘rganlar uni bizning saytimizda, shuningdek, \urld{https}{postgresql.org/docs} manzilida topishlari mumkin.
+
+\section{O‘quv kurslari}
+
+Biz PostgreSQL bilan ishlashni boshlayotgan yoki malakasini oshirayotganlar uchun o‘quv kurslarini ishlab chiqmoqdamiz.
+
+Ma‘lumotlar bazasi administratorlari uchun kurslar:
+
+\vspace{-0.5\baselineskip}
+\begin{center}
+\begin{tikzpicture}[
+  course/.style={rectangle,draw,inner xsep=1em,inner ysep=1ex,align=center}
+]
+\node [course]                (dba1) {\textbf{DBA1} \\ administratorlik, \\ boshlang‘ich kurs};
+\matrix [column sep=1.8em,below=of dba1]
+{
+  \node [course] (dba2) {\textbf{DBA2} \\ Sozlash \\ va monitoring}; &
+  \node [course] (dba3) {\textbf{DBA3} \\ Zaxiraga \\ nusxalash \\ va replikatsiya}; &
+  \node [course] (qpt)  {\textbf{QPT} \\ So‘rovlarni \\ optimallashtirish}; \\
+};
+\draw [->] (dba1.south) to [out=-90,in=90] (dba2.north);
+\draw [->] (dba1.south) to [out=-90,in=90] (dba3.north);
+\draw [->] (dba1.south) to [out=-90,in=90] (qpt.north);
+\end{tikzpicture}
+\end{center}
+
+Va amaliyotchi dasturchilar uchun:
+
+%\vspace{0.5\baselineskip}
+\begin{center}
+\begin{tikzpicture}[
+  course/.style={rectangle,draw,inner xsep=1em,inner ysep=1ex,align=center}
+]
+\centering
+\node [course]                (dev1) {\textbf{DEV1} \\ Ilovaning server qismini yaratuvchilar uchun \\ boshlang‘ich kurs};
+\matrix [column sep=1.8em,below=of dev1]
+{
+  \node [course] (dev2) {\textbf{DEV2} \\ Ilovaning server qismini  \\ yaratuvchilar uchun  \\ kengaytirilgan kurs}; &
+  \node [course] (qpt)  {\textbf{QPT} \\ So‘rovlarni \\ optimallashtirish}; \\
+};
+\draw [->] (dev1.south) to [out=-90,in=90] (dev2.north);
+\draw [->] (dev1.south) to [out=-90,in=90] (qpt.north);
+\end{tikzpicture}
+\end{center}
+
+Barcha ma‘lumotlar bazasi administratorlik kurslarini yoki ilova dasturlash kurslarini o‘zlashtirganlar uchun biz yana bir kursni taklif etamiz, bu bizning asosiy mahsulotimizga bag‘ishlangan:
+
+\begin{center}
+\begin{tikzpicture}[
+  course/.style={rectangle,draw,inner xsep=1em,inner ysep=1ex,align=center},
+  track/.style={ellipse,draw,inner xsep=1em,inner ysep=1ex,align=center},
+]
+\matrix (prereq) [column sep=-1.5em]
+{
+  \node [track] (dba) {DBA kurslari}; &
+  \node [track] (dev) {DEV kurslari}; \\
+};
+\node [course, below=of prereq] (pgpro) {\textbf{PGPRO} \\  Postgres Pro Enterprise \\ imkoniyatlari};
+\draw [->] (dba.south) to [out=-90,in=90] (pgpro.north);
+\draw [->] (dev.south) to [out=-90,in=90] (pgpro.north);
+\end{tikzpicture}
+\end{center}
+
+PostgreSQL va Postgres Pro hujjatlari ish uchun zarur bo‘lgan barcha ma‘lumotlarni o‘z ichiga oladi, biroq ular turli bo‘limlarga tarqalgan va ko‘p marotaba diqqat bilan o‘qishni talab qiladi.
+
+Kurslar hujjatlarni o‘rnini bosmaydi, balki ularni to‘ldiradi. O‘quv modullari izchil va bog‘langan tarzda mazmunni ochib beradi, muhim va amaliy jihatdan foydali ma‘lumotlarni ajratib ko‘rsatadi. O‘quv kurslaridan o‘tish kerakli bilimlarni kengaytiradi, avvalgi olingan uzluksiz ma‘lumotlarni tizimlashtiradi va hujjatlar bo‘yicha yaxshiroq yo‘nalishga yordam beradi hamda kerakli tafsilotlarni tezda aniqlashga imkon beradi.
+
+Har bir kurs mavzusi nazariy qism va amaliyotdan iborat. Nazariy qism ko‘p hollarda nafaqat taqdimot, balki “jonli” tizimda ishlashning namoyishini ham o‘z ichiga oladi. Kurs tinglovchilari har bir slayd batafsil sharhlar bilan yoritilgan taqdimotlar, namoyish skriptlarining ishlash natijalari, amaliy masalalarning yechimlari va ba‘zi hollarda qo‘shimcha ma‘lumotnoma materiallarini oladilar.
+
+\pagebreak
+
+\subsection{Qayerda va qanday ta‘lim olish mumkin}
+
+Mustaqil o‘qish va notijorat foydalanish uchun barcha kurs materiallari, shu jumladan videoyozuvlar, hamma uchun bizning saytimizda mavjud. Ularni \urld{https}{postgrespro.ru/education/courses} manzilida topishingiz mumkin.
+
+Shuningdek, siz yuqorida sanab o‘tilgan kurslarni tajribali o‘qituvchi rahbarligida maxsus o‘quv markazlarida o‘qishingiz mumkin. Kursni tugatgandan so‘ng, tinglovchi sertifikati beriladi. Biz tomonimizdan tasdiqlangan o‘quv markazlarining ro‘yxati: \urld{https}{postgrespro.ru/education/where}.
+
+\vspace{1ex plus 3cm}
+
+\subsection{DBA1. PostgreSQL administratorligi bo‘yicha boshlang‘ich kurs}\label{DBA1}
+
+Davomiylik: 3 kun
+
+Talab etilgan bilimlar:
+
+\begin{denseitem}
+\item[] Ma‘lumotlar bazalari va SQL haqida minimum tushunchalar.
+\item[] Unix bilan tanish bo‘lish.
+\end{denseitem}
+
+Qanday ko‘nikmalar olinadi:
+
+\begin{denseitem}
+\item[] PostgreSQL arxitekturasi haqida umumiy ma‘lumot.
+\item[] O‘rnatish, boshlang‘ich sozlashlar, serverni boshqarish.
+\item[] Ma‘lumotlarni mantiqiy va fizik darajada tashkil etish.
+\item[] Administratorlik boshlang‘ich vazifalari.
+\item[] Foydalanuvchilarni va kirish imkoniyatlarini boshqarish.
+\item[] Zaxira uchun nusxalash, tiklash va replikatsiya haqida tushuncha.
+\end{denseitem}
+
+Mavzular:
+
+\begin{denseenum}
+\itemgrp {Asosiy vositalar}
+\item     Serverni o‘rnatish va boshqarish
+\item     Psql dan foydalanish
+\item     Konfiguratsiyalash
+
+\itemgrp {Arxitektura}
+\item     PostgreSQL umumiy tuzilishi
+\item     Izolyatsiya va ko‘ptalqinlilik
+\item     Bufer kesh va jurnal
+
+\itemgrp {Ma‘lumotlarni tashkillashtirish}
+\item     Ma‘lumotlar bazasi va sxemalar
+\item     Tizim katalogi
+\item     Jadval mayonlari
+\item     Quyi qism
+
+\itemgrp {Administratorlik vazifalari}
+\item     Monitoring
+\item     Boshchilik qilish
+
+\itemgrp {Kirishlarni boshqarish}
+\item     Rollar va atributlar
+\item     Imtiyozlar
+\item     Qatorlarni himoya qilish siyosati
+\item     Ulanish va autentifikatsiya
+
+\itemgrp {Zaxira uchun nusxalash}
+\item     Umumiy sharh
+
+\itemgrp {Replikatsiya}
+\item     Umumiy sharh
+\end{denseenum}
+
+O‘quv kursi materiallari mustaqil o‘rganish uchun
+ \urld{https}{postgrespro.ru/education/courses/DBA1} manzilida mavjud.
+
+
+\subsection{DBA2. PostgreSQLni sozlash va monitoring qilish}\label{DBA2}
+
+Davomiylik: 4 kun
+
+Talab etilgan bilimlar:
+
+\begin{denseitem}
+\item[] SQL tili asoslari.
+\item[] Unix OT da ishlay olish.
+\item[] PostgreSQL bilan DBA1 kursi hajmi darajasida tanish bo‘lish.
+\end{denseitem}
+
+Qanday ko‘nikmalar olinadi:
+
+\begin{denseitem}
+\item[] \textls[5]{Serverning ichki tuzilishini tushunish asosida} turli konfiguratsiya parametrlarini sozlash.
+\item[] Serverni monitoring qilish va parametrlarni iterativ sozlash uchun olingan ma‘lumotlardan foydalanish.
+\item[] Mahalliylashtirish bilan bog‘liq sozlamalar.
+\item[] Kengaytmalarni boshqarish va serverni yangilash jarayoni bilan tanishuv.
+\end{denseitem}
+
+Mavzular:
+
+\begin{denseenum}
+
+\itemgrp{Ko‘ptalqinlilik}
+\item    Izolyatsiya
+\item    Sahifalar va qatorlar talqinlari
+\item    Ma‘lumotlarning sur‘atlari
+\item    HOT-yangilanishlar
+\item    Tozalash
+\item    Avtotozalash
+\item    Muzlatish
+
+\itemgrp{Jurnal yuritish}
+\item    Bufer kesh
+\item    Oldindan yozish jurnali
+\item    Nazorat nuqtasi
+\item    Jurnalni sozlash
+
+\itemgrp{Bloklashlar}
+\item    Obyektlarni bloklash
+\item    Qatorlarni bloklash
+\item    Tezkor xotiradagi bloklashlar
+
+\itemgrp{Administratorlik vazifalari}
+\item    Kengaytmalarni boshqarish
+\item    Mahalliylashtirish
+\item    Serverni yangilash
+\end{denseenum}
+
+O‘quv kursi materiallarini mustaqil o‘rganish uchun \urld{https}{postgrespro.ru/education/courses/DBA2} manzilida mavjud.
+
+\vspace{1ex plus 3cm}
+
+\subsection{DBA3. PostgreSQL da zaxira uchun nusxalash va replikatsiya}\label{DBA3}
+
+Davomiylik: 2 kun
+
+Talab etilgan bilimlar:
+
+\begin{denseitem}
+\item[] SQL tili asoslari.
+\item[] Unix OT dan foydalana olish.
+\item[] PostgreSQL bilan DBA1 kurs hajmida tanish bo‘lish.
+\end{denseitem}
+
+Qanday ko‘nikmalari olinadi:
+
+\begin{denseitem}
+\item[] Zaxira uchun nusxalashni bajarish.
+\item[] Serverni mantiqiy va fizik replikatsiyalar uchun sozlash.
+\item[] Replikatsiyalardan foydalanish senariylari bilan tanishish.
+\item[] Klasterlarni qurish usullari yuzasidan tushuncha.
+\end{denseitem}
+
+\pagebreak
+
+Mavzular:
+
+\begin{denseenum}
+\itemgrp {Zaxira uchun nusxalash}
+\item     Mantiqiy nusxalash
+\item     Asosiy zaxira uchun nusxalash
+\item     Oldindan yozish jurnalini nusxalash
+
+\itemgrp {Replikatsiya}
+\item     Fizik replikatsiya
+\item     Replikatsiyaga ulanish
+\item     Mantiqiy replikatsiya
+\item     Foydalanish senariylari
+
+\itemgrp {Klasterli texnologiyalar}
+\item     Umumiy sharh
+\end{denseenum}
+
+
+O‘quv kursi materiallari mustaqil o‘rganish uchun \urld{https}{postgrespro.ru/education/courses/DBA3} manzilida mavjud.
+
+\vspace{1ex plus 3cm}
+
+\subsection{DEV1. Ilova dasturlarning server qismini ishlab chiqish bo‘yicha boshlang‘ich kurs}\label{DEV1}
+
+Davomiylik: 4 kun
+
+Talab etilgan bilimlar:
+
+\begin{denseitem}
+\item[] SQL tili asoslari.
+\item[] Protsedura dasturlash tillaridan biri bilan ishlash yuzasidan tajriba.
+\item[] Unix ishlashi haqida minimal tushunchalarga ega bo‘lish.
+\end{denseitem}
+
+\pagebreak
+
+Qanday ko‘nikmalar olinadi:
+
+\begin{denseitem}
+\item[] PostgreSQL arxitekturasi haqida umumiy ma‘lumotlar.
+\item[] MB ning asosiy obyektlarini ishlatish.
+\item[] SQL va PL/pgSQL tillarida server tomonda dasturlash.
+\item[] Yozuvlar va massivlarni ham qo‘llagan holda asosiy turlardan foydalanish.
+\item[] Mijoz qism bilan o‘zaro aloqani tashkillashtirish.
+\end{denseitem}
+
+Mavzular:
+
+\begin{denseenum}
+
+\itemgrp{Asosiy vositalar}
+\item   O‘rnatish va boshqaruv; psql
+
+\itemgrp{Arxitektura}
+\item   PostgreSQL-ning umumiy tuzilishi
+\item   Izolyatsiya va ko‘ptalqinlik
+\item   Bufer kesh va jurnal
+
+\itemgrp{Ma‘lumotlarni tashkillashtirish}
+\item   Mantiqiy tuzilma
+\item   Fizik tuzilma
+
+\itemgrp{«Книжный магазин» Ilovasi}
+\item   Ilovaning ma‘lumotlar sxemasi
+
+\itemgrp{SQL}
+\item   Funksiyalar
+\item   Protseduralar
+\item   Tashkiliy turlar
+
+\itemgrp{PL/pgSQL}
+\item   Til umumiy ko‘rinishi va kostruksiyalari
+\item   So‘rovlarning bajarilishi
+
+\pagebreak
+
+\item   Kursorlar
+\item   Dinamik buyruqlar
+\item   Massivlar
+\item   Xatoliklarni qayta ishlash
+\item   Triggerlar
+\item   Xatoliklarni tutish va nosozliklarni tuzatish
+
+\itemgrp{Kirishlarni chegaralash}
+\item   Kirishlarni chegaralashni umumiy sharhi
+
+\itemgrp{Zaxira uchun nusxalash}
+\item   Mantiqiy zaxiralash
+\end{denseenum}
+
+Материалы учебного курса доступны для изучения по адресу:
+\urld{https}{postgrespro.ru/education/courses/DEV1}.
+
+\vspace{1ex plus 3cm}
+
+\subsection{DEV2. Ilova dasturlarning server qismini ishlab chiqish bo‘yicha kengaytirilgan kurs}\label{DEV2}
+
+Davomiylik: 4 kun
+
+Talab etilgan bilimlar:
+
+\begin{denseitem}
+\item[] PostgreSQL arxitekturasi haqida umumiy tushunchalar.
+\item[] SQL va PL/pgSQL bo‘yicha mustahkam bilimlar.
+\item[] Unixda ishlash haqida minimum tushunchalar.
+\end{denseitem}
+
+Qanday ko‘nikmalar olinadi:
+
+\begin{denseitem}
+\item[] Serverning ichki tuzilishini tushunish.
+
+\item[] Ilova mantig‘ini amalga oshirish uchun PostgreSQL tomonidan taqdim etilgan imkoniyatlardan to‘liq foydalanish.
+
+\pagebreak
+
+\item[] Maxsus vazifalarni hal qilish uchun MBBT imkoniyatlarini kengaytirish.
+\end{denseitem}
+
+Mavzular:
+
+\begin{denseenum}
+
+\itemgrp{Arxitektura}
+\item   Izolyatsiya
+\item   Ichki qurilma
+\item   Tozalash
+\item   Jurnal yuritish
+\item   Bloklashlar
+
+\itemgrp{«Книжный магазин»}
+\item   2.0 Ilova
+
+\itemgrp{Kengayuvchanlik}
+\item   Ulanishlar puli
+\item   Katta qiymatlar uchun turlar
+\item   Foydalanuvchi ma‘lumot turlari
+\item   Operatorlar sinflari
+\item   Zaiftuzilmali ma‘lumotlar
+\item   Orqa tomonda ishlaydigan jarayonlar
+\item   Asinxron qayta ishlash
+\item   Kengaytmalarni yaratish
+\item   Dasturlash tillari
+\item   Agregat va oyna funksiyalari
+\item   Umummatn qidiruvi
+\item   Fizik replikatsiya
+\item   Mantiqiy replikatsiya
+\item   Tashqi ma‘lumotlar
+\end{denseenum}
+
+O‘quv kursi materiallarini mustaqil o‘rganish uchun: \urld{https}{postgrespro.ru/education/courses/DEV2} manzilda mavjud.
+
+\pagebreak
+
+\subsection{QPT. PostgreSQL so‘rovlarini maqbullashtirish}\label{QPT}
+
+Davomiylik: 2 kun
+
+Talab etilgan bilimlar:
+
+\begin{denseitem}
+\item[] Unix OT bilan tanish bo‘lish.
+\item[] SQL bo‘yicha mustahkam bilimlar.
+\item[] PL/pgSQL tilini bilish foydali bo‘ladi, ammo zarur emas.
+\item[] PostgreSQL bilan DBA1 (administratorlar uchun) yoki DEV1 (dastur yaratuvchilar uchun) kurs hajmida tanish bo‘lish.
+\end{denseitem}
+
+Qanday ko‘nikmalar olinadi:
+
+\begin{denseitem}
+\item[] So‘rovlarni rejalashtirish va bajarilishini mexanizmini to‘liq bilish.
+\item[] Biror serverni samaradorlikka doir parametrlarini sozlash.
+\item[] Muammoli so‘rovlarni qidirish va ularni maqbullashtirish.
+\end{denseitem}
+
+Mavzular:
+
+\begin{denseenum}
+
+\item   «Авиаперевозки» demo bazasi
+\item   So‘rovlarni bajarilishi\\[-0.5\baselineskip]
+
+\item   Ketma-ket kirish
+\item   Indeksli kirish
+\item   Bit xaritasi bo‘yicha skanerlash\\[-0.5\baselineskip]
+
+\item   Ichma-ich sikl yordamida bog‘lash
+\item   Xeshlash yordamida bog‘lash
+\item   Birlashtirish yordamida bog‘lash\\[-0.5\baselineskip]
+
+\item   Statistika\\[-0.5\baselineskip]
+
+\item   Profil yaratish
+\item   Maqbullashtirish usullari
+\end{denseenum}
+
+O‘quv kursi materiallarini mustaqil o‘rganish uchun: \urld{https}{postgrespro.ru/education/courses/QPT} QPT manzilda mavjud.
+
+\vspace{1ex plus 3cm}
+\subsection{PGPRO. Postgres Pro Enterprise imkoniyatlari}\label{PGPRO}
+
+Davomiylik: 3 kun
+
+Talab etilgan bilimlar:
+
+\begin{denseitem}
+\item[] Unix OT bilan tanish bo‘lish.
+\item[] SQL bo‘yicha mustahkam bilimlar.
+\item[] PL/pgSQL tilini bilish foydali ammo zarur emas.
+\item[] PostgreSQL bilan DBA1, DBA2, QPT (administratorlar uchun) yoki DEV1, DEV2, QPT (dasturchilar uchun) kurslar hajmida tanish bo‘lish.
+\end{denseitem}
+
+Qanday ko‘nikmalar olinadi:
+
+\begin{denseitem}
+\item[] Postgres Pro Enterprise qo‘shimcha imkoniyatlarini ishlatish.
+\end{denseitem}
+
+Mavzular:
+
+\begin{denseenum}
+
+\item   Tahrirlar va imkoniyatlar
+\item   O‘rnatish, sozlash, yangilanish\\[-0.5\baselineskip]
+\item   Tranzaksiyalarni boshqarish
+\item   CFS — siqilgan fayllar tizimi\\[-0.5\baselineskip]
+\item   So‘rovlarni maqbullashtirish
+\item   Moslashtirilgan maqbullashtirish
+\item   Samaradorlik tahlili
+\item   pgpro\_pwr yuklamasi boy‘icha hisobotlar %\\[-0.5\baselineskip]
+
+\pagebreak
+
+\item   Foydalanuvchilar profillari
+\item   Audit\\[-0.5\baselineskip]
+\item   Topshiriqlar rejalashtiruvchisi\\[-0.5\baselineskip]
+\item   Zaxira uchun nusxalash — 1 
+\item   Zaxira uchun nusxalash — 2
+\item   Zaxira uchun nusxalash — 3\\[-0.5\baselineskip]
+\item   Sinxron klaster multimaster
+\end{denseenum}
+
+O‘quv kursi materiallarini mustaqil o‘rganish uchun: \urld{https}{postgrespro.ru/education/courses/PGPRO} PGPRO manzilda mavjud.
+
+\section{Professional sertifikatlash}
+
+
+2019 yilda ishga tushirilgan professional sertifikatlash dasturi nafaqat mutaxassislar uchun, balki ish beruvchilar uchun ham foydalidir. Sertifikat egalariga ish qidirishda va ish haqi darajasini muhokama qilishda qo‘shimcha afzalliklar berilishi mumkin. Bundan tashqari, bu mustaqil baholash tizimidan foydalanib, o‘z bilim darajasini tasdiqlash imkoniyatidir.
+
+Ish beruvchilar uchun dastur yangi mutaxassislarni topishni osonlashtiradi va mavjud xodimlarning PostgreSQL bo‘yicha bilim darajasini tekshirish imkonini beradi. Bu dastur - xodimlarni o‘qitishga yuborishda olingan bilimlarning sifatini nazorat qilish, shuningdek, hamkor kompaniyalar va xizmat ko‘rsatuvchi provayderlar xodimlarining malakasiga ishonch hosil qilish imkoniyatini taqdim etadi.
+
+Hozirda sertifikatlash faqat ma‘lumotlar bazasi administratorlari uchun mavjud, ammo kelgusida dastur ilova dasturchilariga ham kengaytirilishi rejalashtirilgan.
+
+Sertifikatlash uch darajani nazarda tutadi, har bir darajaga erishish uchun bir qator testlardan o‘tish kerak bo‘ladi.
+
+\textbf{“Professional” darajasi} quyidagi sohalardagi bilimlarni tasdiqlaydi:
+
+\begin{denseitem}
+\item    PostgreSQL arxitekturasi haqida umumiy tushunchalar;
+\item    Serverni o‘rnatish variantlari, psql bilan ishlash ko‘nikmalari, konfiguratsiya sozlamalarini boshqarish;
+\item    Ma‘lumotlarni mantiqiy va fizik darajada tashkil etish;
+\item    Foydalanuvchilarni va kirishni boshqarish;
+\item    Ma‘lumotlar bazasini zaxira nusxalash va replikatsiya qilish haqida umumiy tushunchalar.
+\end{denseitem}
+
+Sertifikat olish uchun DBA1 kursi bo‘yicha testni muvaffaqiyatli topshirish kerak. Barcha yangi nomzodlarga PostgreSQL 13 versiyasi bo‘yicha test topshirishni tavsiya qilamiz.
+
+\textbf{“Ekspert” darajasi} quyidagi sohalardagi qo‘shimcha bilimlarni tasdiqlaydi:
+
+\begin{denseitem}
+\item    PostgreSQL ning ichki tuzilishi;
+\item    Serverni monitoring qilish va sozlash, texnik xizmat ko‘rsatish vazifalarini bajarish;
+\item    Ishlash samaradorligini optimallashtirish, so‘rovlarni sozlash masalalarini hal qilish;
+\item    Zaxira uchun nusxalashni bajarish;
+\item    Turli ishlash senariylari uchun fizik va mantiqiy replikatsiyani sozlash.
+\end{denseitem}
+
+%\pagebreak
+
+Sertifikatni olishning ikki yo‘li mavjud:
+
+\begin{denseitem}
+\item PostgreSQL 13 bo‘yicha “Professional” darajasidagi sertifikatga ega bo‘lish va DBA2-13, DBA3-13, QPT-13 testlarini (istalgan tartibda) muvaffaqiyatli topshirish;
+\item PostgreSQL 10 bo‘yicha “Ekspert” darajasidagi sertifikatga ega bo‘lish va bitta o‘tish testi, ya‘ni Ekspert 10–13 testini muvaffaqiyatli topshirish.
+\end{denseitem}
+
+\textbf{“Master” darajasi} qo‘shimcha ravishda PostgreSQLni boshqarish bo‘yicha amaliy ko‘nikmalarni tasdiqlaydi.
+
+Sertifikat olish uchun “Ekspert” darajasidagi sertifikatga ega bo‘lish va amaliy testni muvaffaqiyatli topshirish kerak. Ushbu sertifikat turi hozirda ishlab chiqilmoqda.
+
+\vspace{0.5\baselineskip}
+\urld{https}{postgrespro.ru/user} saytida ro‘yxatdan o‘ting va shaxsiy kabinetda testdan o‘tish uchun yoziling.
+
+Testlarni muvaffaqiyatli topshirish uchun:
+
+\begin{denseitem}
+\item    Tegishli kurslarning materiallarini yaxshi bilish va kurslarda keltirilgan havolalar orqali hujjatlar bo‘limlari bilan tanish bo‘lish;
+\item    PostgreSQL bilan psql muhitida amaliy ishlash ko‘nikmalariga ega bo‘lish kerak.
+\end{denseitem}
+
+Testdan o‘tish jarayonida kurs materiallari va PostgreSQL hujjatlari mavjud, ammo boshqa manbalardan foydalanish taqiqlanadi. 
+
+Navbatdagi darajaga erishish sertifikat bilan tasdiqlanadi. Sertifikat muddatsizdir, lekin ma‘lum bir server talqiniga bog‘langan va ushbu talqin bilan birga eskiradi, shuning uchun bir necha yil o‘tgach, PostgreSQL ning dolzarb talqini bo‘yicha testdan o‘tish zarurati paydo bo‘lishi mumkin.
+
+Sertifikatlash dasturi haqida batafsil ma‘lumotni \urld{https}{postgrespro.ru/education/cert} saytida o‘qing.
+
+\pagebreak
+
+\section{Ta‘lim beruvchi tashkilotlar bilan hamkorlik}
+
+\vspace{-3pt}
+Kompaniyamizning eng muhim faoliyat yo‘nalishlaridan biri ma‘lumotlar bazasi boshqaruv tizimlari sohasida kadrlar tayyorlashdir. Kelajakdagi mutaxassislarni tayyorlashni ta‘lim davridan boshlash kerak, bu esa faqat oliy o‘quv yurtlari, kollejlar va maktablar bilan hamkorlikda amalga oshirilishi mumkin.
+
+\vspace{-6pt}
+\subsection{Akademik litsenziya}
+
+\vspace{-3pt}
+Biz tegishli tashkilotlar uchun Postgres Pro Standard MBBTning akademik litsenziyasini bepul taqdim etamiz. Ariza yuborish uchun \urld{mailto}{academy@postgrespro.ru} manziliga murojaat qiling.
+
+\vspace{-6pt}
+\subsection{Talabalar uchun amaliyotlar}
+
+\vspace{-3pt}
+Biz oliy o‘quv yurtlarida amaliyot o‘tash uchun o‘quv laboratoriyalarini tashkil qilamiz. Kompaniyamiz amaliyotchilarga PostgreSQL bilan bevosita bog‘liq diplom mavzularini taklif etadi va himoya qilishda yordam beradi.
+
+\vspace{-6pt}
+\subsection{Musobaqalar}
+
+\vspace{-3pt}
+Kompaniya xakatonlar tashkil etishda ishtirok etadi va maktab o‘quvchilari hamda talabalar uchun turli musobaqalar o‘tkazadi. Ular orasida:
+
+\begin{itemizex}
+\item “Postgres Pro DBMS” musobaqasi “IT-Planeta” olimpiadasida:\urld{https}{it-planet.braim.org/2024/postgresql.html};
+\item Butunrossiya ochiq kodli loyihalar musobaqasi:\urld{https}{foss.kruzhok.org}.
+\end{itemizex}
+
+Kompaniya ishtirokida o‘tkazilgan tanlovlar g‘oliblari va final ishtirokchilari, shuningdek, hamkor universitetlarning o‘qituvchilari professional sertifikatlash dasturi bo‘yicha testlarni bepul topshirishlari mumkin. Promokod olish uchun \urld{mailto}{certification@postgrespro.ru} manziliga yozing va tasdiqlovchi hujjatni qo‘shing.
+
+\subsection{Oliy o‘quv yurtlari uchun kurslar}
+
+Biz kompaniyamiz va yetakchi universitetlarning tajribali o‘qituvchilari hamkorligining natijasi bo‘lgan bir nechta o‘quv kurslarini taklif etamiz. Barcha kurslar ta‘lim faoliyatida foydalanish uchun ochiq. O‘qituvchilarga taqdim etiladigan materiallar: o‘quv qo‘llanmalari, taqdimot slaydlari va ma‘ruza videoyozuvlari, shuningdek, boshqa o‘quv materiallari \urld{https}{postgrespro.ru/education/university} manzilida mavjud.
+
+Bizning ishtirokimizda ishlab chiqilgan kurslar quyidagi universitetlarda o‘qitiladi:M.V. Lomonosov nomidagi Moskva davlat universiteti, Oliy iqtisodiyot maktabi, Moskva aviatsiya instituti, M.F. Reshetnev nomidagi Sibir davlat fan va texnologiya universiteti, Sibir federal universiteti.
+Agar siz universitet vakili bo‘lsangiz va o‘quv rejangizga ma‘lumotlar bazalari bo‘yicha kurslarni kiritishga qiziqsangiz, biz bilan bog‘laning.
+
+Shuningdek, biz PostgreSQLdan foydalangan holda yangi mualliflik kurslarini ishlab chiqishga tayyor bo‘lgan o‘qituvchilarni hamkorlikka taklif qilamiz. Biz o‘z navbatida qo‘llab-quvvatlaymiz, maslahat beramiz, qo‘lyozmalarni tahrirlaymiz va nashrga tayyorlaymiz, mualliflar uchun mamlakatimiz yetakchi universitetlarida ochiq ma‘ruzalar tashkil qilamiz.
+
+\pagebreak
+
+\subsection{SQL tili asoslari}
+
+Kurs tinglovchilari oldindan tayyorgarliksiz PostgreSQL tizimi nima ekanligini tushunib olishlari va u bilan ishlashni o‘rganishlari mumkin. SQL tilida oddiy so‘rovlarni ishlab chiqishdan boshlanib, tinglovchilar asta-sekin murakkab tuzilmalarga o‘tishadi, tranzaktsiya tushunchasi va ishlashni optimallashtirish bilan tanishadilar.
+
+Kursning asosi “PostgreSQL. SQL Tilining Asoslari” o‘quv qo‘llanmasiga asoslanadi.
+
+\setlength{\columnsep}{1cm}
+\begin{multicols}{2}
+\includegraphics[width=0.5\textwidth]{10_sqlprimer}
+\vfill
+\columnbreak
+\RaggedRight
+Mundarija:
+
+\begin{denseitem}
+\item Kirish
+\item Ishchi muhit yaratish
+\item Asosiy amallar
+\item Ma‘lumotlar turlari
+\item Ma‘lumotlarni aniqlashtirish tili asoslari
+\item So‘rovlar
+\item Ma‘lumotlarni o‘zgartirish
+\item Indekslar
+\item Tranzaksiyalar
+\item PostgreSQL samaradorligini oshirish
+\end{denseitem}
+\end{multicols}
+
+\textbf{Моргунов Е. П.}\\
+PostgreSQL. Основы языка SQL: учеб. пособие~--- СПб.: БХВ-Петербург, 2018.~--- 336 с.\\[0.25\baselineskip]
+ISBN 978-5-9775-4022-3 (qog‘oz nashri)\\
+ISBN 978-5-6041193-2-7 (elektron nashri)
+
+\pagebreak
+
+Elektron ko‘rinishdagi kitob bizning saytimizda mavjud: \urld{https}{postgrespro.ru/education/books/sqlprimer}.
+
+Kurs 36 soatlik ma‘ruza va amaliy mashg‘ulotlardan iborat. Ushbu kurs muallif tomonidan bir necha yildan beri Moskva va Krasnoyarskdagi yetakchi universitetlarda doimiy ravishda o‘qitilib kelinmoqda. Kurs materiallari \urld{https}{postgrespro.ru/education/university/sqlprimer} manzilida mavjud.
+
+
+\setlength\columnsep{0.4cm}
+\setlength\intextsep{0pt}
+\begin{wrapfigure}[13]{r}{0pt}
+\includegraphics[width=0.45\textwidth]{10_morgunov}
+\end{wrapfigure}
+
+\vspace{0.5\baselineskip}
+
+\textbf{Yevgeniy Pavlovich Morgunov}, texnika fanlari nomzodi, akademik M. F. Reshetnev nomidagi Sibir davlat fan va texnologiya universiteti informatika va hisoblash texnikasi kafedrasi dotsenti.
+
+Yevgeniy Pavlovich Morgunov Krasnoyarskda yashaydi. 2000-yilda universitetga o‘tishdan oldin o‘n yildan ortiq vaqt davomida dasturchi bo‘lib ishlagan, shu jumladan bank uchun dasturiy tizim ishlab chiqish bilan shug‘ullangan. 1998-yilda PostgreSQL MBBT bilan tanishgan. Ta‘lim jarayonida ochiq va bepul dasturiy ta‘minotdan foydalanish tarafdori. Uning tashabbusi bilan “Dasturlash texnologiyasi” fanini o‘rganish jarayonida FreeBSD operatsion tizimi va PostgreSQL ma‘lumotlar bazasi boshqaruv tizimi qo‘llanila boshlandi. Xalqaro muhandislik pedagogikasi jamiyati (IGIP) a‘zosi. PostgreSQLdan ta‘limda foydalanish tajribasi yigirma yildan ortiq.
+
+\hfill
+\pagebreak
+
+\subsection{Ma‘lumotlar bazalari texnologiyalari asoslari}
+
+{\RaggedRight
+Zamonaviy universitet kursi bo‘lib, u chuqur nazariy tashkil etuvchilarni ma‘lumotlar bazasining boshqaruv tizimlarini qo‘llash va loyihalashning dolzarb amaliy jihatlari bilan birlashtiradi.
+}
+
+\setlength{\columnsep}{0.8cm}
+\begin{multicols}{2}
+\includegraphics[width=0.5\textwidth]{10_dbtech}
+\vfill
+\columnbreak
+\RaggedRight
+Birinchi qism ma‘lumotlar bazasi boshqaruv tizimlari haqida asosiy ma‘lumotlarni o‘z ichiga oladi: relyatsion ma‘lumotlar modeli, SQL tili, tranzaktsiyalarni qayta ishlash.
+
+Ikkinchi qismda MBBTning ishlashiga asos bo‘lgan texnologiyalar va ularning rivojlanish tendentsiyalari batafsil ko‘rib chiqiladi. Ba‘zi mavzular chuqurroq darajada takroran o‘rganiladi.
+
+\end{multicols}
+
+\textbf{Новиков Б. А.}\\
+Основы технологий баз данных: учеб. пособие / Б. А. Новиков,
+Е. А. Горшкова, Н. Г. Графеева; под ред. Е. В. Рогова.~--- 2-е изд.~--- М.: ДМК Пресс, 2020.~--- 582 с.\\[0.5\baselineskip]
+ISBN 978-5-97060-841-8 (qog‘oz nashri)\\
+ISBN 978-5-6041193-5-8 (elektron nashri)
+
+\hfill
+\pagebreak
+
+Mundarija:
+
+\textbf{I qism. Nazariyadan amaliyotga}
+
+\begin{itemize}[leftmargin=11pt,labelsep=8pt,parsep=0.3\parsep]
+\item Kirish
+\item Ma‘lumotlar bazasi nazariy asoslari
+\item Ma‘lumotlar bazasi bilan tanishuv
+\item SQLga kirish
+\item Ma‘lumotlar bazalarida kirishni boshqarish
+\item Tranzaktsiyalar va ma‘lumotlar bazasi izchilligi
+\item MBBT ilovalarini ishlab chiqish
+\item Relyatsion modelning kengaytmalari
+\item MBBT turlari
+\end{itemize}
+
+\textbf{II qism. Amaliyotdan mahoratga}
+
+\begin{itemize}[leftmargin=11pt,labelsep=8pt,parsep=0.3\parsep]
+\item MBBT arxitekturasi
+\item Saqlash tuzilmalari va asosiy MBBT algoritmlari
+\item So‘rovlarni bajarish va optimallashtirish
+\item Tranzaktsiyalarni boshqarish
+\item Ma‘lumotlar bazasining ishonchliligi
+\item SQLning qo‘shimcha imkoniyatlari
+\item Ma‘lumotlar bazasidagi funksiyalar va protseduralar
+\item PostgreSQLning kengaytirilishi
+\item Umummatnli qidiruv
+\item Ma‘lumotlarning xavfsizligi
+\item Ma‘lumotlar bazasini boshqarish
+\item Ma‘lumotlar bazasini replikatsiya qilish
+\item Parallel va taqsimlangan MBBT
+\end{itemize}
+
+\vspace{0.5\baselineskip}
+Kitobning elektron ko‘rinishi saytda mavjud: \urld{https}{postgrespro.ru/education/books/dbtech}.
+
+\pagebreak
+
+Kurs 24 soatlik ma‘ruza va 8 soatlik amaliy mashg‘ulotlardan iborat. Kurs Boris Asenovich Novikov tomonidan M.V. Lomonosov nomidagi Moskva davlat universiteti VMK fakultetida o‘qitilgan. Kurs materiallari \urld{https}{postgrespro.ru/education/university/dbtech} manzilida mavjud.
+
+\vspace{0.5\baselineskip}
+
+\setlength\columnsep{0.6cm}
+\setlength\intextsep{0pt}
+\begin{wrapfigure}[7]{r}{0pt}
+\includegraphics[width=0.32\textwidth]{10_novikov}
+\end{wrapfigure}
+
+\textbf{Boris Asenovich Novikov}, fizika-matematika fanlari doktori, Sankt-Peterburgdagi Oliy iqtisod maktabi informatika departamenti professori.
+
+Ilmiy qiziqishlari asosan ma‘lumotlar bazasi boshqaruv tizimlarini va ularning ilovalarini loyihalash, ishlab chiqish va qo‘llashning turli jihatlari, shuningdek, katta ma‘lumot oqimlarini qayta ishlash va tahlil qilish uchun taqsimlangan masshtablanuvchi tizimlar bilan bog‘liq.
+
+\textbf{Gorshkova Yekaterina Aleksandrovna}, fizika-matematika fanlari nomzodi.
+
+Yuqori yuklangan va ma‘lumotlardan intensiv foydalanadigan ilovalarni loyihalash bo‘yicha mutaxassis. Ilmiy qiziqishlariga mashinani o‘rganish, oqim ma‘lumotlarini tahlil qilish va axborot qidiruvi kiradi.
+
+Grafeeva Natalya Genrixovna, fizika-matematika fanlari nomzodi, Sankt-Peterburg davlat universiteti axborot-tahliliy tizimlar kafedrasi dotsenti.
+
+Ilmiy qiziqishlari ma‘lumotlar bazalari, axborot qidiruvi, katta ma‘lumotlar va intellektual ma‘lumotlar tahlili bilan bog‘liq. Axborot tizimlarini ishlab chiqish, loyihalash va qo‘llab-quvvatlash, shuningdek, o‘quv kurslarini ishlab chiqish va o‘qitish bo‘yicha katta tajribaga ega.
+
+\section{Kitoblar}
+
+\subsection{PostgreSQL ichkaridan qaralganda}
+
+{\RaggedRight
+Ushbu kitob, ma‘lumotlar bazasi bilan qora quti sifatida ishlashdan qoniqmaydiganlar uchun. 
+Kitob PostgreSQL-dan foydalanishda biroz tajribaga ega bo‘lgan o‘quvchilar uchun mo‘ljallangan. Bu kitob boshqa ma‘lumotlar bazasi boshqaruv tizimlari bilan yaxshi tanish bo‘lgan, lekin PostgreSQL-ga o‘tayotgan va farqlarni tushunishni xohlaydiganlar uchun ham foydali bo‘ladi.
+}
+
+\setlength{\columnsep}{0.8cm}
+\begin{multicols}{2}
+\includegraphics[width=0.5\textwidth]{10_internals}
+\vfill
+\columnbreak
+\RaggedRight
+Kitobda siz tayyor retseptlarni topa olmaysiz, lekin ichki mexanizmlarni tushunish sizga boshqalarning tajribasini tanqidiy qayta ko‘rib chiqish va mustaqil xulosalar chiqarish imkonini beradi. Muallif PostgreSQL tuzilishining tafsilotlarini tushuntiradi va qanday qilib tajribalar o‘tkazishni va eskirgan ma‘lumotlarni mustaqil ravishda tekshirishni ko‘rsatadi.
+\end{multicols}
+
+\textbf{Рогов Е. В.}\\
+PostgreSQL изнутри.~--- М.: ДМК Пресс, 2022.~--- 660 с.\\[0.5\baselineskip]
+ISBN 978-5-93700-122-1 (qog‘oz nashri)\\
+ISBN 978-5-6041193-9-6 (elektron nashri)
+
+\pagebreak
+
+\setlength\columnsep{0.6cm}
+\setlength\intextsep{0pt}
+\begin{wrapfigure}[7]{r}{0pt}
+\includegraphics[width=0.3\textwidth]{10_rogov}
+\end{wrapfigure}
+
+%\vspace{0.2\baselineskip}
+
+\textbf{Egor Rogov} 2015 yildan beri Postgres Professional kompaniyasining ta‘lim bo‘limida ishlaydi: o‘quv kurslarini ishlab chiqadi va o‘qiydi, maqolalar nashr qiladi, kitoblar yozadi va tahrir qiladi.
+
+{\RaggedRight
+\vspace{0.5\baselineskip}
+Mundarija:
+
+\vspace{0.5\baselineskip}
+%Введение
+
+\textbf{I Qism. Izolyatsiya va ko‘ptalqinlilik}
+
+Izolyatsiya\quad\textbullet\quad
+Sahifalar va satrlar talqinlari\quad\textbullet\quad
+Ma‘lumotlar\\ sur‘atlari\quad\textbullet\quad
+Sahifa ichidagi tozalash va hot yangilanishlar\\
+Tozalash va avtomatik tozalash\quad\textbullet\quad
+Muzlatish\quad\textbullet\quad
+Jadvallar va indekslarni qayta qurish
+
+\textbf{II Qism. Bufer kesh va jurnal}
+
+Buffer keshi\quad\textbullet\quad
+Oldindan yozish jurnali\quad\textbullet\quad
+Jurnal \\holatlari
+
+\textbf{III Qism. Bloklashlar}
+
+Munosabatlar bloklanishlari\quad\textbullet\quad
+Satrlar bloklanishlari\\
+Turli obyektlar bloklanishlari\quad\textbullet\quad
+Xotiradagi bloklanishlar
+
+\textbf{IV Qism. So‘rovlarning bajarilishi}
+
+So‘rovlar bajarilish bosqichlari\quad\textbullet\quad
+Statistika\\
+Kirishning jadvalli usullari\quad\textbullet\quad
+Kirishning indeksli usullari\\ доступа\quad\textbullet\quad
+Indeksli skanerlash\quad\textbullet\quad
+Qism sikl\quad\textbullet\quad
+Xeshlash\quad\textbullet\quad
+Saralash va birlashtirish
+
+\textbf{V Qism. Indekslar turlari}
+
+Xesh indeks\quad\textbullet\quad
+B-daraxt\quad\textbullet\quad
+GiST indeks\\
+SP-GiST indeks\quad\textbullet\quad
+GIN indeks\quad\textbullet\quad
+BRIN indeks
+}
+
+Elektron ko‘rinishidagi kitob bizning saytimizda mavjud: \urld{https}{postgrespro.ru/education/books/internals}.
+
+\subsection{PostgreSQL monitoring}
+
+{\RaggedRight
+PostgreSQL monitoringi administratorning ishining muhim qismidir. Kitob ushbu keng mavzuni har tomonlama qamrab oladi, mavjud vositalar haqida ma‘lumotnoma materiallarini, ularni qo‘llashning amaliy usullarini va olingan ma‘lumotlarni talqin qilish usullarini birlashtiradi.}
+
+\setlength\columnsep{0.6cm}
+\setlength\intextsep{0pt}
+\begin{wrapfigure}[17]{l}{0pt}
+\includegraphics[width=0.632\textwidth]{10_monitoring}
+\end{wrapfigure}
+
+{\RaggedRight
+PostgreSQL ning ichki tuzilishini va uning monitoring xususiyatlarini bilish, ushbu kitobdan olingan bilimlar, uzoq muddatli istiqbolda MBBTni samarali ishlatishga va paydo bo‘ladigan boshqaruv vazifalarini muvaffaqiyatli hal qilishga yordam beradi.
+
+\vspace{0.5\baselineskip}
+
+\textbf{Лесовский А. В.}\\
+Мониторинг PostgreSQL.~--- М.: Бумба, 2024.~--- 247 с.\\[0.5\baselineskip]
+ISBN 978-5-907754-42-3
+}
+
+\pagebreak
+
+\setlength\columnsep{0.62cm}
+\setlength\intextsep{0pt}
+\begin{wrapfigure}[7]{r}{0pt}
+\includegraphics[width=0.325\textwidth]{10_lesovsky}
+\end{wrapfigure}
+
+\textbf{Aleksey Lesovskiy} — ma‘lumotlar bazasining professional administratori, tizim administratori, dasturchi, devops-muhandis. U qariyb 20 yildan beri katta va murakkab tizimlarni ekspluatatsiya qilish, dasturiy ta‘minotni loyihalash va ishlab chiqish bilan shug‘ullanadi.
+
+{\RaggedRight
+\vspace{0.5\baselineskip}
+Mundarija:
+
+\vspace{0.5\baselineskip}
+\begin{denseitem}
+\item Kirish so‘zi
+\item Ushbu kitob haqida
+\item Statistika umumiy sharhi
+\item Faollik statistikasi
+\item So‘rovlar va funksiyalarni bajarilishi
+\item Ma‘lumotlar bazalari
+\item Kiritish-chiqarish va xotira umumiy maydoni
+\item Oldindan yozish jurnali
+\item Replikatsiya
+\item Tozalash
+\item Amallarni bajarish yo‘llari
+\item Ilova. Sinov muhiti
+\end{denseitem}
+}
+
+\vspace{0.5\baselineskip}
+Kitob bilan birga Docker muhiti taklif etiladi, unda barcha misollarni qayta tiklash va monitoring bilan bog‘liq har qanday eksperimentlarni o‘tkazish mumkin. Kitob ma‘lumotlar bazasi administratorlari, tizim administratorlari, ishonchlilik mutaxassislari va ishlash samaradorligini optimallashtirish bilan qiziqqan barcha uchun foydali bo‘ladi.
+
+\vspace{0.5\baselineskip}
+Elektron shaklda kitob bizning saytimizda mavjud: \urld{https}{postgrespro.ru/education/books/monitoring}.
+
+\subsection{Ma‘lumotlar bazalariga yo‘riqnoma}
+
+{\RaggedRight
+Kitob zamonaviy ma‘lumotlar bazasi boshqaruv tizimlarining arxitektura prinsiplari, shuningdek, ularda qo‘llaniladigan algoritmlar va ma‘lumotlar tuzilmalarini tushuntiradi. O‘xshash funksionallikdagi platformalarning bir xil yondashuvlarining amalga oshirilishini taqqoslashga alohida e‘tibor qaratilgan.
+}
+
+\setlength{\columnsep}{0.8cm}
+\begin{multicols}{2}
+\includegraphics[width=0.5\textwidth]{10_dbguide}
+\vfill
+\columnbreak
+\RaggedRight
+\textls[-5]{Ushbu kitobni uch oy davomida "ITga kirish" kurslarida olingan bilimlardan qoniqmagan barcha o‘qishi kerak. Kitob amaliy bilimlarni taqdim etadi va umumiy qoidalarni tushunishda mustahkam asoslar beradi. Kitob axborot tizimlari arxitektorlariga va yetakchi dasturchilarga mo‘ljallangan. Boshqacha qilib aytganda, u elitaga va ushbu darajaga chiqmoqchi bo‘lganlarga qaratilgan.}
+\end{multicols}
+
+\textbf{Комаров В. И.}\\
+Путеводитель по базам данных.~--- М.: ДМК Пресс, 2024.~--- 520 с.\\[0.5\baselineskip]
+ISBN 978-5-93700-287-7
+
+Elektron shaklda kitob bizning saytimizda mavjud: \urld{https}{postgrespro.ru/education/books/dbguide}.
+
+\pagebreak
+
+\setlength\columnsep{0.6cm}
+\setlength\intextsep{0pt}
+\begin{wrapfigure}[7]{r}{0pt}
+\includegraphics[width=0.33\textwidth]{10_komarov}
+\end{wrapfigure}
+
+%\vspace{0.2\baselineskip}
+
+\textbf{Vladimir Komarov}~--- keng profilli IT mutaxassis: dasturchi, ma‘lumotlar bazasi administrator, ma‘lumot va infratuzilma arxitektori, o‘qituvchi va ozgina evangelist.
+
+{\RaggedRight
+\vfill
+Mundarija:
+
+\vspace{0.5\baselineskip}
+
+\textbf{I Qism. Ma‘lumotlar bazalarini sinflashtirish}
+
+Ma‘lumotlar modellari	\quad\textbullet\quad
+Ma‘lumotlar bazalarini sinflashtirishning \\ boshqa uslublari 
+
+\textbf{II Qism. Ma‘lumotlarga kirish}
+
+Ma‘lumotlarni saqlash tuzilmasi\quad\textbullet\quad
+Ma‘lumotlarni qayta ishlash
+
+\textbf{III Qism. MBBT arxitekturasi}
+
+Ma‘lumotlar to‘g‘riligiga kafolat \quad\textbullet\quad
+MBBT qurilmasi
+
+\textbf{IV Qism. Tarqatilgan ma‘lumotlar bazasi}
+
+Tarqatilgan ma‘lumotlar bazalaridagi murosalar\\
+Tarqatilgan tizimlarda ma‘lumotlarni o‘zgartirish
+
+\textbf{V Qism. Nosozliklar bo‘lganda tiklash}
+
+Replikatsiya\quad\textbullet\quad
+Zaxira uchun nusxalash 
+
+\textbf{VI Qism. Ma‘lumotlar bazasini ekspluatatsiya qilish}
+
+Ma‘lumotlar bazasini boshqarish\quad\textbullet\quad
+Uskunalar\\
+Ekspluatatsiya bilan bog‘liq tijorat masalalari
+
+\textbf{VII qism. Ma‘lumotlar bazasi xavfsizligi}
+
+Kirishni chegaralash\quad\textbullet\quad
+Ichki tahdidlardan ximoya qilish
+}
+
