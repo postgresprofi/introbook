@@ -155,7 +155,7 @@ test=# \textbf{UPDATE course_chapters
 \begin{codep}
 UPDATE 3
 \end{codep}
-\pagebreak
+
 \begin{codep}
 test=# \textbf{SELECT txtvector
 FROM course_chapters {\BS}gx}
@@ -253,7 +253,6 @@ ts_headline | путешествие в интригующий <b>мир</b>
               сетей
 \end{codep}
 
-\pagebreak[2]
 
 Umummatnli qidiruvni tezlashtirish uchun maxsus GiST, GIN va RUM indekslari qo‘llaniladi, ular ma‘lumotlar bazasidagi oddiy indekslardan farq qiladi. Ammo ular, umummatnli qidiruv bo‘yicha boshqa ko‘plab foydali bilimlar singari, ushbu qisqa qo‘llanma doirasidan tashqarida qoladi.
 
@@ -343,7 +342,7 @@ details | \{ "хобби":                               +
         |      \}                                   +
         | \}
 \end{codep}
-\pagebreak
+
 \begin{codep}
 -[ RECORD 3 ]--------------------------------------
 name    | Нина
@@ -796,8 +795,6 @@ test=# {\bfseries{}CREATE USER MAPPING FOR postgres
 CREATE USER MAPPING 
 \end{codep}
 
-\pagebreak[2]
-
 Biz uchinchi tomon jadvallarini alohida sxemaga import qilamiz. Keling, uni yarataylik:
 
 \begin{code}
@@ -820,8 +817,6 @@ IMPORT FOREIGN SCHEMA
 \end{codep}
 
 E‘tibor bering, Oracle ma‘lumotlar lug‘atida obyekt nomlari katta harflarda, PostgreSQL tizim katalogida esa kichik harflarda saqlanadi. Shuning uchun, PostgreSQL-da tashqi ma‘lumotlar bilan ishlaganda, kichik harflarga o‘tkazmaslik uchun Oracle sxemasi nomini katta harflar va qo‘sh tirnoq ichida yozing.
-
-\pagebreak[2]
 
 Keling, uchinchi tomon jadvallari ro‘yxatini ko‘rib chiqaylik:
 
@@ -928,8 +923,6 @@ SERVER mysql_srv
 CREATE FOREIGN TABLE 
 \end{codep}
 
-\pagebreak[2]
-
 Tekshiramiz:
 
 \begin{code}
@@ -972,8 +965,6 @@ CREATE SERVER
 
 Taqdim etilgan ma‘lumotlar o‘zgarmaydi: siz server nomini, port raqamini, ma‘lumotlar bazasini ko‘rsatishingiz kerak. Ammo \codett{OPTIONS} bandidagi parametrlarning soni va nomlari biz \codett{oracle\_fdw} va \codett{mysql\_fdw} uchun ko‘rganimizdan farq qiladi.
 
-\pagebreak[2]
-
 Biz SQL Serverning superuser hisobi ostida ulanamiz:
 
 \begin{code}
@@ -1004,8 +995,6 @@ test=# \textbf{IMPORT FOREIGN SCHEMA HumanResources
 \begin{codep}
 IMPORT FOREIGN SCHEMA 
 \end{codep}
-
-\pagebreak[2]
 
 Import qilingan jadvallar ro‘yxatini \codett{{\BS}det} buyrug‘i bilan tekshirish mumkin yoki tizim katalogida quyidagi so‘rov bilan topish mumkin:
 

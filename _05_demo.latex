@@ -22,7 +22,6 @@ Biz o‘z sohamiz sifatida havo transportini tanladik. Bizning ma‘lumotlar baz
 Bizning ma‘lumotlar bazamiz diagrammasi ~\pageref{demo-erd} betdagi rasmda ko‘rsatilgan. 
 Biz keraksiz tafsilotlarga yo‘l qo‘ymaslik va shu bilan birga uning misolidan foydalangan holda qiziqarli va mazmunli so‘rovlarni ishlab chiqish uchun ma‘lumotlar sxemasini juda murakkab emas, lekin juda oddiy emas qilishga harakat qildik.
 
-%\pagebreak
 
 Asosiy ob‘ekt - har biriga alohida \textbf{chipta}(\codett{tickets}) beriladigan bir yoki bir nechta yo‘lovchilar uchun \textbf{bron qilish} (\codett{book\-ings}). 
 Biz yo‘lovchini shaxs sifatida (u bizning aviakompaniyamiz bilan bir necha marta uchgan bo'lishi mumkin) mustaqil mazmun sifatida ajrata olmaymiz, chunki u uchun ishonchli yagona identifikator yo‘q. Biz har bir yo‘lovchi reysini unikal deb hisoblaymiz.
@@ -93,7 +92,6 @@ Parvoz har doim ikkita nuqtani bog‘laydi: \texttt{depar\-ture\_airport} va \te
 Har bir reysda jo‘nash \texttt{scheduled\_departure} va kelishlarning (\texttt{scheduled\_ar\-ri\-val}) rejalashtirilgan  sanasi va vaqti mavjud. 
 Haqiqiy jo‘nash vaqti - \texttt{actual\_departure} va haqiqiy kelish vaqti - \texttt{actual\_ar\-rival} farq qilishi mumkin; ko‘pincha ko‘p emas, lekin ba‘zida parvozning kechikishi bir necha soat bo‘lishi mumkin.
 
-\pagebreak[2]
 
 Parvoz holati \texttt{status} quyidagi qiymatlarni olishi mumkin:
 
@@ -341,7 +339,6 @@ Sxemani boshqarish haqida ko‘proq bilib oling: \urld{https}{postgrespro.ru/doc
 
 Server parametrlarini sozlash haqida — \urld{https}{postgrespro.ru/doc/config-setting}.
 
-
 \subsection{Oddiy so‘rovlar}
 
 Keling, ushbu sxema uchun bir nechta vazifalarni ko‘rib chiqaylik - eng oddiydan ancha murakkabgacha. Aksariyat muammolarning yechimlari bor, lekin avval javobga qaramasdan so‘rov yozishga harakat qilgan ma‘qul, chunki aks holda siz SQL tilini o‘rgana olmaysiz.
@@ -349,8 +346,6 @@ Keling, ushbu sxema uchun bir nechta vazifalarni ko‘rib chiqaylik - eng oddiyd
 \textbf{Topshiriq.} Kecha bir kun oldin Moskva (SVO) - Novosibirsk (OVB) reysida 1A o‘rindig‘ida kim uchdi va u chiptani qachon bron qilgan?
 
 \textbf{Yechim.} “Kechagi kun” joriy sanadan emas, balki \texttt{booking.now}-dan hisoblanadi.
-
-\pagebreak
 
 \begin{code}
 SELECT t.passenger_name,
@@ -599,7 +594,7 @@ WITH t AS (
   ) t
 )
 \begin{code}
-\pagebreak
+
 \end{code}
 SELECT t.ticket_no, 
        t.a, 
@@ -674,7 +669,7 @@ WITH RECURSIVE p(
   AND    NOT p.found
 )
 \end{code}
-\pagebreak
+
 \begin{code}
 SELECT hops, 
        flights, 
@@ -735,7 +730,6 @@ FROM   p
 WHERE  p.last_arrival = p.destination;
 \end{code}
 
-\pagebreak
 
 
 \textbf{Topshiriq.} Ust-Kutdan (UKX) Neryungriga (CNN) eng qisqa marshrutni aniq parvoz vaqti bo‘yicha toping (qo‘nish vaqtini hisobga olmaganda).
@@ -777,7 +771,7 @@ WITH RECURSIVE p(
          JOIN routes r 
            ON r.departure_airport = p.last_arrival 
 \end{code}
-\pagebreak
+
 \begin{code}
   WHERE  p.flight_time + r.duration
          < coalesce(

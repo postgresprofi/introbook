@@ -9,9 +9,9 @@
 % po4a: environment document
 % po4a: environment leftbar
 % po4a: environment sidewaysfigure 
-\chapter{PostgreSQL \PGVER yangiliklari }\label{whatsnew}
+\chapter{PostgreSQL \PGVER\ yangiliklari }\label{whatsnew}
 
-Agar siz PostgreSQL ning oldingi talqinlari bilan tanish bo‘lsangiz, ushbu bob sizga o‘tgan yil ichida nima o‘zgarganligi haqida ma‘lumotlar beradi. 
+Agar siz PostgreSQLning oldingi talqinlari bilan tanish bo‘lsangiz, ushbu bob sizga o‘tgan yil ichida nima o‘zgarganligi haqida ma‘lumotlar beradi. 
 Faqat ba‘zi o‘zgarishlargina bu yerda keltirilgan. To‘liq ro‘yxat uchun nashr eslatmalariga qarang: \urld{https}{postgrespro.ru/docs/postgresql/\PGVER/release-\PGVER}. Postgres Pro tomonidan yuritiladigan Habr-dagi blogda yangi mahsulotlar bilan tezda tanishishingiz mumkin: \urld{https}{habr.com/ru/companies/postgrespro/articles/}.
 
 \section{SQL buyruqlari}
@@ -121,11 +121,10 @@ Rol a‘zoligi uchinchi rol nomidan berilsa, server harakati endi shunga mos bo�
 
 Yangi \codett{SYSTEM\_USER} funktsiyasi SQL standarti bilan moslandi, shu bilan birga u \textbf{autentifikatsiya usuli} va \textbf{tashqi foydalanuvchi} haqidagi ma‘lumotlarni ham ko‘rsatadi.
 
-%%%
-
 Konfiguratsiya fayllarini qayta ishlashda ma‘lum bir birlashmalar bo‘ldi. pg\_hba.conf va pg\_ident.conf fayllari, postgresql.conf bilan bir qatorda, endi boshqa fayllarni kiritish uchun \textbf{include direktivalarini} qo‘llab-quvvatlashni boshlashdi va \codett{pg\_hba\_file\_rules} va \codett{pg\_ident\_file\_mappings} ko‘rinishlarida fayl nomi va qoida yoki moslik raqamiga ega ustunlar paydo bo‘ldi. pg\_ident.conf faylida PostgreSQL foydalanuvchi nomi endi pg\_hba.conf bilan bir xil qoidalarga muvofiq qayta ishlanadi: siz \textbf{all} va \textbf{guruh rol nomlarini} belgilashingiz va \textbf{regulyar iboralardan} foydalanishingiz mumkin. Regulyar ifodalar pg\_hba.conf da foydalanuvchi nomlari va ma‘lumotlar bazalari uchun ham qo‘llab-quvvatlanadi.
 
-Yangi \textit{reserved\_connections} parametridan foydalanib, siz yangi \textit{pg\_use\_reserved\_connections} sobit roliga kiritilgan rollar tomonidan ishlatilishi mumkin bo‘lgan ulanishlarning kerakli sonini \textbf{zaxiraga olishingiz mumkin}. \textit{superuser\_reserved\_connections} zaxirasi ham saqlanib qoladi, lekin eng ekstremal holatlar uchun.
+Yangi \textit{reserved\_connections} parametridan foydalanib, siz yangi \textit{pg\_use\_reserved\_connections} sobit roliga kiritilgan rollar tomonidan ishlatilishi mumkin bo‘lgan ulanishlarning kerakli sonini \textbf{zaxiraga olishingiz mumkin}. 
+\textit{superuser\_reserved\_connections} zaxirasi ham saqlanib qoladi, lekin eng ekstremal holatlar uchun.
 
 Endi libpq kutubxonasi ulanish balansini qo‘llab-quvvatlaydi (\codett{load\_balance\_hosts}) va qabul qilinadigan \textbf{autentifikatsiya usullarini} (\codett{require\_auth}) belgilash qobiliyatiga ega.
 

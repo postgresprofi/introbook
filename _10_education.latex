@@ -88,7 +88,6 @@ Kurslar hujjatlarni o‘rnini bosmaydi, balki ularni to‘ldiradi. O‘quv modul
 
 Har bir kurs mavzusi nazariy qism va amaliyotdan iborat. Nazariy qism ko‘p hollarda nafaqat taqdimot, balki “jonli” tizimda ishlashning namoyishini ham o‘z ichiga oladi. Kurs tinglovchilari har bir slayd batafsil sharhlar bilan yoritilgan taqdimotlar, namoyish skriptlarining ishlash natijalari, amaliy masalalarning yechimlari va ba‘zi hollarda qo‘shimcha ma‘lumotnoma materiallarini oladilar.
 
-\pagebreak
 
 \subsection{Qayerda va qanday ta‘lim olish mumkin}
 
@@ -236,8 +235,6 @@ Qanday ko‘nikmalari olinadi:
 \item[] Klasterlarni qurish usullari yuzasidan tushuncha.
 \end{denseitem}
 
-\pagebreak
-
 Mavzular:
 
 \begin{denseenum}
@@ -272,8 +269,6 @@ Talab etilgan bilimlar:
 \item[] Protsedura dasturlash tillaridan biri bilan ishlash yuzasidan tajriba.
 \item[] Unix ishlashi haqida minimal tushunchalarga ega bo‘lish.
 \end{denseitem}
-
-\pagebreak
 
 Qanday ko‘nikmalar olinadi:
 
@@ -313,8 +308,6 @@ Mavzular:
 \item   Til umumiy ko‘rinishi va kostruksiyalari
 \item   So‘rovlarning bajarilishi
 
-\pagebreak
-
 \item   Kursorlar
 \item   Dinamik buyruqlar
 \item   Massivlar
@@ -353,8 +346,6 @@ Qanday ko‘nikmalar olinadi:
 
 \item[] Ilova mantig‘ini amalga oshirish uchun PostgreSQL tomonidan taqdim etilgan imkoniyatlardan to‘liq foydalanish.
 
-\pagebreak
-
 \item[] Maxsus vazifalarni hal qilish uchun MBBT imkoniyatlarini kengaytirish.
 \end{denseitem}
 
@@ -390,8 +381,6 @@ Mavzular:
 \end{denseenum}
 
 O‘quv kursi materiallarini mustaqil o‘rganish uchun: \urld{https}{postgrespro.ru/education/courses/DEV2} manzilda mavjud.
-
-\pagebreak
 
 \subsection{QPT. PostgreSQL so‘rovlarini maqbullashtirish}\label{QPT}
 
@@ -470,8 +459,6 @@ Mavzular:
 \item   Samaradorlik tahlili
 \item   pgpro\_pwr yuklamasi boy‘icha hisobotlar %\\[-0.5\baselineskip]
 
-\pagebreak
-
 \item   Foydalanuvchilar profillari
 \item   Audit\\[-0.5\baselineskip]
 \item   Topshiriqlar rejalashtiruvchisi\\[-0.5\baselineskip]
@@ -516,8 +503,6 @@ Sertifikat olish uchun DBA1 kursi bo‘yicha testni muvaffaqiyatli topshirish ke
 \item    Turli ishlash senariylari uchun fizik va mantiqiy replikatsiyani sozlash.
 \end{denseitem}
 
-%\pagebreak
-
 Sertifikatni olishning ikki yo‘li mavjud:
 
 \begin{denseitem}
@@ -544,8 +529,6 @@ Testdan o‘tish jarayonida kurs materiallari va PostgreSQL hujjatlari mavjud, a
 Navbatdagi darajaga erishish sertifikat bilan tasdiqlanadi. Sertifikat muddatsizdir, lekin ma‘lum bir server talqiniga bog‘langan va ushbu talqin bilan birga eskiradi, shuning uchun bir necha yil o‘tgach, PostgreSQL ning dolzarb talqini bo‘yicha testdan o‘tish zarurati paydo bo‘lishi mumkin.
 
 Sertifikatlash dasturi haqida batafsil ma‘lumotni \urld{https}{postgrespro.ru/education/cert} saytida o‘qing.
-
-\pagebreak
 
 \section{Ta‘lim beruvchi tashkilotlar bilan hamkorlik}
 
@@ -586,8 +569,6 @@ Agar siz universitet vakili bo‘lsangiz va o‘quv rejangizga ma‘lumotlar baz
 
 Shuningdek, biz PostgreSQLdan foydalangan holda yangi mualliflik kurslarini ishlab chiqishga tayyor bo‘lgan o‘qituvchilarni hamkorlikka taklif qilamiz. Biz o‘z navbatida qo‘llab-quvvatlaymiz, maslahat beramiz, qo‘lyozmalarni tahrirlaymiz va nashrga tayyorlaymiz, mualliflar uchun mamlakatimiz yetakchi universitetlarida ochiq ma‘ruzalar tashkil qilamiz.
 
-\pagebreak
-
 \subsection{SQL tili asoslari}
 
 Kurs tinglovchilari oldindan tayyorgarliksiz PostgreSQL tizimi nima ekanligini tushunib olishlari va u bilan ishlashni o‘rganishlari mumkin. SQL tilida oddiy so‘rovlarni ishlab chiqishdan boshlanib, tinglovchilar asta-sekin murakkab tuzilmalarga o‘tishadi, tranzaktsiya tushunchasi va ishlashni optimallashtirish bilan tanishadilar.
@@ -621,8 +602,6 @@ PostgreSQL. Основы языка SQL: учеб. пособие~--- СПб.: �
 ISBN 978-5-9775-4022-3 (qog‘oz nashri)\\
 ISBN 978-5-6041193-2-7 (elektron nashri)
 
-\pagebreak
-
 Elektron ko‘rinishdagi kitob bizning saytimizda mavjud: \urld{https}{postgrespro.ru/education/books/sqlprimer}.
 
 Kurs 36 soatlik ma‘ruza va amaliy mashg‘ulotlardan iborat. Ushbu kurs muallif tomonidan bir necha yildan beri Moskva va Krasnoyarskdagi yetakchi universitetlarda doimiy ravishda o‘qitilib kelinmoqda. Kurs materiallari \urld{https}{postgrespro.ru/education/university/sqlprimer} manzilida mavjud.
@@ -641,7 +620,6 @@ Kurs 36 soatlik ma‘ruza va amaliy mashg‘ulotlardan iborat. Ushbu kurs mualli
 Yevgeniy Pavlovich Morgunov Krasnoyarskda yashaydi. 2000-yilda universitetga o‘tishdan oldin o‘n yildan ortiq vaqt davomida dasturchi bo‘lib ishlagan, shu jumladan bank uchun dasturiy tizim ishlab chiqish bilan shug‘ullangan. 1998-yilda PostgreSQL MBBT bilan tanishgan. Ta‘lim jarayonida ochiq va bepul dasturiy ta‘minotdan foydalanish tarafdori. Uning tashabbusi bilan “Dasturlash texnologiyasi” fanini o‘rganish jarayonida FreeBSD operatsion tizimi va PostgreSQL ma‘lumotlar bazasi boshqaruv tizimi qo‘llanila boshlandi. Xalqaro muhandislik pedagogikasi jamiyati (IGIP) a‘zosi. PostgreSQLdan ta‘limda foydalanish tajribasi yigirma yildan ortiq.
 
 \hfill
-\pagebreak
 
 \subsection{Ma‘lumotlar bazalari texnologiyalari asoslari}
 
@@ -668,7 +646,6 @@ ISBN 978-5-97060-841-8 (qog‘oz nashri)\\
 ISBN 978-5-6041193-5-8 (elektron nashri)
 
 \hfill
-\pagebreak
 
 Mundarija:
 
@@ -707,7 +684,6 @@ Mundarija:
 \vspace{0.5\baselineskip}
 Kitobning elektron ko‘rinishi saytda mavjud: \urld{https}{postgrespro.ru/education/books/dbtech}.
 
-\pagebreak
 
 Kurs 24 soatlik ma‘ruza va 8 soatlik amaliy mashg‘ulotlardan iborat. Kurs Boris Asenovich Novikov tomonidan M.V. Lomonosov nomidagi Moskva davlat universiteti VMK fakultetida o‘qitilgan. Kurs materiallari \urld{https}{postgrespro.ru/education/university/dbtech} manzilida mavjud.
 
@@ -753,8 +729,6 @@ Kitobda siz tayyor retseptlarni topa olmaysiz, lekin ichki mexanizmlarni tushuni
 PostgreSQL изнутри.~--- М.: ДМК Пресс, 2022.~--- 660 с.\\[0.5\baselineskip]
 ISBN 978-5-93700-122-1 (qog‘oz nashri)\\
 ISBN 978-5-6041193-9-6 (elektron nashri)
-
-\pagebreak
 
 \setlength\columnsep{0.6cm}
 \setlength\intextsep{0pt}
@@ -832,23 +806,20 @@ PostgreSQL monitoringi administratorning ishining muhim qismidir. Kitob ushbu ke
 
 {\RaggedRight
 PostgreSQL ning ichki tuzilishini va uning monitoring xususiyatlarini bilish, ushbu kitobdan olingan bilimlar, uzoq muddatli istiqbolda MBBTni samarali ishlatishga va paydo bo‘ladigan boshqaruv vazifalarini muvaffaqiyatli hal qilishga yordam beradi.
-
 \vspace{0.5\baselineskip}
 
-\textbf{Лесовский А. В.}\\
-Мониторинг PostgreSQL.~--- М.: Бумба, 2024.~--- 247 с.\\[0.5\baselineskip]
+\textbf{Лесовский А. В.}, Мониторинг PostgreSQL.~--- М.: Бумба, 2024.~--- 247 с.\\[0.5\baselineskip]
 ISBN 978-5-907754-42-3
 }
 
-\pagebreak
-
 \setlength\columnsep{0.62cm}
 \setlength\intextsep{0pt}
-\begin{wrapfigure}[7]{r}{0pt}
+\begin{wrapfigure}[10]{r}{0pt}
 \includegraphics[width=0.325\textwidth]{10_lesovsky}
 \end{wrapfigure}
 
-\textbf{Aleksey Lesovskiy} — ma‘lumotlar bazasining professional administratori, tizim administratori, dasturchi, devops-muhandis. U qariyb 20 yildan beri katta va murakkab tizimlarni ekspluatatsiya qilish, dasturiy ta‘minotni loyihalash va ishlab chiqish bilan shug‘ullanadi.
+\textbf{Aleksey Lesovskiy} — ma‘lumotlar bazasining professional administratori, tizim administratori, dasturchi, devops-muhandis. U qariyb 20 yildan beri katta va murakkab tizimlarni ekspluatatsiya qilish, dasturiy ta‘minotni loyihalash va ishlab chiqish 
+bilan shug‘ullanadi.
 
 {\RaggedRight
 \vspace{0.5\baselineskip}
@@ -897,8 +868,6 @@ Kitob zamonaviy ma‘lumotlar bazasi boshqaruv tizimlarining arxitektura prinsip
 ISBN 978-5-93700-287-7
 
 Elektron shaklda kitob bizning saytimizda mavjud: \urld{https}{postgrespro.ru/education/books/dbguide}.
-
-\pagebreak
 
 \setlength\columnsep{0.6cm}
 \setlength\intextsep{0pt}

@@ -9,7 +9,7 @@
 % po4a: environment document
 % po4a: environment leftbar
 % po4a: environment sidewaysfigure 
-\chapter{PostgreSQL ni sozlash}\label{configure}
+\chapter{PostgreSQLni sozlash}\label{configure}
 
 \vspace{-2pt}
 \section{Asosiy sozlashlar}

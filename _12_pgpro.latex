@@ -53,7 +53,7 @@ Batafsil: \urld{https}{postgrespro.ru/products/PPEM}.
 
 \section{Postgres Pro Backup Enterprise}
 
-Postgres Pro Backup Enterprise (pg_probackup) — bu PostgreSQL ma‘lumotlar bazasi klasterlarini zaxira qilish va tiklashni boshqarish uchun mo‘ljallangan utilita.
+Postgres Pro Backup Enterprise (\codett{pg\_probackup}) — bu PostgreSQL ma‘lumotlar bazasi klasterlarini zaxira qilish va tiklashni boshqarish uchun mo‘ljallangan utilita.
 
 Ushbu utilita markazlashtirilgan nusxa katalogi bilan ishlaydi, u mahalliy yoki masofaviy, jumladan, S3 xotirasida joylashishi mumkin.
 

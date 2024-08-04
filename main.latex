@@ -62,7 +62,7 @@ Omad tilaymiz!
 
 \input{_11_galaxy.latex}
 
-%\input{_12_pgpro.latex}
+\input{_12_pgpro.latex}
 
 \newpage
 \thispagestyle{empty}
